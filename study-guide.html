@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Guide — Road to Quant</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .page-hero { padding: 60px 0 48px; border-bottom: 0.5px solid var(--light); margin-bottom: 48px; }
+  .subject-list { display: flex; flex-direction: column; gap: 0; margin-bottom: 80px; }
+  .subject-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 0.5px solid var(--light);
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.15s;
+  }
+  .subject-row:hover { opacity: 0.75; }
+  .sr-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; font-family: var(--font-mono);
+    flex-shrink: 0;
+  }
+  .sr-body { flex: 1; }
+  .sr-name { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .sr-desc { font-size: 13px; color: var(--subtle); }
+  .sr-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .sr-levels { display: flex; gap: 4px; }
+  .sr-lv {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 980px;
+    border: 0.5px solid var(--light);
+    color: var(--subtle);
+  }
+  .sr-lv.active { background: var(--green-bg); color: var(--green); border-color: transparent; }
+  .sr-status { font-size: 11px; color: var(--subtle); }
+  .sr-arrow { color: var(--subtle); font-size: 18px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Road to <span>Quant</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Home</a>
+    <a class="nav-link active" href="study-guide.html">Study Guide</a>
+    <a class="nav-link" href="projects.html">Projects <span class="nav-badge">soon</span></a>
+    <a class="nav-link" href="blog.html">Blog <span class="nav-badge">soon</span></a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-hero">
+    <p class="label" style="margin-bottom:12px">Study Guide</p>
+    <h1 class="headline">Five subjects.<br>Level by level.</h1>
+    <p class="body-lg" style="max-width:480px;margin-top:14px">Interactive notes built topic by topic as each concept is studied and understood. Currently working through LV I across all subjects.</p>
+  </div>
+
+  <div class="subject-list">
+
+    <a class="subject-row" href="finance-lv1.html">
+      <div class="sr-icon" style="background:#fffbeb;color:#d97706">£</div>
+      <div class="sr-body">
+        <div class="sr-name">Finance</div>
+        <div class="sr-desc">Foundations of Valuation · Pricing Principles · Fixed Income · Options · Quant Strategy</div>
+      </div>
+      <div class="sr-meta">
+        <div class="sr-levels">
+          <span class="sr-lv active">LV I</span>
+          <span class="sr-lv">LV II</span>
+          <span class="sr-lv">LV III</span>
+          <span class="sr-lv">LV IV</span>
+          <span class="sr-lv">LV V</span>
+        </div>
+        <span class="sr-status">7 topics · LV I complete</span>
+      </div>
+      <div class="sr-arrow">→</div>
+    </a>
+
+    <a class="subject-row" href="#" style="opacity:0.5;pointer-events:none">
+      <div class="sr-icon" style="background:#f5f3ff;color:#7c3aed">∑</div>
+      <div class="sr-body">
+        <div class="sr-name">Mathematics</div>
+        <div class="sr-desc">Core Calculus · Multivariable · Linear Algebra · Differential Equations · Stochastic Calculus</div>
+      </div>
+      <div class="sr-meta">
+        <div class="sr-levels">
+          <span class="sr-lv active">LV I</span>
+          <span class="sr-lv">LV II</span>
+          <span class="sr-lv">LV III</span>
+          <span class="sr-lv">LV IV</span>
+          <span class="sr-lv">LV V</span>
+        </div>
+        <span class="sr-status">Coming soon</span>
+      </div>
+      <div class="sr-arrow">→</div>
+    </a>
+
+    <a class="subject-row" href="#" style="opacity:0.5;pointer-events:none">
+      <div class="sr-icon" style="background:#eff6ff;color:#2563eb;font-size:12px">P(x)</div>
+      <div class="sr-body">
+        <div class="sr-name">Probability & Statistics</div>
+        <div class="sr-desc">Basic Probability · Stochastic Processes · Markov Chains · Continuous-Time · Martingales</div>
+      </div>
+      <div class="sr-meta">
+        <div class="sr-levels">
+          <span class="sr-lv active">LV I</span>
+          <span class="sr-lv">LV II</span>
+          <span class="sr-lv">LV III</span>
+          <span class="sr-lv">LV IV</span>
+          <span class="sr-lv">LV V</span>
+        </div>
+        <span class="sr-status">Coming soon</span>
+      </div>
+      <div class="sr-arrow">→</div>
+    </a>
+
+    <a class="subject-row" href="#" style="opacity:0.5;pointer-events:none">
+      <div class="sr-icon" style="background:#ecfdf5;color:#059669;font-size:12px">&lt;/&gt;</div>
+      <div class="sr-body">
+        <div class="sr-name">Computer Science</div>
+        <div class="sr-desc">Python · Data Structures · Numerical Methods · Performance · Research Engineering</div>
+      </div>
+      <div class="sr-meta">
+        <div class="sr-levels">
+          <span class="sr-lv active">LV I</span>
+          <span class="sr-lv">LV II</span>
+          <span class="sr-lv">LV III</span>
+          <span class="sr-lv">LV IV</span>
+          <span class="sr-lv">LV V</span>
+        </div>
+        <span class="sr-status">Coming soon</span>
+      </div>
+      <div class="sr-arrow">→</div>
+    </a>
+
+    <a class="subject-row" href="#" style="opacity:0.5;pointer-events:none">
+      <div class="sr-icon" style="background:#fff1f2;color:#e11d48;font-size:12px">f(x)</div>
+      <div class="sr-body">
+        <div class="sr-name">Machine Learning</div>
+        <div class="sr-desc">Statistical Learning · Supervised Methods · Optimisation · Time Series · Alpha Modelling</div>
+      </div>
+      <div class="sr-meta">
+        <div class="sr-levels">
+          <span class="sr-lv active">LV I</span>
+          <span class="sr-lv">LV II</span>
+          <span class="sr-lv">LV III</span>
+          <span class="sr-lv">LV IV</span>
+          <span class="sr-lv">LV V</span>
+        </div>
+        <span class="sr-status">Coming soon</span>
+      </div>
+      <div class="sr-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <span>Road to Quant · 2026</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell ↗</a>
+</footer>
+
+</body>
+</html>
