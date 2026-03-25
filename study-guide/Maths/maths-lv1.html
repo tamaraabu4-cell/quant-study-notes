@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths LV I — Road to Quant</title>
+<style>
+/* Math */
+.math{font-family:'Times New Roman',Georgia,serif;font-size:1.05em;letter-spacing:.01em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}
+.num{border-bottom:1.5px solid currentColor;padding:0 4px 2px;text-align:center}
+.den{padding:2px 4px 0;text-align:center}
+.big-paren{font-size:1.35em;vertical-align:middle;line-height:1}
+.f-box{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;background:rgba(0,0,0,.04);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+[data-theme="dark"] .f-box{background:rgba(255,255,255,.07)}
+
+/* Tokens */
+:root{--bg:#fff;--bg2:#f5f5f7;--bg3:#e8e8ed;--tx1:#1d1d1f;--tx2:#6e6e73;--tx3:#aeaeb2;--br:rgba(0,0,0,.10);--br2:rgba(0,0,0,.18);--green:#059669;--green-bg:#ecfdf5;--green-dk:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--blue:#2563eb;--blue-bg:#eff6ff;--purple:#7c3aed;--purple-bg:#f5f3ff;--red:#dc2626;--red-bg:#fff1f2}
+[data-theme="dark"]{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--tx1:#f5f5f7;--tx2:#98989d;--tx3:#636366;--br:rgba(255,255,255,.09);--br2:rgba(255,255,255,.16);--green-bg:#022c22;--green:#34d399;--green-dk:#6ee7b7;--amber-bg:#1c1200;--blue-bg:#0d1b3e;--blue:#60a5fa;--purple-bg:#1e0e3e;--purple:#a78bfa;--red-bg:#1c0505;--red:#f87171}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--br);height:52px;display:flex;align-items:center;padding:0 32px;gap:8px}
+[data-theme="dark"] .nav{background:rgba(28,28,30,.82)}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-right:auto}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px}
+.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:10px;transition:background .15s,color .15s}
+.nav-link:hover{background:var(--bg2);color:var(--tx1)}
+.nav-link.active{color:var(--tx1);font-weight:500}
+.nav-badge{font-size:10px;padding:1px 5px;border-radius:4px;background:var(--bg2);color:var(--tx3);margin-left:3px}
+.nav-divider{width:.5px;height:20px;background:var(--br2);margin:0 6px}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:15px;transition:background .15s,color .15s;border:.5px solid transparent}
+.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br)}
+.icon-btn.active{background:var(--bg2);border-color:var(--br2)}
+
+/* Page header */
+.page-header{padding:28px 32px 0;border-bottom:.5px solid var(--br)}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);margin-bottom:10px}
+.breadcrumb a:hover{color:var(--tx1)}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--tx2);margin-bottom:18px}
+.lv-tabs{display:flex}
+.lv-tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-.5px;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s;display:flex;align-items:center;gap:6px}
+.lv-tab.active{color:var(--tx1);font-weight:500;border-bottom-color:var(--tx1)}
+.lv-tab.locked{opacity:.35;cursor:default}
+.lv-pip{width:6px;height:6px;border-radius:50%;background:var(--purple)}
+.lv-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--tx3)}
+
+/* Shell */
+.study-shell{display:flex;min-height:calc(100vh - 52px)}
+.study-sidebar{width:196px;flex-shrink:0;border-right:.5px solid var(--br);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;background:var(--bg)}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);padding:8px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 18px;font-size:13px;color:var(--tx2);cursor:pointer;border-left:2px solid transparent;background:none;width:100%;text-align:left;transition:color .12s,background .12s;line-height:1.4}
+.sb-item:hover{color:var(--tx1);background:var(--bg2)}
+.sb-item.active{color:var(--tx1);font-weight:500;border-left-color:var(--purple);background:var(--bg2)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--br2);flex-shrink:0}
+.sb-item.active .sb-dot{background:var(--purple)}
+.sb-item.done .sb-dot{background:var(--purple);opacity:.4}
+.study-content{flex:1;padding:28px 48px 64px;overflow-y:auto;max-height:calc(100vh - 52px)}
+.study-shell.book-mode .study-sidebar{display:none}
+.study-shell.book-mode .study-content{column-count:2;column-gap:52px;column-rule:.5px solid var(--br);padding:28px 52px 64px}
+.study-shell.book-mode .study-content>*{break-inside:avoid}
+
+/* Content */
+.progress-pips{display:flex;gap:6px;margin-bottom:20px}
+.pip{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:transform .15s;padding:0}
+.pip:hover{transform:scale(1.4)}
+.topic-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.topic-title-lg{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:20px;line-height:1.15}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:980px;font-weight:500}
+.badge-purple{background:var(--purple-bg);color:var(--purple)}
+.badge-subtle{background:var(--bg2);color:var(--tx2)}
+.peb{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.7}
+.peb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
+.sh{font-size:13px;font-weight:600;color:var(--tx1);margin:24px 0 12px;padding-bottom:5px;border-bottom:.5px solid var(--br);letter-spacing:-.01em}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.fc{background:var(--bg2);border-radius:16px;padding:14px 16px}
+.fc-term{font-size:12px;font-weight:600;margin-bottom:6px}
+.fc-def{font-size:12px;color:var(--tx2);line-height:1.55}
+.fc-eg{font-size:11px;color:var(--tx3);margin-top:7px;padding-top:7px;border-top:.5px solid var(--br);font-style:italic}
+.f-label{font-size:11px;color:var(--tx3);text-align:center;margin-bottom:4px;font-style:italic}
+.vt{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:18px}
+.vt td{padding:6px 10px;border-bottom:.5px solid var(--br);vertical-align:top}
+.vt td:first-child{font-family:'Courier New',monospace;font-weight:500;color:var(--blue);width:60px;font-size:12px}
+.vt td:last-child{color:var(--tx2)}
+.vt tr:last-child td{border-bottom:none}
+.rt{width:100%;font-size:13px;border-collapse:collapse;margin:10px 0 18px}
+.rt th{padding:7px 10px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:.5px solid var(--br2);color:var(--tx2)}
+.rt td{padding:7px 10px;border-bottom:.5px solid var(--br)}
+.rt tr:last-child td{border-bottom:none}
+.worked{background:var(--bg2);border:.5px solid var(--br);border-radius:16px;padding:18px 20px;margin:14px 0 18px;break-inside:avoid}
+.worked-title{font-size:12px;font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--br)}
+.worked-body{font-size:13px;color:var(--tx2);line-height:1.7}
+.worked-math{font-family:'Courier New',monospace;background:var(--bg);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13px;overflow-x:auto}
+.worked-conclusion{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic}
+.insight{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.65;break-inside:avoid}
+.insight-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px}
+.qbox{background:var(--purple-bg);border-radius:16px;padding:16px 18px;margin-top:18px;break-inside:avoid}
+.qbox-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:8px}
+.qbox-body{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px}
+.qtag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:980px;background:var(--purple-bg);color:var(--purple);border:.5px solid rgba(124,58,237,.2);margin:2px}
+.topic-nav{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:.5px solid var(--br)}
+.tn-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:980px;border:.5px solid var(--br2);background:var(--bg);color:var(--tx1);cursor:pointer;transition:background .15s}
+.tn-btn:hover{background:var(--bg2)}
+.tn-btn.primary{background:var(--tx1);color:var(--bg);border-color:var(--tx1)}
+.tn-btn.primary:hover{opacity:.85}
+.footer{border-top:.5px solid var(--br);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}
+.footer a:hover{color:var(--tx1)}
+@media(max-width:700px){.study-sidebar{display:none}.study-content{padding:20px 20px 48px}.nav{padding:0 16px}.page-header{padding:20px 16px 0}.study-shell.book-mode .study-content{column-count:1;padding:20px}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Road to <span>Quant</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="../../index.html">Home</a>
+    <a class="nav-link active" href="../../study-guide.html">Study Guide</a>
+    <a class="nav-link" href="../../projects.html">Projects <span class="nav-badge">soon</span></a>
+    <a class="nav-link" href="../../blog.html">Blog <span class="nav-badge">soon</span></a>
+  </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" id="layout-btn" title="Toggle layout" onclick="toggleLayout()">&#9700;</button>
+  <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">&#9788;</button>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="../../index.html">Home</a><span>/</span>
+    <a href="../../study-guide.html">Study Guide</a><span>/</span>
+    <span>Mathematics &mdash; LV I</span>
+  </div>
+  <div class="page-title">Mathematics</div>
+  <div class="page-sub">Core Calculus Foundations &mdash; Level I</div>
+  <div class="lv-tabs">
+    <button class="lv-tab active"><div class="lv-pip"></div>LV I &mdash; Core Calculus</button>
+    <button class="lv-tab locked">LV II <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV III <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV IV <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV V <span class="lv-badge">locked</span></button>
+  </div>
+</div>
+
+<div class="study-shell" id="shell">
+  <aside class="study-sidebar">
+    <div class="sb-label" style="margin-top:8px">LV I Topics</div>
+    <button class="sb-item active" onclick="go(0)"><div class="sb-dot"></div>Limits &amp; continuity</button>
+    <button class="sb-item" onclick="go(1)"><div class="sb-dot"></div>The derivative</button>
+    <button class="sb-item" onclick="go(2)"><div class="sb-dot"></div>The integral</button>
+    <button class="sb-item" onclick="go(3)"><div class="sb-dot"></div>Logarithmic &amp; exponential</button>
+    <button class="sb-item" onclick="go(4)"><div class="sb-dot"></div>Trigonometric functions</button>
+    <button class="sb-item" onclick="go(5)"><div class="sb-dot"></div>Applications of calculus</button>
+  </aside>
+  <main class="study-content" id="content"></main>
+</div>
+
+<footer class="footer">
+  <span>Road to Quant &middot; Maths LV I</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
+</footer>
+
+<script>
+const T = [
+{
+  title:"Limits &amp; continuity",
+  peb:"Imagine you are driving towards a wall. You get closer and closer but never quite reach it. A limit is the mathematical way of describing what value a function is heading towards as its input gets closer and closer to some point &mdash; even if it never actually gets there. This might sound abstract but it is the bedrock of all calculus. Without limits, you cannot define derivatives or integrals, and without those, quant finance collapses entirely.",
+  html:`
+  <div class="sh">What a limit actually is</div>
+  <p style="font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:16px">A limit describes the behaviour of a function as its input approaches a value &mdash; not what the function equals there, but what it is heading towards. We write:</p>
+  <div class="f-label">The limit notation</div>
+  <div class="f-box"><span class="math">lim<sub>x&rarr;a</sub> f(x) = L</span></div>
+  <p style="font-size:13px;color:var(--tx2);line-height:1.65;margin:10px 0 18px">This reads: "as x gets arbitrarily close to a, f(x) gets arbitrarily close to L." x does not need to equal a, and f does not even need to be defined at a.</p>
+
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">Left-hand limit</div><div class="fc-def">Approaching from below. Written lim<sub>x&rarr;a&minus;</sub> f(x). The function's behaviour as you come from smaller values.</div></div>
+    <div class="fc"><div class="fc-term">Right-hand limit</div><div class="fc-def">Approaching from above. Written lim<sub>x&rarr;a&plus;</sub> f(x). The function's behaviour as you come from larger values.</div></div>
+    <div class="fc"><div class="fc-term">Limit exists when</div><div class="fc-def">Both one-sided limits exist AND are equal. If they differ, the limit does not exist at that point.</div><div class="fc-eg">lim<sub>x&rarr;2&minus;</sub> = 5 and lim<sub>x&rarr;2&plus;</sub> = 5 &rarr; limit = 5</div></div>
+    <div class="fc"><div class="fc-term">Limit &ne; function value</div><div class="fc-def">The limit is about approach, not arrival. A function can have a limit at a point where it is undefined or has a different value.</div></div>
+  </div>
+
+  <div class="sh">Continuity &mdash; when limits and values agree</div>
+  <div class="worked">
+    <div class="worked-title">The three conditions for continuity at x = a</div>
+    <div class="worked-body">
+      <p><strong>1.</strong> f(a) is defined</p>
+      <p style="margin-top:6px"><strong>2.</strong> lim<sub>x&rarr;a</sub> f(x) exists</p>
+      <p style="margin-top:6px"><strong>3.</strong> lim<sub>x&rarr;a</sub> f(x) = f(a)</p>
+      <p class="worked-conclusion">If any one of these fails, there is a discontinuity at that point.</p>
+    </div>
+  </div>
+
+  <div class="sh">Types of discontinuity</div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">Jump</div><div class="fc-def">The function suddenly jumps. Left and right limits both exist but are not equal.</div><div class="fc-eg">Stock price gap at market open after overnight news</div></div>
+    <div class="fc"><div class="fc-term">Removable</div><div class="fc-def">A "hole" &mdash; the limit exists but the function is undefined or has a different value there.</div></div>
+    <div class="fc"><div class="fc-term">Infinite</div><div class="fc-def">The function blows up to &plusmn;&infin;. The limit does not exist because the function grows without bound.</div><div class="fc-eg">1/x at x = 0</div></div>
+  </div>
+
+  <div class="sh">Key limit rules</div>
+  <table class="rt">
+    <thead><tr><th>Rule</th><th>Formula</th></tr></thead>
+    <tbody>
+      <tr><td>Sum</td><td><span class="math">lim[f + g] = lim f + lim g</span></td></tr>
+      <tr><td>Product</td><td><span class="math">lim[f &middot; g] = lim f &times; lim g</span></td></tr>
+      <tr><td>Quotient</td><td><span class="math">lim <span class="frac"><span class="num">f</span><span class="den">g</span></span> = <span class="frac"><span class="num">lim f</span><span class="den">lim g</span></span> &nbsp;(when lim g &ne; 0)</span></td></tr>
+      <tr><td>Power</td><td><span class="math">lim x<sup>n</sup> = a<sup>n</sup></span> &mdash; substitute directly for polynomials</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sh">The limit that defines e</div>
+  <div class="insight">
+    <div class="insight-lbl">Connection to Finance LV I</div>
+    <p>One of the most important limits in mathematics defines Euler's number e:</p>
+    <div class="f-box" style="margin:10px 0">
+      <span class="math">lim<sub>n&rarr;&infin;</sub> <span class="big-paren">(</span>1 + <span class="frac"><span class="num">1</span><span class="den">n</span></span><span class="big-paren">)</span><sup>n</sup> = e &approx; 2.71828</span>
+    </div>
+    <p style="font-size:13px;color:var(--tx2)">You already used this in Finance LV I &mdash; continuous compounding FV = PV &middot; e<sup>rt</sup> is built entirely on this limit. The further you compound per year, the closer you get to e.</p>
+  </div>
+
+  <div class="qbox">
+    <div class="qbox-lbl">Why quants care</div>
+    <p class="qbox-body">Limits are what allow finance to move from discrete to continuous time. The Black-Scholes model, geometric Brownian motion, and all stochastic calculus live in continuous time &mdash; and getting there requires taking limits. When an option approaches expiry (t &rarr; 0), limits tell you the price behaviour at the boundary. When volatility &rarr; 0, limits reveal what the model reduces to.</p>
+    <span class="qtag">Continuous-time models</span><span class="qtag">Black-Scholes boundaries</span><span class="qtag">Defines derivatives</span><span class="qtag">Defines integrals</span>
+  </div>`
+},
+{
+  title:"The derivative",
+  peb:"The derivative answers one question: how fast is something changing right now? Not on average over a period &mdash; but at this exact instant. If your portfolio value is a function of time, the derivative tells you its instantaneous growth rate at any moment. If an option price is a function of the stock price, the derivative tells you how sensitive the option is to small stock movements. In trading, every Greek &mdash; Delta, Gamma, Vega, Theta &mdash; is literally a derivative.",
+  html:`
+  <div class="sh">From average change to instantaneous change</div>
+  <div class="f-label">Average rate of change between two points</div>
+  <div class="f-box"><span class="math"><span class="frac"><span class="num">f(b) &minus; f(a)</span><span class="den">b &minus; a</span></span></span></div>
+  <div class="f-label">Instantaneous rate of change &mdash; the derivative (limit definition)</div>
+  <div class="f-box"><span class="math"><span class="frac"><span class="num">df</span><span class="den">dx</span></span> = lim<sub>h&rarr;0</sub> <span class="frac"><span class="num">f(x + h) &minus; f(x)</span><span class="den">h</span></span></span></div>
+  <p style="font-size:13px;color:var(--tx2);line-height:1.65;margin:10px 0 18px">h is a tiny change in x. We observe how f responds, then shrink h to zero. The result is the exact slope of the tangent line at that point.</p>
+
+  <div class="sh">Differentiation rules &mdash; the practical toolkit</div>
+  <table class="rt">
+    <thead><tr><th>Rule</th><th>Formula</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Power rule</td><td><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> x<sup>n</sup> = nx<sup>n&minus;1</sup></span></td><td><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> x<sup>3</sup> = 3x<sup>2</sup></span></td></tr>
+      <tr><td>Constant</td><td><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> c = 0</span></td><td>Constants have zero rate of change</td></tr>
+      <tr><td>Constant multiple</td><td><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> [c&middot;f] = c&middot;f'</span></td><td><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> 5x<sup>2</sup> = 10x</span></td></tr>
+      <tr><td>Sum rule</td><td><span class="math">(f + g)' = f' + g'</span></td><td><span class="math">(x<sup>2</sup> + 3x)' = 2x + 3</span></td></tr>
+      <tr><td>Product rule</td><td><span class="math">(fg)' = f'g + fg'</span></td><td>Differentiate each factor separately</td></tr>
+      <tr><td>Quotient rule</td><td><span class="math"><span class="big-paren">(</span><span class="frac"><span class="num">f</span><span class="den">g</span></span><span class="big-paren">)</span>' = <span class="frac"><span class="num">f'g &minus; fg'</span><span class="den">g<sup>2</sup></span></span></span></td><td>For ratios of functions</td></tr>
+      <tr><td>Chain rule</td><td><span class="math">[g(f(x))]' = g'(f(x)) &middot; f'(x)</span></td><td>For composite functions</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sh">Worked examples</div>
+  <div class="worked">
+    <div class="worked-title">Example 1 &mdash; power rule</div>
+    <div class="worked-body">
+      <div class="worked-math">f(x) = x⁴  →  f'(x) = 4x³
+f(x) = x²  →  f'(x) = 2x
+f(x) = x   →  f'(x) = 1</div>
+    </div>
+  </div>
+  <div class="worked">
+    <div class="worked-title">Example 2 &mdash; chain rule (backbone of ML backpropagation)</div>
+    <div class="worked-body">
+      <p>Find the derivative of h(x) = (2x + 1)<sup>4</sup></p>
+      <div class="worked-math">Let f(x) = 2x + 1,  g(f) = f⁴
+f'(x) = 2,   g'(f) = 4f³
+h'(x) = g'(f) × f'(x) = 4(2x+1)³ × 2 = 8(2x+1)³</div>
+      <p class="worked-conclusion">The chain rule is applied repeatedly in neural network backpropagation &mdash; differentiating the loss with respect to every weight through every layer.</p>
+    </div>
+  </div>
+
+  <div class="sh">Economic interpretation</div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term"><span class="math"><span class="frac"><span class="num">dP</span><span class="den">dt</span></span> &gt; 0</span></div><div class="fc-def">Price is increasing at this instant.</div></div>
+    <div class="fc"><div class="fc-term"><span class="math"><span class="frac"><span class="num">dP</span><span class="den">dt</span></span> &lt; 0</span></div><div class="fc-def">Price is decreasing at this instant.</div></div>
+    <div class="fc"><div class="fc-term"><span class="math"><span class="frac"><span class="num">dP</span><span class="den">dt</span></span> = 0</span></div><div class="fc-def">Possible turning point &mdash; maximum or minimum. Core of optimisation.</div></div>
+  </div>
+
+  <div class="qbox">
+    <div class="qbox-lbl">Every Greek is a derivative</div>
+    <p class="qbox-body">Delta = dV/dS (sensitivity of option value to stock price). Gamma = d&sup2;V/dS&sup2; (second derivative &mdash; rate of change of Delta). Vega = dV/d&sigma; (sensitivity to volatility). Theta = dV/dt (time decay). Gradient descent in ML updates parameters by moving in the direction of the negative derivative of the loss function. The derivative is not one tool in quant finance &mdash; it is the language.</p>
+    <span class="qtag">Option Greeks</span><span class="qtag">Delta hedging</span><span class="qtag">Gradient descent (ML)</span><span class="qtag">Risk sensitivities</span>
+  </div>`
+},
+{
+  title:"The integral",
+  peb:"If the derivative tells you the speed of something at any instant, the integral tells you the total distance travelled over a period. More generally, integrals measure accumulated change. If you have a function that gives the rate of return at every moment, the integral gives the total return over a period. If you have a probability density function, integrating it gives you the probability over a range. Integrals and derivatives are two sides of the same coin, connected by the Fundamental Theorem of Calculus.",
+  html:`
+  <div class="sh">Two types of integral</div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">Indefinite integral</div><div class="fc-def">Finds the antiderivative &mdash; a function F(x) whose derivative is f(x). The +C represents an unknown constant.</div><div class="fc-eg"><span class="math">&int; 2x dx = x<sup>2</sup> + C</span></div></div>
+    <div class="fc"><div class="fc-term">Definite integral</div><div class="fc-def">Integrates between limits a and b, giving a numerical answer. Represents total accumulated value &mdash; area under the curve.</div><div class="fc-eg"><span class="math">&int;<sub>0</sub><sup>2</sup> x dx = 2</span></div></div>
+    <div class="fc"><div class="fc-term">Riemann sum</div><div class="fc-def">The idea behind integration &mdash; approximate area with thin rectangles, then take the limit as rectangles become infinitely thin.</div><div class="fc-eg"><span class="math">&int;<sub>a</sub><sup>b</sup> f(x) dx = lim<sub>&Delta;x&rarr;0</sub> &Sigma; f(x<sub>i</sub>)&Delta;x</span></div></div>
+    <div class="fc"><div class="fc-term">Signed area</div><div class="fc-def">Above the x-axis: positive contribution. Below the x-axis: negative. The definite integral gives the net signed area.</div></div>
+  </div>
+
+  <div class="sh">The Fundamental Theorem of Calculus</div>
+  <div class="insight">
+    <div class="insight-lbl">The most important result in calculus</div>
+    <p>Differentiation and integration are inverse operations. If F'(x) = f(x), then:</p>
+    <div class="f-box" style="margin:10px 0"><span class="math">&int;<sub>a</sub><sup>b</sup> f(x) dx = F(b) &minus; F(a)</span></div>
+    <p style="font-size:13px;color:var(--tx2)">Instead of summing infinite rectangles, find an antiderivative and evaluate it at the endpoints. This is what makes integration computationally tractable.</p>
+  </div>
+
+  <div class="sh">Core integration rules</div>
+  <table class="rt">
+    <thead><tr><th>Rule</th><th>Formula</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Power rule</td><td><span class="math">&int; x<sup>n</sup> dx = <span class="frac"><span class="num">x<sup>n+1</sup></span><span class="den">n+1</span></span> + C</span></td><td><span class="math">&int; x<sup>2</sup> dx = <span class="frac"><span class="num">x<sup>3</sup></span><span class="den">3</span></span> + C</span></td></tr>
+      <tr><td>Constant</td><td><span class="math">&int; c dx = cx + C</span></td><td><span class="math">&int; 5 dx = 5x + C</span></td></tr>
+      <tr><td>Sum rule</td><td><span class="math">&int; [f + g] dx = &int;f dx + &int;g dx</span></td><td>Integrate term by term</td></tr>
+      <tr><td>Exponential</td><td><span class="math">&int; e<sup>x</sup> dx = e<sup>x</sup> + C</span></td><td>e<sup>x</sup> is its own antiderivative</td></tr>
+      <tr><td>Natural log</td><td><span class="math">&int; <span class="frac"><span class="num">1</span><span class="den">x</span></span> dx = ln|x| + C</span></td><td>Appears in log-return calculations</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sh">Worked example</div>
+  <div class="worked">
+    <div class="worked-title">Area under f(x) = x&sup2; between x = 0 and x = 3</div>
+    <div class="worked-body">
+      <div class="worked-math">∫₀³ x² dx  =  [x³/3]₀³  =  27/3 − 0  =  9</div>
+      <p class="worked-conclusion">The total accumulated value of x&sup2; from 0 to 3 is exactly 9.</p>
+    </div>
+  </div>
+
+  <div class="qbox">
+    <div class="qbox-lbl">Integrals in quant finance</div>
+    <p class="qbox-body">Expected value in continuous probability: E[X] = &int; x f(x) dx. Option pricing: Black-Scholes is derived by integrating the expected payoff under the risk-neutral measure. Total return: if r(t) is the instantaneous return rate, &int; r(t) dt gives total return over a period. Value at Risk involves integrating a loss distribution over a tail region. Every continuous probability statement is an integral.</p>
+    <span class="qtag">Expected value</span><span class="qtag">Option pricing</span><span class="qtag">Continuous probability</span><span class="qtag">Black-Scholes derivation</span>
+  </div>`
+},
+{
+  title:"Logarithmic &amp; exponential functions",
+  peb:"Exponential functions model growth &mdash; compound interest, price processes, volatility dynamics. The natural exponential e<sup>x</sup> is special because it is the only function that is its own derivative, making it the natural choice for continuous-time models. The natural logarithm ln(x) is its inverse &mdash; and log returns (ln(P<sub>1</sub>/P<sub>0</sub>)) are used everywhere in quant finance because they are additive, symmetric, and analytically clean. Mastering these two functions means you speak the language of continuous-time finance.",
+  html:`
+  <div class="sh">The exponential function e<sup>x</sup></div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">What it is</div><div class="fc-def">The function e<sup>x</sup> where e &approx; 2.71828. Models anything that grows proportionally to its current size &mdash; the mathematical description of compounding.</div><div class="fc-eg">Continuously compounded portfolio: PV &middot; e<sup>rt</sup></div></div>
+    <div class="fc"><div class="fc-term">Why it is special</div><div class="fc-def">e<sup>x</sup> is its own derivative: d/dx(e<sup>x</sup>) = e<sup>x</sup>. No other function has this property. It makes calculus with exponentials uniquely clean.</div><div class="fc-eg">Differentiate e<sup>rt</sup> with respect to t: r&middot;e<sup>rt</sup></div></div>
+    <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">Always positive. e<sup>0</sup> = 1. e<sup>x+y</sup> = e<sup>x</sup>&middot;e<sup>y</sup>. Grows without bound as x &rarr; &infin;. Decays to zero as x &rarr; &minus;&infin;.</div></div>
+  </div>
+
+  <div class="sh">The natural logarithm ln(x)</div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">What it is</div><div class="fc-def">The inverse of e<sup>x</sup>. If e<sup>y</sup> = x then ln(x) = y. Answers: "e to what power gives me x?"</div><div class="fc-eg">ln(e<sup>3</sup>) = 3 &nbsp; ln(1) = 0 &nbsp; ln(e) = 1</div></div>
+    <div class="fc"><div class="fc-term">Its derivative</div><div class="fc-def"><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> ln(x) = <span class="frac"><span class="num">1</span><span class="den">x</span></span></span> &mdash; clean and elegant.</div><div class="fc-eg"><span class="math"><span class="frac"><span class="num">d</span><span class="den">dx</span></span> ln(x<sup>2</sup>) = <span class="frac"><span class="num">2</span><span class="den">x</span></span></span> by chain rule</div></div>
+    <div class="fc"><div class="fc-term">Log laws</div><div class="fc-def">ln(ab) = ln(a) + ln(b). ln(a/b) = ln(a) &minus; ln(b). ln(a<sup>n</sup>) = n&middot;ln(a). Multiplications become additions.</div></div>
+  </div>
+
+  <div class="sh">Key derivatives</div>
+  <table class="rt">
+    <thead><tr><th>Function</th><th>Derivative</th></tr></thead>
+    <tbody>
+      <tr><td><span class="math">e<sup>x</sup></span></td><td><span class="math">e<sup>x</sup></span></td></tr>
+      <tr><td><span class="math">e<sup>ax</sup></span></td><td><span class="math">a &middot; e<sup>ax</sup></span></td></tr>
+      <tr><td><span class="math">ln(x)</span></td><td><span class="math"><span class="frac"><span class="num">1</span><span class="den">x</span></span></span></td></tr>
+      <tr><td><span class="math">ln(f(x))</span></td><td><span class="math"><span class="frac"><span class="num">f'(x)</span><span class="den">f(x)</span></span></span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="sh">Log returns &mdash; the quant standard</div>
+  <div class="f-label">Log return between two prices</div>
+  <div class="f-box"><span class="math">r<sub>log</sub> = ln<span class="big-paren">(</span><span class="frac"><span class="num">P<sub>t</sub></span><span class="den">P<sub>t&minus;1</sub></span></span><span class="big-paren">)</span> = ln(P<sub>t</sub>) &minus; ln(P<sub>t&minus;1</sub>)</span></div>
+
+  <div class="insight">
+    <div class="insight-lbl">Why quants use log returns instead of simple returns</div>
+    <ul style="font-size:13px;margin:6px 0 0 16px;line-height:1.8;color:var(--tx2)">
+      <li><strong style="color:var(--tx1)">Additive:</strong> daily log returns sum to the total period return. Simple returns do not add cleanly.</li>
+      <li><strong style="color:var(--tx1)">Symmetric:</strong> a +50% gain followed by a &minus;50% loss gives &minus;25% in simple returns. Log returns are symmetric around zero.</li>
+      <li><strong style="color:var(--tx1)">Normally distributed:</strong> log returns are closer to normally distributed than simple returns &mdash; essential for statistical models.</li>
+      <li><strong style="color:var(--tx1)">Continuous-time link:</strong> log returns connect directly to the continuous-time models built on e<sup>rt</sup>.</li>
+    </ul>
+  </div>
+
+  <div class="qbox">
+    <div class="qbox-lbl">Core to all continuous-time finance</div>
+    <p class="qbox-body">The geometric Brownian motion model for stock prices is dS = &mu;S dt + &sigma;S dW, giving S(t) = S(0)e<sup>(&mu;&minus;&sigma;&sup2;/2)t + &sigma;W(t)</sup>. The entire model is built on the exponential. Log returns appear in every backtest, every factor model, every volatility estimate. The Black-Scholes formula contains ln(S/K) in its core expressions. Mastering exp and log is non-negotiable.</p>
+    <span class="qtag">Log returns</span><span class="qtag">Geometric Brownian Motion</span><span class="qtag">Black-Scholes</span><span class="qtag">Volatility models</span>
+  </div>`
+},
+{
+  title:"Trigonometric functions",
+  peb:"Sine and cosine describe oscillating, cyclical behaviour &mdash; anything that repeats in a wave pattern. In quant finance this shows up in signal processing, Fourier analysis (decomposing price series into frequency components), and some volatility modelling techniques. Their derivatives follow clean cyclic patterns, and Euler's formula connects them to the exponential &mdash; which you will use in characteristic functions and option pricing models at LV IV.",
+  html:`
+  <div class="sh">The core functions</div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">sin(x)</div><div class="fc-def">Oscillates between &minus;1 and 1. Period = 2&pi;. sin(0) = 0, sin(&pi;/2) = 1, sin(&pi;) = 0.</div></div>
+    <div class="fc"><div class="fc-term">cos(x)</div><div class="fc-def">Oscillates between &minus;1 and 1. Period = 2&pi;. cos(0) = 1, cos(&pi;/2) = 0, cos(&pi;) = &minus;1.</div></div>
+    <div class="fc"><div class="fc-term">tan(x)</div><div class="fc-def">sin(x)/cos(x). Period = &pi;. Vertical asymptotes where cos(x) = 0.</div></div>
+    <div class="fc"><div class="fc-term">Key identity</div><div class="fc-def">sin&sup2;(x) + cos&sup2;(x) = 1. The Pythagorean identity &mdash; used constantly in proofs.</div></div>
+  </div>
+
+  <div class="sh">Derivatives and integrals</div>
+  <table class="rt">
+    <thead><tr><th>Function</th><th>Derivative</th><th>Integral</th></tr></thead>
+    <tbody>
+      <tr><td><span class="math">sin(x)</span></td><td><span class="math">cos(x)</span></td><td><span class="math">&minus;cos(x) + C</span></td></tr>
+      <tr><td><span class="math">cos(x)</span></td><td><span class="math">&minus;sin(x)</span></td><td><span class="math">sin(x) + C</span></td></tr>
+      <tr><td><span class="math">sin(ax)</span></td><td><span class="math">a&middot;cos(ax)</span></td><td><span class="math">&minus;<span class="frac"><span class="num">1</span><span class="den">a</span></span>cos(ax) + C</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="sh">The cyclic derivative pattern</div>
+  <div class="insight">
+    <div class="insight-lbl">A pattern worth knowing</div>
+    <p style="text-align:center;margin:8px 0;font-size:13px;color:var(--tx2)">sin(x) &rarr; cos(x) &rarr; &minus;sin(x) &rarr; &minus;cos(x) &rarr; sin(x) &rarr; &hellip;</p>
+    Differentiating sine four times returns to sine. This cycle is useful for Taylor series calculations.
+  </div>
+
+  <div class="sh">Euler's formula &mdash; connecting exp and trig</div>
+  <div class="f-label">One of the most beautiful results in mathematics</div>
+  <div class="f-box"><span class="math">e<sup>ix</sup> = cos(x) + i&middot;sin(x)</span></div>
+  <p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-top:10px">Where i = &radic;(&minus;1). Setting x = &pi; gives e<sup>i&pi;</sup> + 1 = 0 &mdash; Euler's identity, connecting the five most important constants in mathematics. More practically, this formula underlies Fourier transforms and characteristic functions in option pricing.</p>
+
+  <div class="qbox">
+    <div class="qbox-lbl">Where this appears in quant finance</div>
+    <p class="qbox-body">Fourier analysis for filtering noise from price series and detecting cycles is built on sine and cosine. The characteristic function of a probability distribution &mdash; used in the Heston model and other option pricing frameworks &mdash; involves Euler's formula directly. Some volatility seasonality models use sinusoidal terms to capture intraday and calendar effects.</p>
+    <span class="qtag">Fourier analysis</span><span class="qtag">Characteristic functions</span><span class="qtag">Signal processing</span><span class="qtag">Heston model (LV IV)</span>
+  </div>`
+},
+{
+  title:"Applications of calculus",
+  peb:"Now that you have limits, derivatives, and integrals, the question is: what do you actually use them for? This topic ties everything together &mdash; finding maxima and minima (optimisation), approximating complex functions as polynomials (Taylor series), and the specific applications that appear constantly in quant finance: finding option sensitivities, minimising model error, pricing derivatives, and decomposing portfolio returns. This is where abstract maths becomes practical finance.",
+  html:`
+  <div class="sh">Optimisation &mdash; finding maxima and minima</div>
+  <div class="fc-grid">
+    <div class="fc"><div class="fc-term">Critical points</div><div class="fc-def">Where f'(x) = 0. These are candidates for maxima, minima, or saddle points. Always check the second derivative to confirm which.</div></div>
+    <div class="fc"><div class="fc-term">Second derivative test</div><div class="fc-def">f''(x) &gt; 0: local minimum (concave up). f''(x) &lt; 0: local maximum (concave down). f''(x) = 0: inconclusive.</div></div>
+    <div class="fc"><div class="fc-term">Gradient descent</div><div class="fc-def">Move in the direction of the negative derivative (downhill). Repeat until a minimum is reached. The core algorithm behind all machine learning.</div></div>
+  </div>
+
+  <div class="sh">Worked example &mdash; finding a minimum</div>
+  <div class="worked">
+    <div class="worked-title">Minimise C(x) = x&sup2; &minus; 4x + 7</div>
+    <div class="worked-body">
+      <div class="worked-math">Step 1 — set C'(x) = 0:
+  C'(x) = 2x - 4 = 0  →  x = 2
+
+Step 2 — second derivative test:
+  C''(x) = 2 > 0  →  local minimum confirmed
+
+Step 3 — minimum value:
+  C(2) = 4 - 8 + 7 = 3</div>
+      <p class="worked-conclusion">Minimum occurs at x = 2 with value 3. The same process finds the minimum variance portfolio weight in portfolio theory.</p>
+    </div>
+  </div>
+
+  <div class="sh">Taylor series &mdash; approximating functions</div>
+  <p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:12px">Any smooth function can be approximated near a point x<sub>0</sub> using its derivatives at that point:</p>
+  <div class="f-box"><span class="math">f(x) &approx; f(x<sub>0</sub>) + f'(x<sub>0</sub>)(x&minus;x<sub>0</sub>) + <span class="frac"><span class="num">f''(x<sub>0</sub>)</span><span class="den">2!</span></span>(x&minus;x<sub>0</sub>)<sup>2</sup> + <span class="frac"><span class="num">f'''(x<sub>0</sub>)</span><span class="den">3!</span></span>(x&minus;x<sub>0</sub>)<sup>3</sup> + &hellip;</span></div>
+
+  <div class="insight">
+    <div class="insight-lbl">Taylor series and the option Greeks</div>
+    <p>The option Greeks are the Taylor expansion terms for option price changes. If the stock price moves by &Delta;S:</p>
+    <div class="f-box" style="margin:10px 0"><span class="math">&Delta;V &approx; &Delta; &middot; &Delta;S + <span class="frac"><span class="num">1</span><span class="den">2</span></span>&Gamma; &middot; (&Delta;S)<sup>2</sup></span></div>
+    <p style="font-size:13px;color:var(--tx2)">Delta is the first derivative term (linear sensitivity). Gamma is the second derivative term (convexity). This is used daily for P&amp;L attribution and risk management.</p>
+  </div>
+
+  <div class="sh">L'H&ocirc;pital's rule &mdash; handling 0/0 limits</div>
+  <p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:10px">When a limit gives 0/0 or &infin;/&infin;, differentiate numerator and denominator separately:</p>
+  <div class="f-box"><span class="math">lim<sub>x&rarr;a</sub> <span class="frac"><span class="num">f(x)</span><span class="den">g(x)</span></span> = lim<sub>x&rarr;a</sub> <span class="frac"><span class="num">f'(x)</span><span class="den">g'(x)</span></span></span></div>
+
+  <div class="sh">Summary &mdash; calculus tools and quant applications</div>
+  <table class="rt">
+    <thead><tr><th>Tool</th><th>What it does</th><th>Quant application</th></tr></thead>
+    <tbody>
+      <tr><td>Derivative</td><td>Rate of change at a point</td><td>Greeks, sensitivities, gradient descent</td></tr>
+      <tr><td>Second derivative</td><td>Curvature &mdash; rate of change of the rate of change</td><td>Gamma, convexity, loss function shape</td></tr>
+      <tr><td>Setting f' = 0</td><td>Finds optimal points</td><td>Portfolio optimisation, MLE fitting</td></tr>
+      <tr><td>Taylor series</td><td>Local polynomial approximation</td><td>Delta-Gamma P&amp;L, pricing approximations</td></tr>
+      <tr><td>Definite integral</td><td>Accumulated value over a range</td><td>Expected payoffs, tail probabilities</td></tr>
+      <tr><td>L'H&ocirc;pital's rule</td><td>Evaluates indeterminate limits</td><td>Model boundary behaviour</td></tr>
+    </tbody>
+  </table>
+
+  <div class="qbox">
+    <div class="qbox-lbl">Calculus ties the entire LV I curriculum together</div>
+    <p class="qbox-body">Every formula in Finance LV I used calculus even when it was not obvious. Continuous compounding uses e<sup>rt</sup> &mdash; derived from a limit. The NPV formula's derivative with respect to r gives duration. Bond pricing is an annuity &mdash; which is the integral of a continuous payment stream. In ML, gradient descent minimises loss functions by following the negative derivative. At Maths LV V, It&ocirc;'s Lemma is the stochastic chain rule &mdash; applying calculus to functions of random processes. Everything builds from LV I.</p>
+    <span class="qtag">Option Greeks</span><span class="qtag">Gradient descent</span><span class="qtag">Portfolio optimisation</span><span class="qtag">It&ocirc;'s Lemma (LV V)</span><span class="qtag">MLE estimation</span>
+  </div>`
+}
+];
+
+let cur=0,bookMode=false;
+function go(i){
+  cur=i;
+  document.querySelectorAll('.sb-item').forEach((el,idx)=>{
+    el.classList.toggle('active',idx===i);
+    if(idx<i)el.classList.add('done');else el.classList.remove('done');
+  });
+  const t=T[i];
+  document.getElementById('content').innerHTML=`
+    <div class="progress-pips" id="pips"></div>
+    <div class="topic-eyebrow">
+      <span class="badge badge-purple">LV I &middot; Topic ${i+1} of ${T.length}</span>
+      <span class="badge badge-subtle">Core concept</span>
+    </div>
+    <div class="topic-title-lg">${t.title}</div>
+    <div class="peb"><div class="peb-label">Plain English First</div>${t.peb}</div>
+    ${t.html}
+    <div class="topic-nav">
+      ${i>0?`<button class="tn-btn" onclick="go(${i-1})">&#8592; Previous</button>`:''}
+      ${i<T.length-1
+        ?`<button class="tn-btn primary" onclick="go(${i+1})" style="margin-left:auto">Next &#8594;</button>`
+        :'<span style="font-size:13px;color:var(--tx3);margin-left:auto;align-self:center">LV I complete &#10003;</span>'}
+    </div>`;
+  renderPips();
+  document.getElementById('content').scrollTop=0;
+}
+function renderPips(){
+  const el=document.getElementById('pips');
+  if(!el)return;
+  el.innerHTML=T.map((t,i)=>{
+    const bg=i===cur?'#7c3aed':i<cur?'#a78bfa':'rgba(0,0,0,.15)';
+    return`<button class="pip" title="${t.title}" style="background:${bg}" onclick="go(${i})"></button>`;
+  }).join('');
+}
+function toggleLayout(){
+  bookMode=!bookMode;
+  document.getElementById('shell').classList.toggle('book-mode',bookMode);
+  document.getElementById('layout-btn').classList.toggle('active',bookMode);
+}
+function toggleTheme(){
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('theme-btn').classList.toggle('active',!dark);
+}
+if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+}else{
+  document.documentElement.setAttribute('data-theme','light');
+}
+go(0);
+</script>
+</body>
+</html>
