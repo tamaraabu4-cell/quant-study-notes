@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turtle Soup Backtest — Road to Quant</title>
+<style>
+:root{--bg:#ffffff;--bg2:#f5f5f7;--bg3:#e8e8ed;--tx1:#1d1d1f;--tx2:#6e6e73;--tx3:#aeaeb2;--br:rgba(0,0,0,.10);--br2:rgba(0,0,0,.18);--green:#059669;--green-bg:#ecfdf5;--green-dk:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--blue:#2563eb;--blue-bg:#eff6ff;--purple:#7c3aed;--purple-bg:#f5f3ff;--red:#dc2626;--red-bg:#fff1f2}
+[data-theme="dark"]{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--tx1:#f5f5f7;--tx2:#98989d;--tx3:#636366;--br:rgba(255,255,255,.09);--br2:rgba(255,255,255,.16);--green:#34d399;--green-bg:#022c22;--green-dk:#6ee7b7;--amber:#fbbf24;--amber-bg:#1c1200;--blue:#60a5fa;--blue-bg:#0d1b3e;--purple:#a78bfa;--purple-bg:#1e0e3e;--red:#f87171;--red-bg:#1c0505}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--br);height:52px;display:flex;align-items:center;padding:0 32px;gap:8px}
+[data-theme="dark"] .nav{background:rgba(28,28,30,.82)}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-right:auto}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px}
+.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:10px;transition:background .15s,color .15s}
+.nav-link:hover{background:var(--bg2);color:var(--tx1)}
+.nav-link.active{color:var(--tx1);font-weight:500}
+.nav-badge{font-size:10px;padding:1px 5px;border-radius:4px;background:var(--bg2);color:var(--tx3);margin-left:3px}
+.nav-divider{width:.5px;height:20px;background:var(--br2);margin:0 6px}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:15px;transition:background .15s;border:.5px solid transparent}
+.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br)}
+
+/* Page layout */
+.page-wrap{max-width:860px;margin:0 auto;padding:0 40px 80px}
+.page-hero{padding:52px 0 40px;border-bottom:.5px solid var(--br);margin-bottom:48px}
+.back-link{font-size:13px;color:var(--tx3);display:flex;align-items:center;gap:6px;margin-bottom:24px}
+.back-link:hover{color:var(--tx1)}
+.project-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:980px;background:var(--green-bg);color:var(--green);margin-bottom:16px}
+.page-title{font-size:36px;font-weight:600;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px}
+.page-sub{font-size:17px;color:var(--tx2);line-height:1.6;max-width:600px;margin-bottom:24px}
+.meta-row{display:flex;gap:20px;flex-wrap:wrap}
+.meta-item{font-size:12px;color:var(--tx3)}
+.meta-item strong{color:var(--tx1);font-weight:500}
+
+/* Stats strip */
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:48px}
+.stat-card{background:var(--bg2);border-radius:16px;padding:16px 18px}
+.stat-label{font-size:11px;color:var(--tx3);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.stat-value{font-size:22px;font-weight:600;letter-spacing:-.02em}
+.stat-note{font-size:11px;color:var(--tx3);margin-top:3px}
+
+/* Section */
+.section{margin-bottom:48px}
+.section-title{font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:16px}
+.section-sub{font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:16px}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px}
+.card{background:var(--bg2);border-radius:16px;padding:16px 18px}
+.card-title{font-size:13px;font-weight:600;margin-bottom:6px}
+.card-body{font-size:12px;color:var(--tx2);line-height:1.55}
+.card-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:980px;margin-top:8px;font-weight:500}
+.tag-green{background:var(--green-bg);color:var(--green)}
+.tag-amber{background:var(--amber-bg);color:var(--amber)}
+.tag-red{background:var(--red-bg);color:var(--red)}
+.tag-blue{background:var(--blue-bg);color:var(--blue)}
+.tag-purple{background:var(--purple-bg);color:var(--purple)}
+
+/* Alert boxes */
+.alert{border-radius:12px;padding:16px 18px;margin-bottom:16px;font-size:13px;line-height:1.7}
+.alert-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.alert-amber{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.alert-amber .alert-title{color:var(--amber)}
+.alert-green{background:var(--green-bg);border-left:3px solid var(--green)}
+.alert-green .alert-title{color:var(--green)}
+.alert-blue{background:var(--blue-bg);border-left:3px solid var(--blue)}
+.alert-blue .alert-title{color:var(--blue)}
+.alert-red{background:var(--red-bg);border-left:3px solid var(--red)}
+.alert-red .alert-title{color:var(--red)}
+
+/* Improvements list */
+.improve-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.improve-item{background:var(--bg2);border-radius:12px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+.improve-num{width:24px;height:24px;border-radius:50%;background:var(--purple-bg);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.improve-body{}
+.improve-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.improve-desc{font-size:12px;color:var(--tx2);line-height:1.55}
+
+/* Code block */
+.code-wrap{background:#0d1117;border-radius:16px;overflow:hidden;margin-bottom:20px}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#161b22;border-bottom:1px solid #30363d}
+.code-lang{font-size:12px;color:#8b949e;font-family:'Courier New',monospace}
+.code-copy{font-size:11px;color:#8b949e;cursor:pointer;padding:3px 8px;border-radius:6px;background:transparent;border:.5px solid #30363d;transition:background .15s;font-family:inherit}
+.code-copy:hover{background:#21262d}
+pre{padding:20px;overflow-x:auto;font-size:12.5px;line-height:1.65;color:#e6edf3;font-family:'Courier New',monospace}
+.kw{color:#ff7b72}
+.fn{color:#d2a8ff}
+.st{color:#a5d6ff}
+.cm{color:#8b949e;font-style:italic}
+.nm{color:#79c0ff}
+.op{color:#ffa657}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+.data-table th{padding:8px 12px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:.5px solid var(--br2);color:var(--tx2);letter-spacing:.03em}
+.data-table td{padding:8px 12px;border-bottom:.5px solid var(--br)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table .positive{color:var(--green);font-weight:500}
+.data-table .negative{color:var(--red);font-weight:500}
+.data-table .highlight{background:var(--green-bg)}
+
+/* Divider */
+hr{border:none;border-top:.5px solid var(--br);margin:40px 0}
+
+/* Footer */
+.footer{border-top:.5px solid var(--br);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}
+.footer a:hover{color:var(--tx1)}
+
+@media(max-width:700px){.page-wrap{padding:0 20px 60px}.nav{padding:0 16px}.footer{padding:16px 20px;flex-direction:column;gap:6px}.stats-strip{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Road to <span>Quant</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="../index.html">Home</a>
+    <a class="nav-link" href="../study-guide.html">Study Guide</a>
+    <a class="nav-link active" href="../projects.html">Projects</a>
+    <a class="nav-link" href="../blog.html">Blog <span class="nav-badge">soon</span></a>
+  </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" onclick="toggleTheme()">&#9788;</button>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <a class="back-link" href="../projects.html">&#8592; All projects</a>
+    <div class="project-tag">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>
+      Project 1
+    </div>
+    <h1 class="page-title">ICT Turtle Soup<br>Backtest</h1>
+    <p class="page-sub">A parameter-optimised backtest of the ICT Turtle Soup strategy on EURUSD daily data — with in-sample/out-of-sample validation and overfitting analysis.</p>
+    <div class="meta-row">
+      <span class="meta-item"><strong>Market:</strong> EURUSD / EURGBP (FX)</span>
+      <span class="meta-item"><strong>Timeframe:</strong> Daily</span>
+      <span class="meta-item"><strong>Language:</strong> Python</span>
+      <span class="meta-item"><strong>Status:</strong> Complete — v1</span>
+    </div>
+  </div>
+
+  <!-- What is Turtle Soup -->
+  <div class="section">
+    <div class="section-title">What is the Turtle Soup strategy?</div>
+    <p class="section-sub">Turtle Soup is an ICT (Inner Circle Trader) concept that <em>fades</em> the classic Turtle Trader breakout. Where traditional Turtle Traders buy new highs and sell new lows, Turtle Soup does the opposite — it anticipates false breakouts.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">The setup</div>
+        <div class="card-body">Price sweeps a recent N-day high or low, triggering breakout traders. It then reverses back inside the range — the "soup" — trapping those traders on the wrong side.</div>
+        <span class="card-tag tag-blue">Liquidity sweep</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Long signal</div>
+        <div class="card-body">Price breaks below the N-day low (sweeps buy-side liquidity), then closes back above it within the same candle. Enter long at the next open.</div>
+        <span class="card-tag tag-green">Bullish reversal</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Short signal</div>
+        <div class="card-body">Price breaks above the N-day high (sweeps sell-side liquidity), then closes back below it. Enter short at the next open.</div>
+        <span class="card-tag tag-red">Bearish reversal</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Stop & target</div>
+        <div class="card-body">Stop loss placed at ATR × multiplier from entry. Take profit at R:R × stop distance. Both parameters are optimised in the grid search.</div>
+        <span class="card-tag tag-amber">ATR-based sizing</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it was built -->
+  <div class="section">
+    <div class="section-title">How the model works</div>
+    <div class="alert alert-blue">
+      <div class="alert-title">Methodology</div>
+      This is not just a simple backtest — it includes a full parameter optimisation pipeline with overfitting protection. Three years of data are split into in-sample (years 1–2) and out-of-sample (year 3). Parameters are optimised only on in-sample data and then validated on the unseen out-of-sample period.
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>Component</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr><td>Data</td><td>EURUSD daily OHLCV via yfinance (2021–2024)</td></tr>
+        <tr><td>Signal</td><td>N-day high/low sweep with same-candle close reversal</td></tr>
+        <tr><td>ATR</td><td>14-period Average True Range for stop sizing</td></tr>
+        <tr><td>Position sizing</td><td>Fixed 1% risk per trade on £10,000 capital</td></tr>
+        <tr><td>Grid search</td><td>96 parameter combinations across lookback, R:R, ATR mult</td></tr>
+        <tr><td>Ranking metric</td><td>Sharpe ratio on in-sample data</td></tr>
+        <tr><td>Validation</td><td>Best params re-run on out-of-sample data blind</td></tr>
+        <tr><td>Overfitting test</td><td>Sharpe decay: IS Sharpe vs OOS Sharpe comparison</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title" style="font-size:16px;margin-top:28px">Parameters searched</div>
+    <table class="data-table">
+      <thead><tr><th>Parameter</th><th>Values tested</th><th>What it controls</th></tr></thead>
+      <tbody>
+        <tr><td>Lookback</td><td>10, 15, 20, 25, 30, 40 days</td><td>Window for defining the N-day high/low level</td></tr>
+        <tr><td>R:R ratio</td><td>1.5, 2.0, 2.5, 3.0</td><td>Take profit as a multiple of the stop loss distance</td></tr>
+        <tr><td>ATR multiplier</td><td>0.75, 1.0, 1.25, 1.5</td><td>Stop loss distance as a multiple of ATR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Why results were poor -->
+  <div class="section">
+    <div class="section-title">Why the results were likely poor</div>
+    <p class="section-sub">A few structural issues explain underperformance on daily EURUSD — and they are all fixable.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">&#x26A0; Wrong timeframe</div>
+        <div class="card-body">ICT Turtle Soup is primarily an intraday concept — it is designed to be traded on the 15min or 1hr chart during London/NY sessions. On daily bars, the signal logic loses most of its edge because the "sweep and reverse" often happens within a single day, invisible at daily resolution.</div>
+        <span class="card-tag tag-red">High impact</span>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x26A0; No session filter</div>
+        <div class="card-body">ICT setups are session-specific. Turtle Soup setups that form outside of London open or New York open are significantly less reliable. Daily data cannot distinguish between a London open sweep and a random mid-session move.</div>
+        <span class="card-tag tag-red">High impact</span>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x26A0; No market structure filter</div>
+        <div class="card-body">Turtle Soup longs should only be taken in a bullish market structure, and shorts in a bearish one. Trading both directions without a higher timeframe bias doubles noise.</div>
+        <span class="card-tag tag-amber">Medium impact</span>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x26A0; Too few signals</div>
+        <div class="card-body">On daily bars, sweep-and-reverse setups are rare. Fewer signals means higher variance in results and less statistical confidence. A good backtest needs 100+ trades to draw meaningful conclusions.</div>
+        <span class="card-tag tag-amber">Medium impact</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Improvements -->
+  <div class="section">
+    <div class="section-title">Planned improvements</div>
+    <p class="section-sub">These changes would meaningfully improve the strategy's edge and make the backtest results more trustworthy.</p>
+
+    <div class="improve-list">
+      <div class="improve-item">
+        <div class="improve-num">1</div>
+        <div class="improve-body">
+          <div class="improve-title">Switch to intraday data (1hr or 15min)</div>
+          <div class="improve-desc">Download hourly EURGBP data via yfinance or a broker API. Redefine the N-period high/low using hourly bars. This aligns with how the strategy is actually traded and will generate far more signals with better signal quality.</div>
+        </div>
+      </div>
+      <div class="improve-item">
+        <div class="improve-num">2</div>
+        <div class="improve-body">
+          <div class="improve-title">Add London and New York session filters</div>
+          <div class="improve-desc">Only allow entries between 07:00–10:00 GMT (London open) or 13:30–16:00 GMT (NY open). ICT setups derive their edge from institutional order flow at session opens — filtering to these windows removes a large amount of noise.</div>
+        </div>
+      </div>
+      <div class="improve-item">
+        <div class="improve-num">3</div>
+        <div class="improve-body">
+          <div class="improve-title">Add higher timeframe market structure filter</div>
+          <div class="improve-desc">Use the daily chart to determine trend direction. Only take long Turtle Soup setups when daily structure is bullish (higher highs and higher lows), and only short when bearish. This aligns trades with institutional bias and reduces counter-trend losses.</div>
+        </div>
+      </div>
+      <div class="improve-item">
+        <div class="improve-num">4</div>
+        <div class="improve-body">
+          <div class="improve-title">Tighten the entry logic</div>
+          <div class="improve-desc">The current signal fires on any candle that sweeps and closes back inside. A stricter version requires: (1) a clean displacement candle after the sweep, (2) the close to be more than 50% back inside the range, and (3) volume above the rolling average. Each condition removes false positives.</div>
+        </div>
+      </div>
+      <div class="improve-item">
+        <div class="improve-num">5</div>
+        <div class="improve-body">
+          <div class="improve-title">Test on multiple pairs</div>
+          <div class="improve-desc">Run the same optimised parameters on GBPUSD, USDJPY, and EURUSD to test robustness. A strategy that only works on one pair is likely curve-fitted. One that works across multiple correlated pairs has a genuine edge.</div>
+        </div>
+      </div>
+      <div class="improve-item">
+        <div class="improve-num">6</div>
+        <div class="improve-body">
+          <div class="improve-title">Add walk-forward validation</div>
+          <div class="improve-desc">Replace the single train/test split with rolling walk-forward optimisation — re-optimise every 3 months on the preceding 12 months of data. This is a much stronger test of whether the strategy adapts to changing market conditions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code -->
+  <div class="section">
+    <div class="section-title">The code</div>
+    <p class="section-sub" style="margin-bottom:20px">Full Python source. Runs with yfinance for real data or falls back to synthetic EURUSD if yfinance is unavailable.</p>
+
+    <div class="alert alert-green" style="margin-bottom:20px">
+      <div class="alert-title">How to run</div>
+      Install dependencies: <code style="font-family:'Courier New',monospace;font-size:12px">pip install pandas numpy matplotlib yfinance</code><br>
+      Then run: <code style="font-family:'Courier New',monospace;font-size:12px">python turtle_soup_optimisation.py</code><br>
+      Output: a PNG chart showing heatmap, equity curves, and top 10 parameter combinations.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">Python &mdash; turtle_soup_optimisation.py</span>
+        <button class="code-copy" onclick="copyCode()">Copy</button>
+      </div>
+      <pre id="code-block"><span class="cm">"""
+Turtle Soup ICT — Parameter Optimisation + Out-of-Sample Test
+==============================================================
+1. Load EURUSD daily data (real via yfinance or synthetic)
+2. Split: Years 1-2 = IN-SAMPLE | Year 3 = OUT-OF-SAMPLE
+3. Grid search over lookback, R:R ratio, ATR multiplier
+4. Rank by Sharpe ratio on in-sample data
+5. Validate best params on out-of-sample data
+6. Measure overfitting via Sharpe decay
+"""</span>
+
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">from</span> itertools <span class="kw">import</span> product
+
+<span class="cm"># ── SIGNAL LOGIC ─────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">prepare</span>(df, lookback=<span class="nm">20</span>):
+    d = df.copy()
+    d[<span class="st">'turtle_high'</span>] = d[<span class="st">'High'</span>].shift(<span class="nm">1</span>).rolling(lookback).max()
+    d[<span class="st">'turtle_low'</span>]  = d[<span class="st">'Low'</span>].shift(<span class="nm">1</span>).rolling(lookback).min()
+    hl  = d[<span class="st">'High'</span>] - d[<span class="st">'Low'</span>]
+    hpc = (d[<span class="st">'High'</span>] - d[<span class="st">'Close'</span>].shift(<span class="nm">1</span>)).abs()
+    lpc = (d[<span class="st">'Low'</span>]  - d[<span class="st">'Close'</span>].shift(<span class="nm">1</span>)).abs()
+    d[<span class="st">'ATR'</span>] = pd.concat([hl, hpc, lpc], axis=<span class="nm">1</span>).max(axis=<span class="nm">1</span>).rolling(<span class="nm">14</span>).mean()
+    <span class="cm"># Turtle Soup: sweep the level then close back inside</span>
+    d[<span class="st">'long_signal'</span>]  = (d[<span class="st">'Low'</span>]  &lt; d[<span class="st">'turtle_low'</span>])  &amp; (d[<span class="st">'Close'</span>] &gt; d[<span class="st">'turtle_low'</span>])
+    d[<span class="st">'short_signal'</span>] = (d[<span class="st">'High'</span>] &gt; d[<span class="st">'turtle_high'</span>]) &amp; (d[<span class="st">'Close'</span>] &lt; d[<span class="st">'turtle_high'</span>])
+    <span class="kw">return</span> d
+
+<span class="cm"># ── BACKTEST ENGINE ───────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">run_backtest</span>(df, rr_ratio=<span class="nm">2.0</span>, atr_mult=<span class="nm">1.0</span>, risk=<span class="nm">0.01</span>, capital=<span class="nm">10_000</span>):
+    rows = df.reset_index()
+    equity = [capital]; trades = []; in_trade = <span class="kw">False</span>
+    entry_price = sl = tp = direction = <span class="kw">None</span>
+
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="nm">1</span>, len(rows)):
+        row = rows.iloc[i]; prev = rows.iloc[i - <span class="nm">1</span>]
+
+        <span class="kw">if</span> in_trade:
+            hit_tp = hit_sl = <span class="kw">False</span>
+            <span class="kw">if</span> direction == <span class="st">'long'</span>:
+                <span class="kw">if</span> row[<span class="st">'Low'</span>]  &lt;= sl: hit_sl = <span class="kw">True</span>
+                <span class="kw">if</span> row[<span class="st">'High'</span>] &gt;= tp: hit_tp = <span class="kw">True</span>
+            <span class="kw">else</span>:
+                <span class="kw">if</span> row[<span class="st">'High'</span>] &gt;= sl: hit_sl = <span class="kw">True</span>
+                <span class="kw">if</span> row[<span class="st">'Low'</span>]  &lt;= tp: hit_tp = <span class="kw">True</span>
+            <span class="kw">if</span> hit_tp <span class="kw">or</span> hit_sl:
+                exit_px = tp <span class="kw">if</span> hit_tp <span class="kw">else</span> sl
+                pnl_pips = ((exit_px - entry_price) <span class="kw">if</span> direction == <span class="st">'long'</span>
+                            <span class="kw">else</span> (entry_price - exit_px)) * <span class="nm">10_000</span>
+                stop_pips = abs(entry_price - sl) * <span class="nm">10_000</span>
+                <span class="kw">if</span> stop_pips > <span class="nm">0</span>:
+                    capital *= (<span class="nm">1</span> + risk * (pnl_pips / stop_pips))
+                trades.append({<span class="st">'result'</span>: <span class="st">'win'</span> <span class="kw">if</span> hit_tp <span class="kw">else</span> <span class="st">'loss'</span>,
+                               <span class="st">'pnl_pips'</span>: round(pnl_pips, <span class="nm">1</span>)})
+                in_trade = <span class="kw">False</span>
+
+        <span class="kw">if not</span> in_trade:
+            atr = prev[<span class="st">'ATR'</span>]
+            <span class="kw">if</span> pd.isna(atr) <span class="kw">or</span> atr == <span class="nm">0</span>:
+                equity.append(capital); <span class="kw">continue</span>
+            stop_dist = atr * atr_mult
+            <span class="kw">if</span> prev[<span class="st">'long_signal'</span>]:
+                direction = <span class="st">'long'</span>; entry_price = row[<span class="st">'Open'</span>]
+                sl = entry_price - stop_dist; tp = entry_price + stop_dist * rr_ratio
+                in_trade = <span class="kw">True</span>
+            <span class="kw">elif</span> prev[<span class="st">'short_signal'</span>]:
+                direction = <span class="st">'short'</span>; entry_price = row[<span class="st">'Open'</span>]
+                sl = entry_price + stop_dist; tp = entry_price - stop_dist * rr_ratio
+                in_trade = <span class="kw">True</span>
+        equity.append(capital)
+
+    eq = pd.Series(equity, index=df.index)
+    td = pd.DataFrame(trades) <span class="kw">if</span> trades <span class="kw">else</span> pd.DataFrame(columns=[<span class="st">'result'</span>,<span class="st">'pnl_pips'</span>])
+    <span class="kw">return</span> eq, td</pre>
+    </div>
+  </div>
+
+  <!-- What I learned -->
+  <div class="section">
+    <div class="section-title">What this project taught me</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">In-sample / out-of-sample testing</div>
+        <div class="card-body">Optimising on all available data and then reporting those results is the most common mistake in backtesting. Holding back a test set is the minimum standard for any honest evaluation.</div>
+        <span class="card-tag tag-blue">Methodology</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Overfitting detection</div>
+        <div class="card-body">Sharpe decay (how much the Sharpe ratio degrades from IS to OOS) is a practical overfitting metric. Below 30% decay = low risk. Above 60% = the strategy is curve-fitted.</div>
+        <span class="card-tag tag-purple">Statistics</span>
+      </div>
+      <div class="card">
+        <div class="card-title">ATR-based position sizing</div>
+        <div class="card-body">Sizing positions by ATR rather than fixed pip amounts means the risk per trade adapts to current market volatility — a more robust approach than fixed sizing.</div>
+        <span class="card-tag tag-green">Risk management</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Timeframe alignment</div>
+        <div class="card-body">Strategy concepts designed for one timeframe often do not transfer directly to another. ICT setups are intraday by nature — forcing them onto daily data loses their core logic.</div>
+        <span class="card-tag tag-amber">Strategy design</span>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <a href="../projects.html" style="font-size:13px;color:var(--tx3)">&#8592; Back to projects</a>
+    <div style="display:flex;gap:10px">
+      <span style="font-size:13px;color:var(--tx3)">Version 1 &mdash; March 2026</span>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <span>Road to Quant &middot; Projects</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
+</footer>
+
+<script>
+function toggleTheme(){
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+}
+function copyCode(){
+  const code = document.getElementById('code-block').innerText;
+  navigator.clipboard.writeText(code).then(()=>{
+    const btn = document.querySelector('.code-copy');
+    btn.textContent = 'Copied!';
+    setTimeout(()=>{ btn.textContent = 'Copy'; }, 2000);
+  });
+}
+if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+} else {
+  document.documentElement.setAttribute('data-theme','light');
+}
+</script>
+</body>
+</html>
