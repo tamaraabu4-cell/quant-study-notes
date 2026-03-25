@@ -1,41 +1,285 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finance LV I — Road to Quant</title>
-<link rel="stylesheet" href="../../style.css">
+
 <style>
-  .page-header {
-    padding: 36px 48px 0;
-    border-bottom: 0.5px solid var(--light);
-  }
-  .breadcrumb {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--subtle);
-    margin-bottom: 10px;
-  }
-  .breadcrumb a:hover { color: var(--body); }
-  .page-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
-  .page-sub { font-size: 13px; color: var(--subtle); margin-bottom: 20px; }
-  .lv-tabs { display: flex; gap: 0; }
-  .lv-tab {
-    padding: 10px 18px;
-    font-size: 13px;
-    cursor: pointer;
-    color: var(--subtle);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -0.5px;
-    background: none;
-    border-top: none; border-left: none; border-right: none;
-    transition: color 0.15s;
-    display: flex; align-items: center; gap: 7px;
-    font-family: var(--font);
-  }
-  .lv-tab.active { color: var(--body); font-weight: 500; border-bottom-color: var(--body); }
-  .lv-tab.locked { opacity: 0.35; cursor: default; }
-  .lv-tab .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-  .lv-tab .lv-badge { font-size: 10px; padding: 1px 6px; border-radius: 4px; background: var(--off-white); color: var(--subtle); }
+:root {
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "Courier New", monospace;
+  --bg: #ffffff; --bg2: #f5f5f7; --bg3: #e8e8ed;
+  --tx1: #1d1d1f; --tx2: #6e6e73; --tx3: #aeaeb2;
+  --br: rgba(0,0,0,0.10); --br2: rgba(0,0,0,0.18);
+  --green: #059669; --green-bg: #ecfdf5; --green-dk: #065f46;
+  --amber: #d97706; --amber-bg: #fffbeb;
+  --blue: #2563eb; --blue-bg: #eff6ff; --blue-dk: #1e40af;
+  --purple: #7c3aed; --purple-bg: #f5f3ff;
+  --red: #dc2626; --red-bg: #fef2f2;
+  --nav-h: 52px;
+  --r: 10px; --r-lg: 16px;
+}
+[data-theme="dark"] {
+  --bg: #1c1c1e; --bg2: #2c2c2e; --bg3: #3a3a3c;
+  --tx1: #f5f5f7; --tx2: #98989d; --tx3: #636366;
+  --br: rgba(255,255,255,0.09); --br2: rgba(255,255,255,0.16);
+  --green-bg: #022c22; --green: #34d399; --green-dk: #6ee7b7;
+  --amber-bg: #1c1200; --amber: #fbbf24;
+  --blue-bg: #0d1b3e; --blue: #60a5fa; --blue-dk: #93c5fd;
+  --purple-bg: #1e0e3e; --purple: #a78bfa;
+  --red-bg: #1c0505; --red: #f87171;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+button{font-family:var(--font);cursor:pointer;border:none;background:none;}
+
+/* NAV */
+.nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:0.5px solid var(--br);
+  height:var(--nav-h);
+  display:flex;align-items:center;padding:0 32px;gap:8px;
+}
+[data-theme="dark"] .nav{background:rgba(28,28,30,0.82);}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-0.02em;margin-right:auto;}
+.nav-logo span{color:var(--green);}
+.nav-links{display:flex;gap:2px;}
+.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:var(--r);transition:background 0.15s,color 0.15s;}
+.nav-link:hover{background:var(--bg2);color:var(--tx1);}
+.nav-link.active{color:var(--tx1);font-weight:500;}
+.nav-badge{font-size:10px;padding:1px 5px;border-radius:4px;background:var(--bg2);color:var(--tx3);margin-left:3px;}
+.nav-divider{width:0.5px;height:20px;background:var(--br2);margin:0 6px;}
+.icon-btn{
+  width:32px;height:32px;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--tx2);font-size:15px;
+  transition:background 0.15s,color 0.15s;
+  border:0.5px solid transparent;
+}
+.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br);}
+.icon-btn.active{background:var(--bg2);color:var(--tx1);border-color:var(--br2);}
+
+/* PAGE HEADER */
+.page-header{padding:28px 32px 0;border-bottom:0.5px solid var(--br);}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);margin-bottom:10px;}
+.breadcrumb a:hover{color:var(--tx1);}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--tx2);margin-bottom:18px;}
+.lv-tabs{display:flex;gap:0;}
+.lv-tab{
+  padding:10px 16px;font-size:13px;cursor:pointer;
+  color:var(--tx3);border-bottom:2px solid transparent;
+  margin-bottom:-0.5px;background:none;
+  border-top:none;border-left:none;border-right:none;
+  transition:color 0.15s;font-family:var(--font);
+  display:flex;align-items:center;gap:6px;
+}
+.lv-tab.active{color:var(--tx1);font-weight:500;border-bottom-color:var(--tx1);}
+.lv-tab.locked{opacity:0.35;cursor:default;}
+.lv-pip{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.lv-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--tx3);}
+
+/* SHELL */
+.study-shell{display:flex;min-height:calc(100vh - var(--nav-h));}
+
+/* SIDEBAR */
+.study-sidebar{
+  width:196px;flex-shrink:0;
+  border-right:0.5px solid var(--br);
+  padding:20px 0;
+  position:sticky;top:var(--nav-h);
+  height:calc(100vh - var(--nav-h));
+  overflow-y:auto;background:var(--bg);
+  transition:width 0.2s, opacity 0.2s;
+}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--tx3);padding:8px 18px 5px;}
+.sb-item{
+  display:flex;align-items:center;gap:9px;
+  padding:7px 18px;font-size:13px;color:var(--tx2);
+  cursor:pointer;border-left:2px solid transparent;
+  background:none;width:100%;text-align:left;
+  transition:color 0.12s,background 0.12s;line-height:1.4;
+  font-family:var(--font);
+}
+.sb-item:hover{color:var(--tx1);background:var(--bg2);}
+.sb-item.active{color:var(--tx1);font-weight:500;border-left-color:var(--green);background:var(--bg2);}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--br2);flex-shrink:0;}
+.sb-item.active .sb-dot{background:var(--green);}
+.sb-item.done .sb-dot{background:var(--green);opacity:0.4;}
+
+/* CONTENT */
+.study-content{
+  flex:1;padding:28px 48px 64px;
+  overflow-y:auto;
+  max-height:calc(100vh - var(--nav-h));
+  max-width:100%;
+}
+
+/* BOOK MODE */
+.study-shell.book-mode .study-sidebar{display:none;}
+.study-shell.book-mode .study-content{
+  column-count:2;
+  column-gap:52px;
+  column-rule:0.5px solid var(--br);
+  max-width:100%;
+  padding:28px 52px 64px;
+}
+.study-shell.book-mode .study-content > *{break-inside:avoid;}
+.study-shell.book-mode .calc-block{break-inside:avoid;}
+.study-shell.book-mode .fc-grid{break-inside:avoid;}
+
+/* PROGRESS PIPS */
+.progress-pips{display:flex;gap:6px;margin-bottom:20px;}
+.pip{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:transform 0.15s;padding:0;}
+.pip:hover{transform:scale(1.4);}
+
+/* TOPIC HEADER */
+.topic-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.topic-title-lg{font-size:26px;font-weight:600;letter-spacing:-0.03em;margin-bottom:20px;line-height:1.15;}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:980px;font-weight:500;}
+.badge-green{background:var(--green-bg);color:var(--green);}
+.badge-subtle{background:var(--bg2);color:var(--tx2);}
+
+/* PLAIN ENGLISH BLOCK */
+.peb{
+  background:var(--amber-bg);
+  border-left:3px solid var(--amber);
+  border-radius:0 var(--r) var(--r) 0;
+  padding:14px 18px;margin-bottom:24px;
+  font-size:14px;line-height:1.7;color:var(--tx1);
+  break-inside:avoid;
+}
+.peb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:6px;}
+
+/* SECTION HEADING */
+.sh{font-size:13px;font-weight:600;color:var(--tx1);margin:24px 0 12px;padding-bottom:5px;border-bottom:0.5px solid var(--br);letter-spacing:-0.01em;}
+
+/* FLASHCARDS */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px;}
+.fc{background:var(--bg2);border-radius:var(--r-lg);padding:14px 16px;}
+.fc-term{font-size:12px;font-weight:600;color:var(--tx1);margin-bottom:6px;}
+.fc-def{font-size:12px;color:var(--tx2);line-height:1.55;}
+.fc-eg{font-size:11px;color:var(--tx3);margin-top:7px;padding-top:7px;border-top:0.5px solid var(--br);font-style:italic;}
+
+/* FORMULA */
+.f-label{font-size:11px;color:var(--tx3);text-align:center;margin-bottom:4px;font-style:italic;}
+.f-box{
+  background:var(--bg2);border-radius:var(--r);
+  padding:16px 20px;margin-bottom:12px;
+  font-size:15px;text-align:center;
+  overflow-x:auto;break-inside:avoid;
+}
+
+/* Math rendering */
+.math { font-family: 'Times New Roman', Georgia, serif; font-size: 1.05em; letter-spacing: 0.01em; }
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 3px; }
+.num { border-bottom: 1.5px solid currentColor; padding: 0 3px 1px; text-align: center; }
+.den { padding: 1px 3px 0; text-align: center; }
+.big-paren { font-size: 1.3em; vertical-align: middle; line-height: 1; }
+.f-box { display: flex; align-items: center; justify-content: center; }
+
+
+/* VAR TABLE */
+.vt{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:18px;}
+.vt td{padding:6px 10px;border-bottom:0.5px solid var(--br);vertical-align:top;}
+.vt td:first-child{font-family:var(--mono);font-weight:500;color:var(--blue);width:55px;font-size:12px;}
+.vt td:last-child{color:var(--tx2);}
+.vt tr:last-child td{border-bottom:none;}
+
+/* COMPARISON TABLE */
+.ct{width:100%;font-size:13px;border-collapse:collapse;margin:10px 0 18px;}
+.ct th{padding:7px 10px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:0.5px solid var(--br2);color:var(--tx2);letter-spacing:0.02em;}
+.ct td{padding:7px 10px;border-bottom:0.5px solid var(--br);}
+.ct tr:last-child td{border-bottom:none;}
+.ct .hl td{background:var(--green-bg);color:var(--green-dk);font-weight:500;}
+
+/* TIMELINE */
+.timeline{display:flex;align-items:center;margin:18px 0;overflow-x:auto;padding-bottom:4px;}
+.tl-node{display:flex;flex-direction:column;align-items:center;min-width:78px;}
+.tl-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;}
+.tl-lbl{font-size:10px;color:var(--tx3);margin-top:5px;}
+.tl-val{font-size:13px;font-weight:600;margin-top:2px;}
+.tl-line{flex:1;height:1.5px;background:var(--br2);margin-bottom:30px;min-width:24px;}
+.tl-arr{color:var(--tx3);font-size:14px;margin-bottom:30px;}
+
+/* RISK CARDS */
+.risk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:10px 0 18px;}
+.risk-card{border-radius:var(--r-lg);padding:14px 16px;}
+.risk-title{font-size:12px;font-weight:600;margin-bottom:5px;}
+.risk-body{font-size:11px;line-height:1.55;}
+
+/* QUANT BOX */
+.qbox{background:var(--purple-bg);border-radius:var(--r-lg);padding:16px 18px;margin-top:18px;break-inside:avoid;}
+.qbox-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);margin-bottom:8px;}
+.qbox-body{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px;}
+.qtag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:980px;background:var(--purple-bg);color:var(--purple);border:0.5px solid rgba(124,58,237,0.2);margin:2px;}
+
+/* INSIGHT BOX */
+.insight{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.65;break-inside:avoid;}
+.insight-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--blue);margin-bottom:5px;}
+
+/* WORKED EXAMPLE */
+.worked{background:var(--bg2);border:0.5px solid var(--br);border-radius:var(--r-lg);padding:18px 20px;margin:14px 0 18px;break-inside:avoid;}
+.worked-title{font-size:12px;font-weight:600;color:var(--tx1);margin-bottom:10px;padding-bottom:8px;border-bottom:0.5px solid var(--br);}
+.worked-body{font-size:13px;color:var(--tx2);line-height:1.7;}
+.worked-math{font-family:var(--mono);background:var(--bg);border-radius:var(--r);padding:10px 14px;margin:8px 0;font-size:13px;overflow-x:auto;}
+.worked-conclusion{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic;}
+
+/* CASHFLOW TABLE */
+.cft{width:100%;font-size:13px;border-collapse:collapse;margin:12px 0 18px;}
+.cft th{padding:7px 10px;background:var(--bg2);font-size:11px;font-weight:500;color:var(--tx2);text-align:left;border-bottom:0.5px solid var(--br2);}
+.cft td{padding:7px 10px;border-bottom:0.5px solid var(--br);}
+.cft tr:last-child td{border-bottom:none;}
+.cft .pos td:last-child{color:var(--green);font-weight:500;}
+.cft .neg td:last-child{color:var(--red);font-weight:500;}
+.cft .total{font-weight:600;}
+
+/* CALC */
+.calc-block{background:var(--bg2);border-radius:var(--r-lg);padding:20px;margin-bottom:18px;break-inside:avoid;}
+.calc-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.calc-lbl{font-size:12px;color:var(--tx2);min-width:120px;}
+.calc-out{font-size:13px;font-weight:600;color:var(--tx1);min-width:70px;text-align:right;}
+input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--bg3);outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--tx1);cursor:pointer;}
+input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--tx1);border:none;cursor:pointer;}
+.result-strip{display:flex;align-items:baseline;gap:10px;background:var(--green-bg);border-radius:var(--r);padding:14px 18px;margin-top:12px;}
+.result-lbl{font-size:12px;color:var(--green);}
+.result-val{font-size:30px;font-weight:600;color:var(--green-dk);letter-spacing:-0.03em;}
+.results-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.r3{border-radius:var(--r);padding:12px 14px;}
+.r3-lbl{font-size:11px;margin-bottom:4px;}
+.r3-val{font-size:20px;font-weight:600;letter-spacing:-0.02em;}
+
+/* NAV BUTTONS */
+.topic-nav{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:0.5px solid var(--br);}
+.tn-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:980px;border:0.5px solid var(--br2);background:var(--bg);color:var(--tx1);cursor:pointer;transition:background 0.15s;}
+.tn-btn:hover{background:var(--bg2);}
+.tn-btn.primary{background:var(--tx1);color:var(--bg);border-color:var(--tx1);}
+.tn-btn.primary:hover{opacity:0.85;}
+
+/* FOOTER */
+.footer{border-top:0.5px solid var(--br);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3);}
+.footer a:hover{color:var(--tx1);}
+
+/* KATEX overrides for theme */
+.katex{font-size:1.05em;}
+[data-theme="dark"] .katex{color:var(--tx1);}
+
+/* Responsive */
+@media(max-width:700px){
+  .study-sidebar{display:none;}
+  .study-content{padding:20px 20px 48px;}
+  .study-shell.book-mode .study-content{column-count:1;padding:20px;}
+  .nav{padding:0 16px;}
+  .page-header{padding:20px 16px 0;}
+  .footer{padding:16px;flex-direction:column;gap:6px;}
+}
 </style>
 </head>
 <body>
@@ -48,20 +292,21 @@
     <a class="nav-link" href="../../projects.html">Projects <span class="nav-badge">soon</span></a>
     <a class="nav-link" href="../../blog.html">Blog <span class="nav-badge">soon</span></a>
   </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" id="layout-btn" title="Toggle layout" onclick="toggleLayout()">&#9700;</button>
+  <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">&#9788;</button>
 </nav>
 
 <div class="page-header">
   <div class="breadcrumb">
-    <a href="../../index.html">Home</a>
-    <span>/</span>
-    <a href="../../study-guide.html">Study Guide</a>
-    <span>/</span>
-    <span style="color:var(--body)">Finance</span>
+    <a href="../../index.html">Home</a><span>/</span>
+    <a href="../../study-guide.html">Study Guide</a><span>/</span>
+    <span style="color:var(--tx1)">Finance — LV I</span>
   </div>
   <div class="page-title">Finance</div>
   <div class="page-sub">Foundations of Valuation — Level I</div>
   <div class="lv-tabs">
-    <button class="lv-tab active"><div class="pip"></div> LV I — Foundations</button>
+    <button class="lv-tab active"><div class="lv-pip"></div>LV I — Foundations</button>
     <button class="lv-tab locked">LV II <span class="lv-badge">locked</span></button>
     <button class="lv-tab locked">LV III <span class="lv-badge">locked</span></button>
     <button class="lv-tab locked">LV IV <span class="lv-badge">locked</span></button>
@@ -69,9 +314,7 @@
   </div>
 </div>
 
-<div class="study-shell">
-
-  <!-- Sidebar -->
+<div class="study-shell" id="shell">
   <aside class="study-sidebar" id="sidebar">
     <div class="sb-label" style="margin-top:8px">LV I Topics</div>
     <button class="sb-item active" onclick="go(0)"><div class="sb-dot"></div>Time value of money</button>
@@ -82,753 +325,572 @@
     <button class="sb-item" onclick="go(5)"><div class="sb-dot"></div>Annuities &amp; perpetuities</button>
     <button class="sb-item" onclick="go(6)"><div class="sb-dot"></div>Portfolio risk types</button>
   </aside>
-
-  <!-- Content -->
   <main class="study-content" id="content"></main>
-
 </div>
 
 <footer class="footer">
-  <span>Road to Quant · Finance LV I</span>
-  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell ↗</a>
+  <span>Road to Quant &middot; Finance LV I</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
 </footer>
 
+
+
 <script>
-/* =====================================================
-   TOPIC DATA — Finance LV I, all 7 topics
-   ===================================================== */
 const T = [
-
-/* ── 0  TIME VALUE OF MONEY ─────────────────────────── */
+/* ── 0  TIME VALUE OF MONEY ── */
 {
-  title: "Time value of money",
-  eli5: "Imagine your mate owes you £100. Would you rather he paid you back TODAY or in 5 years? Today — obviously. Because you could invest that £100 right now and it would grow to MORE than £100 in 5 years. That single idea — money now is worth more than the same money later — is the foundation of almost everything in finance.",
-  html: `
-  <div class="sh">The core idea</div>
-  <p style="font-size:14px;color:var(--subtle);line-height:1.7;margin-bottom:18px">Money has a time dimension. £100 today is NOT the same as £100 in one year — because today's money can be invested and grow. Every financial decision that involves future cash flows uses this idea.</p>
+title:"Time value of money",
+peb:"Imagine your mate owes you £100. Would you rather he paid you back TODAY or in 5 years? Today — obviously. Because you could invest that £100 right now and it would grow to MORE than £100 in 5 years. That single idea — money now is worth more than the same money later — is the foundation of almost everything in finance. The richer and more sophisticated the financial model, the more this simple idea is hiding inside it.",
+html:`
+<div class="sh">The core idea</div>
+<p style="font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:18px">Money has a time dimension. £100 today is NOT the same as £100 in one year — because today's money can be invested, earn returns, and grow. Every valuation, every pricing model, every financial decision involving future cash flows is built on this single principle.</p>
 
-  <div class="timeline">
-    <div class="tl-node">
-      <div class="tl-circle" style="background:#ecfdf5;color:#065f46">Now</div>
-      <div class="tl-lbl">Today</div>
-      <div class="tl-val" style="color:#065f46">£100</div>
-    </div>
-    <div class="tl-line"></div><div class="tl-arr">→</div><div class="tl-line"></div>
-    <div class="tl-node">
-      <div class="tl-circle" style="background:#f5f3ff;color:#4c1d95">+1yr</div>
-      <div class="tl-lbl">Year 1</div>
-      <div class="tl-val" style="color:#6d28d9">£110</div>
-    </div>
-    <div class="tl-line"></div><div class="tl-arr">→</div><div class="tl-line"></div>
-    <div class="tl-node">
-      <div class="tl-circle" style="background:#fffbeb;color:#78350f">+2yr</div>
-      <div class="tl-lbl">Year 2</div>
-      <div class="tl-val" style="color:#92400e">£121</div>
-    </div>
-    <div class="tl-line"></div><div class="tl-arr">→</div><div class="tl-line"></div>
-    <div class="tl-node">
-      <div class="tl-circle" style="background:#fff1f2;color:#881337">+3yr</div>
-      <div class="tl-lbl">Year 3</div>
-      <div class="tl-val" style="color:#9f1239">£133</div>
-    </div>
+<div class="timeline">
+  <div class="tl-node"><div class="tl-circle" style="background:#ecfdf5;color:#065f46">Now</div><div class="tl-lbl">Today</div><div class="tl-val" style="color:#065f46">£100</div></div>
+  <div class="tl-line"></div><div class="tl-arr">→</div><div class="tl-line"></div>
+  <div class="tl-node"><div class="tl-circle" style="background:#f5f3ff;color:#4c1d95">+1yr</div><div class="tl-lbl">Year 1</div><div class="tl-val" style="color:#6d28d9">£110</div></div>
+  <div class="tl-line"></div><div class="tl-arr">→</div><div class="tl-line"></div>
+  <div class="tl-node"><div class="tl-circle" style="background:#fffbeb;color:#78350f">+2yr</div><div class="tl-lbl">Year 2</div><div class="tl-val" style="color:#92400e">£121</div></div>
+  <div class="tl-line"></div><div class="tl-arr">→</div><div class="tl-line"></div>
+  <div class="tl-node"><div class="tl-circle" style="background:#fff1f2;color:#881337">+3yr</div><div class="tl-lbl">Year 3</div><div class="tl-val" style="color:#9f1239">£133</div></div>
+</div>
+<p style="font-size:11px;color:var(--tx3);text-align:center;margin:0 0 22px">£100 at 10% annually — growth accelerates each year because interest earns interest</p>
+
+<div class="sh">Two directions money moves</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Future Value (FV)</div><div class="fc-def">How much does money today grow to at a future point? You move money FORWARD in time by applying a growth rate. The further forward, the larger it grows due to compounding.</div><div class="fc-eg">£100 at 10% → £110 after 1 year, £121 after 2</div></div>
+  <div class="fc"><div class="fc-term">Present Value (PV)</div><div class="fc-def">What is future money worth in today's terms? You move money BACKWARD in time by discounting. The further away, the less it's worth today.</div><div class="fc-eg">£110 received in 1 year, discounted at 10% → worth £100 today</div></div>
+  <div class="fc"><div class="fc-term">Discount rate (r)</div><div class="fc-def">The rate used to bring future money back to today. Reflects your opportunity cost — the return you could earn by investing elsewhere at equivalent risk.</div><div class="fc-eg">Higher r → future cash flows are worth less today</div></div>
+  <div class="fc"><div class="fc-term">Opportunity cost</div><div class="fc-def">The return you sacrifice by not investing money today. This is why future cash is worth less — you've given up the chance to grow today's money for the waiting period.</div><div class="fc-eg">If you can earn 10% elsewhere, you need £110 in a year to justify waiting</div></div>
+</div>
+
+<div class="sh">The formulas</div>
+<div class="f-label">Future Value — growing money forward in time</div>
+<div class="f-box"><span class="math">FV = PV &times; (1 + r)<sup>n</sup></span></div>
+<div class="f-label">Present Value — discounting back to today</div>
+<div class="f-box"><span class="math">PV = <span class="frac"><span class="num">FV</span><span class="den">(1 + r)<sup>n</sup></span></span></span></div>
+<table class="vt">
+  <tr><td>PV</td><td>Present value — the amount of money today</td></tr>
+  <tr><td>FV</td><td>Future value — the amount at a future point in time</td></tr>
+  <tr><td>r</td><td>Interest or discount rate per period (e.g. 10% = 0.10)</td></tr>
+  <tr><td>n</td><td>Number of periods — years, months, or any consistent unit</td></tr>
+</table>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example — growing £5,000 at 8% over 10 years</div>
+  <div class="worked-body">
+    <p>You invest £5,000 today at an annual rate of 8%. How much will you have in 10 years?</p>
+    <div class="worked-math">FV = 5,000 × (1.08)¹⁰ = 5,000 × 2.1589 = £10,795</div>
+    <p class="worked-conclusion">You more than double your money — purely from the effect of compounding 8% per year over time. Notice that you earned £5,795 in interest on a £5,000 investment — more than the original principal.</p>
   </div>
-  <p style="font-size:11px;color:var(--subtle);text-align:center;margin:0 0 24px">£100 at 10% annual rate — notice how growth accelerates each year</p>
-
-  <div class="sh">Two directions money moves in time</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">Future Value (FV)</div>
-      <div class="fc-def">How much does money today grow to? You move money FORWARD in time by applying a growth rate.</div>
-      <div class="fc-eg">£100 today at 10% → £110 in 1 year</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Present Value (PV)</div>
-      <div class="fc-def">What is future money worth TODAY? You move money BACKWARD in time by discounting it.</div>
-      <div class="fc-eg">£110 in 1 year at 10% → worth £100 today</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Discounting</div>
-      <div class="fc-def">The process of finding present value. The discount rate r reflects opportunity cost — what you could earn elsewhere.</div>
-      <div class="fc-eg">Higher r → future money is worth less today</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Opportunity cost</div>
-      <div class="fc-def">The return you give up by not investing money elsewhere. This is why future cash is less valuable — you've lost the chance to grow today's money.</div>
-      <div class="fc-eg">If you can earn 10%, £100 today must grow to £110</div>
-    </div>
+</div>
+<div class="worked">
+  <div class="worked-title">Example — what is £10,000 received in 5 years worth today?</div>
+  <div class="worked-body">
+    <p>You are owed £10,000 in 5 years. Your discount rate is 6%. What is it worth now?</p>
+    <div class="worked-math">PV = 10,000 ÷ (1.06)⁵ = 10,000 ÷ 1.3382 = £7,473</div>
+    <p class="worked-conclusion">Future money loses value when discounted back — £10,000 in 5 years is only worth £7,473 today. This is why investors always prefer to receive money sooner.</p>
   </div>
+</div>
 
-  <div class="sh">The formulas</div>
-  <div class="f-label">Future Value — growing money forward in time</div>
-  <div class="f-box">FV = PV (1 + r)ⁿ</div>
-  <div class="f-label">Present Value — discounting back to today</div>
-  <div class="f-box">PV = FV ÷ (1 + r)ⁿ</div>
-  <table class="vt">
-    <tr><td>PV</td><td>Present value — the amount of money today</td></tr>
-    <tr><td>FV</td><td>Future value — the money at a future point in time</td></tr>
-    <tr><td>r</td><td>Interest or discount rate per period (10% = 0.10)</td></tr>
-    <tr><td>n</td><td>Number of periods (years, months, quarters...)</td></tr>
-  </table>
+<div class="sh">Live calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Present value (£)</span><input type="range" min="100" max="10000" step="100" value="1000" id="t0-pv"><span class="calc-out" id="t0-pv-v">£1,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Annual rate (%)</span><input type="range" min="1" max="20" step="0.5" value="7" id="t0-r"><span class="calc-out" id="t0-r-v">7%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Years (n)</span><input type="range" min="1" max="30" step="1" value="10" id="t0-n"><span class="calc-out" id="t0-n-v">10 yrs</span></div>
+  <div class="result-strip"><span class="result-lbl">Future Value</span><span class="result-val" id="t0-result">—</span></div>
+</div>
 
-  <div class="sh">Live calculator</div>
-  <div class="calc-block">
-    <div class="calc-row">
-      <span class="calc-lbl">Present value (£)</span>
-      <input type="range" min="100" max="10000" step="100" value="1000" id="t0-pv">
-      <span class="calc-out" id="t0-pv-v">£1,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Annual rate (%)</span>
-      <input type="range" min="1" max="20" step="0.5" value="7" id="t0-r">
-      <span class="calc-out" id="t0-r-v">7%</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Years (n)</span>
-      <input type="range" min="1" max="30" step="1" value="10" id="t0-n">
-      <span class="calc-out" id="t0-n-v">10 yrs</span>
-    </div>
-    <div class="result-strip">
-      <span class="result-label">Future Value</span>
-      <span class="result-value" id="t0-result">—</span>
-    </div>
-  </div>
-
-  <div class="sh">Worked example</div>
-  <div class="card-sm white" style="margin-bottom:20px;padding:16px 20px">
-    <p style="font-size:13px;color:var(--subtle);line-height:1.7">You invest £5,000 today at 8% per year. How much will you have in 10 years?</p>
-    <p style="font-size:13px;color:var(--body);margin-top:8px;font-family:var(--font-mono)">FV = 5,000 × (1.08)¹⁰ = 5,000 × 2.159 = <strong>£10,795</strong></p>
-    <p style="font-size:12px;color:var(--subtle);margin-top:6px">You more than doubled your money — purely from the compounding of 8% per year.</p>
-  </div>
-
-  <div class="sh">Why quants care</div>
-  <div class="qbox">
-    <div class="qbox-label">This concept appears everywhere in quant finance</div>
-    <p class="qbox-body">TVM is the mathematical skeleton of all of finance. Every time a quant prices a bond, values an option, models a cash flow, or discounts a future payoff — this is the engine running underneath.</p>
-    <span class="qtag">Bond pricing</span>
-    <span class="qtag">Option pricing</span>
-    <span class="qtag">DCF models</span>
-    <span class="qtag">Black-Scholes</span>
-    <span class="qtag">Risk-neutral valuation</span>
-  </div>`
+<div class="sh">Why quants care</div>
+<div class="qbox">
+  <div class="qbox-lbl">Foundation of all quantitative finance</div>
+  <p class="qbox-body">TVM is the skeleton inside every financial model. When a quant prices a bond they are discounting coupon payments. When they price an option they are discounting an expected payoff. When they evaluate a trading strategy they are comparing discounted future returns to upfront costs. Even the most advanced derivative pricing models are fundamentally an application of PV — the mathematics becomes more sophisticated but the principle never changes.</p>
+  <span class="qtag">Bond pricing</span><span class="qtag">Option pricing</span><span class="qtag">DCF models</span><span class="qtag">Black-Scholes</span><span class="qtag">Risk-neutral valuation</span>
+</div>`
 },
 
-/* ── 1  COMPOUNDING METHODS ─────────────────────────── */
+/* ── 1  COMPOUNDING ── */
 {
-  title: "Compounding methods",
-  eli5: "Compounding means you earn interest on your interest. Think of a snowball rolling downhill — the bigger it gets, the more snow it picks up on each rotation. The more frequently you add interest (monthly instead of yearly), the faster it grows. At the absolute extreme — adding interest every single instant, infinitely fast — you get continuous compounding, the mathematical maximum. This is where the mysterious number 'e ≈ 2.718' comes from.",
-  html: `
-  <div class="sh">Why compounding frequency matters</div>
-  <p style="font-size:14px;color:var(--subtle);line-height:1.7;margin-bottom:18px">If you invest £100 at 12% for one year, the final amount depends on how often interest is applied. More frequent compounding means interest earns interest sooner, leading to a higher final amount.</p>
+title:"Compounding methods",
+peb:"Compounding means you earn interest on your interest. Imagine a snowball rolling downhill — the bigger it gets, the more snow it picks up on each rotation, so it grows faster and faster. The same thing happens with money. The more frequently interest is added — monthly instead of yearly — the more often you start earning interest on previously earned interest, so the final amount is higher. At the absolute extreme, if you added interest every single instant (infinitely often), you get continuous compounding — the mathematical maximum — and this is where the mysterious number e ≈ 2.718 naturally emerges.",
+html:`
+<div class="sh">Why compounding frequency matters</div>
+<p style="font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:16px">If you invest £100 at 12% for one year, the final amount depends entirely on how often interest is applied. More frequent compounding means interest earns its own interest sooner, leading to a higher final value.</p>
 
-  <table class="ct">
-    <thead>
-      <tr><th>Compounding type</th><th>Formula</th><th>£100 at 12%, 1 year</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Annual (once/yr)</td><td style="font-family:var(--font-mono);font-size:12px">PV(1+r)ⁿ</td><td>£112.00</td></tr>
-      <tr><td>Quarterly (4×/yr)</td><td style="font-family:var(--font-mono);font-size:12px">PV(1+r/4)⁴</td><td>£112.55</td></tr>
-      <tr><td>Monthly (12×/yr)</td><td style="font-family:var(--font-mono);font-size:12px">PV(1+r/12)¹²</td><td>£112.68</td></tr>
-      <tr><td>Daily (365×/yr)</td><td style="font-family:var(--font-mono);font-size:12px">PV(1+r/365)³⁶⁵</td><td>£112.75</td></tr>
-      <tr class="highlight"><td>Continuous (∞)</td><td style="font-family:var(--font-mono);font-size:12px">PV × eʳᵗ</td><td>£112.75 ← maximum possible</td></tr>
-    </tbody>
-  </table>
+<table class="ct">
+  <thead><tr><th>Type</th><th>Formula structure</th><th>£100 at 12%, 1 year</th><th>Extra vs annual</th></tr></thead>
+  <tbody>
+    <tr><td>Annual (1×/yr)</td><td>$(1+r)^n$</td><td>£112.00</td><td>—</td></tr>
+    <tr><td>Quarterly (4×/yr)</td><td>$(1+r/4)^{4n}$</td><td>£112.55</td><td>+£0.55</td></tr>
+    <tr><td>Monthly (12×/yr)</td><td>$(1+r/12)^{12n}$</td><td>£112.68</td><td>+£0.68</td></tr>
+    <tr><td>Daily (365×/yr)</td><td>$(1+r/365)^{365n}$</td><td>£112.747</td><td>+£0.75</td></tr>
+    <tr class="hl"><td>Continuous (∞)</td><td>$e^{rt}$</td><td>£112.750</td><td>+£0.75 (max)</td></tr>
+  </tbody>
+</table>
 
-  <div class="sh">The three key formulas</div>
-  <div class="f-label">Annual discrete compounding</div>
-  <div class="f-box">FV = PV × (1 + r)ⁿ</div>
-  <div class="f-label">Periodic compounding — m times per year</div>
-  <div class="f-box">FV = PV × (1 + r/m)^(m×n)</div>
-  <div class="f-label">Continuous compounding — the theoretical limit</div>
-  <div class="f-box">FV = PV × eʳᵗ</div>
-  <table class="vt">
-    <tr><td>m</td><td>Compounding periods per year (12 = monthly, 365 = daily)</td></tr>
-    <tr><td>e</td><td>Euler's number ≈ 2.71828 — emerges naturally from continuous compounding</td></tr>
-    <tr><td>t</td><td>Time in years (same as n in discrete formulas)</td></tr>
-  </table>
+<div class="sh">The three key formulas</div>
+<div class="f-label">Annual discrete compounding</div>
+<div class="f-box"><span class="math">FV = PV(1 + r)<sup>n</sup></span></div>
+<div class="f-label">Periodic compounding — $m$ times per year</div>
+<div class="f-box"><span class="math">FV = PV <span class="big-paren">(</span>1 + <span class="frac"><span class="num">r</span><span class="den">m</span></span><span class="big-paren">)</span><sup>mn</sup></span></div>
+<div class="f-label">Continuous compounding — the theoretical limit as $m \to \infty$</div>
+<div class="f-box"><span class="math">FV = PV &middot; e<sup>rt</sup></span></div>
+<table class="vt">
+  <tr><td>m</td><td>Compounding periods per year (12 = monthly, 52 = weekly, 365 = daily)</td></tr>
+  <tr><td>e</td><td>Euler's number ≈ 2.71828 — arises naturally from continuous compounding</td></tr>
+  <tr><td>t</td><td>Time in years (equivalent to n in discrete formulas)</td></tr>
+</table>
 
-  <div class="sh">Where does e come from?</div>
-  <div class="eli5" style="border-left-color:var(--purple);margin-bottom:20px">
-    <div class="eli5-label" style="color:var(--purple)">The deep insight</div>
-    As you compound more and more frequently (m → ∞), the formula (1 + r/m)^m converges to a fixed value: Euler's number e ≈ 2.718. So continuous compounding isn't exotic — it's just what happens when you take the natural limit of compounding infinitely often. This is why e appears constantly in finance and physics wherever growth is involved.
+<div class="sh">Where does e come from?</div>
+<div class="insight">
+  <div class="insight-lbl">Mathematical insight</div>
+  As you compound more and more frequently, a remarkable thing happens: the formula (1 + r/m)<sup>m</sup> converges to a fixed limit as $m \to \infty$. That limit is $e^r$ — where $e \approx 2.71828$ is Euler's number. So continuous compounding is not some exotic concept — it is simply the natural mathematical limit of compounding infinitely often. This is one reason $e$ appears everywhere in finance, physics, and probability.
+  $$\lim_{m \to \infty}\left(1 + \frac{r}{m}\right)^{mn} = e^{rn}$$
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example — £1,000 at 6% for 5 years under different compounding</div>
+  <div class="worked-body">
+    <div class="worked-math">Annual:     1,000 × (1.06)⁵          = £1,338.23
+Monthly:    1,000 × (1 + 0.06/12)⁶⁰   = £1,348.85
+Continuous: 1,000 × e^(0.06 × 5)       = £1,349.86</div>
+    <p class="worked-conclusion">Monthly compounding earns £10.62 more than annual. The difference grows with time and rate — at higher rates over longer periods, compounding frequency matters enormously.</p>
   </div>
+</div>
 
-  <div class="sh">Live comparison calculator</div>
-  <div class="calc-block">
-    <div class="calc-row">
-      <span class="calc-lbl">Principal (£)</span>
-      <input type="range" min="100" max="5000" step="100" value="1000" id="t1-pv">
-      <span class="calc-out" id="t1-pv-v">£1,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Annual rate (%)</span>
-      <input type="range" min="1" max="20" step="0.5" value="12" id="t1-r">
-      <span class="calc-out" id="t1-r-v">12%</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Years</span>
-      <input type="range" min="1" max="20" step="1" value="5" id="t1-n">
-      <span class="calc-out" id="t1-n-v">5</span>
-    </div>
-    <div class="results-3">
-      <div class="r3" style="background:#eff6ff">
-        <div class="r3-label" style="color:#2563eb">Annual</div>
-        <div class="r3-value" style="color:#1e40af" id="t1-ann">—</div>
-      </div>
-      <div class="r3" style="background:#f5f3ff">
-        <div class="r3-label" style="color:#7c3aed">Monthly</div>
-        <div class="r3-value" style="color:#5b21b6" id="t1-mon">—</div>
-      </div>
-      <div class="r3" style="background:#ecfdf5">
-        <div class="r3-label" style="color:#059669">Continuous</div>
-        <div class="r3-value" style="color:#065f46" id="t1-con">—</div>
-      </div>
-    </div>
+<div class="sh">Live comparison calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Principal (£)</span><input type="range" min="100" max="5000" step="100" value="1000" id="t1-pv"><span class="calc-out" id="t1-pv-v">£1,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Annual rate (%)</span><input type="range" min="1" max="20" step="0.5" value="12" id="t1-r"><span class="calc-out" id="t1-r-v">12%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Years</span><input type="range" min="1" max="20" step="1" value="5" id="t1-n"><span class="calc-out" id="t1-n-v">5</span></div>
+  <div class="results-3">
+    <div class="r3" style="background:var(--blue-bg)"><div class="r3-lbl" style="color:var(--blue)">Annual</div><div class="r3-val" style="color:var(--blue-dk)" id="t1-ann">—</div></div>
+    <div class="r3" style="background:var(--purple-bg)"><div class="r3-lbl" style="color:var(--purple)">Monthly</div><div class="r3-val" style="color:var(--purple)" id="t1-mon">—</div></div>
+    <div class="r3" style="background:var(--green-bg)"><div class="r3-lbl" style="color:var(--green)">Continuous</div><div class="r3-val" style="color:var(--green-dk)" id="t1-con">—</div></div>
   </div>
+</div>
 
-  <div class="sh">Why quants love continuous compounding</div>
-  <div class="qbox">
-    <div class="qbox-label">Critical for quant work</div>
-    <p class="qbox-body">Continuous compounding makes the calculus clean — the derivative of eˣ is itself, which is uniquely convenient. Log returns (ln(P₁/P₀)) are the discrete counterpart of continuously compounded returns. Black-Scholes, stochastic calculus, and all continuous-time finance assume this framework.</p>
-    <span class="qtag">Log returns</span>
-    <span class="qtag">Black-Scholes</span>
-    <span class="qtag">Stochastic calculus</span>
-    <span class="qtag">GBM (Geometric Brownian Motion)</span>
-  </div>`
+<div class="sh">Why quants use continuous compounding</div>
+<div class="qbox">
+  <div class="qbox-lbl">Critical for quant work</div>
+  <p class="qbox-body">Continuous compounding makes calculus work cleanly. The function $e^{rt}$ has a derivative of $r \cdot e^{rt}$ — perfectly proportional to itself, which makes differential equations tractable. Log returns (the natural log of price relatives: $\ln(P_t / P_{t-1})$) are the continuous-compounding equivalent of discrete returns. Black-Scholes, geometric Brownian motion, and all stochastic calculus assume a continuous-time framework — and continuous compounding is baked into every formula.</p>
+  <span class="qtag">Log returns</span><span class="qtag">Black-Scholes</span><span class="qtag">Geometric Brownian Motion</span><span class="qtag">Stochastic calculus</span>
+</div>`
 },
 
-/* ── 2  EAR ─────────────────────────────────────────── */
+/* ── 2  EAR ── */
 {
-  title: "Effective Annual Rate (EAR)",
-  eli5: "Two banks both advertise '10% interest per year'. One adds interest annually, one adds it every month. They sound identical but they're NOT — the monthly one gives you more money, because you start earning interest on your interest sooner. EAR is the single number that converts any rate into 'what do you actually earn over a full year?' — so you can compare them fairly. Without EAR, comparing rates is like comparing apples and oranges.",
-  html: `
-  <div class="sh">The problem EAR solves</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">Nominal rate</div>
-      <div class="fc-def">The advertised headline rate. Often misleading — it doesn't tell you how often interest compounds.</div>
-      <div class="fc-eg">"10% compounded monthly" — sounds like 10%</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Effective rate (EAR)</div>
-      <div class="fc-def">The TRUE annual return after accounting for compounding frequency. Always use this to compare investments.</div>
-      <div class="fc-eg">10% monthly → EAR = 10.47%</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Golden rule</div>
-      <div class="fc-def">Never compare nominal rates directly. Convert everything to EAR first. Higher EAR always means better return.</div>
-      <div class="fc-eg">12% monthly EAR > 12.5% annual</div>
-    </div>
+title:"Effective Annual Rate (EAR)",
+peb:"Two banks both advertise 10% interest per year. One compounds annually, one compounds monthly. They look identical on paper but are NOT the same — the monthly one gives you more money because you start earning interest on your interest 12 times a year instead of once. EAR is the single standardised number that converts any rate into 'what do you actually earn over a full year, accounting for compounding?' so you can compare any two rates fairly. Without EAR, comparing rates quoted under different compounding conventions is mathematically meaningless.",
+html:`
+<div class="sh">The problem — nominal rates are misleading</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Nominal rate</div><div class="fc-def">The advertised headline rate. Misleading on its own because it does not reveal how often compounding occurs. Two identical nominal rates with different compounding frequencies produce different actual returns.</div><div class="fc-eg">"10% per year, compounded monthly" — the 10% is the nominal rate</div></div>
+  <div class="fc"><div class="fc-term">Effective Annual Rate (EAR)</div><div class="fc-def">The TRUE annual return after accounting for compounding. Converts any rate into a standardised annual equivalent, regardless of how often it compounds. Always use EAR to compare investments.</div><div class="fc-eg">10% compounded monthly → EAR = 10.47% actual annual growth</div></div>
+  <div class="fc"><div class="fc-term">The golden rule</div><div class="fc-def">Never compare nominal rates directly unless they share the same compounding frequency. Always convert everything to EAR first. Higher EAR always means better return, full stop.</div><div class="fc-eg">12% monthly EAR (12.68%) beats 12.5% annual EAR (12.5%)</div></div>
+</div>
+
+<div class="sh">The formulas</div>
+<div class="f-label">Periodic compounding — $m$ periods per year</div>
+<div class="f-box"><span class="math">lim<sub>m&rarr;&infin;</sub> <span class="big-paren">(</span>1 + <span class="frac"><span class="num">r</span><span class="den">m</span></span><span class="big-paren">)</span><sup>mn</sup> = e<sup>rn</sup></span></div>
+<div class="f-label">Continuous compounding</div>
+<div class="f-box"><span class="math">EAR = <span class="big-paren">(</span>1 + <span class="frac"><span class="num">r</span><span class="den">m</span></span><span class="big-paren">)</span><sup>m</sup> &minus; 1</span></div>
+<table class="vt">
+  <tr><td>r</td><td>Nominal annual interest rate as a decimal — 12% becomes 0.12</td></tr>
+  <tr><td>m</td><td>Number of compounding periods per year (12 for monthly, 365 for daily)</td></tr>
+</table>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example — comparing two 12% offers</div>
+  <div class="worked-body">
+    <p>Bank A offers 12% compounded annually. Bank B offers 12% compounded monthly. Which gives you more?</p>
+    <div class="worked-math">Bank A EAR = (1 + 0.12)¹ - 1               = 12.00%
+Bank B EAR = (1 + 0.12/12)¹² - 1           = 12.68%</div>
+    <p class="worked-conclusion">Bank B earns 0.68% more per year despite the same nominal rate. On £10,000 over 10 years, this difference compounds to over £1,000 extra — from a rate that looks identical on the surface.</p>
   </div>
+</div>
 
-  <div class="sh">The formulas</div>
-  <div class="f-label">Periodic compounding — m periods per year</div>
-  <div class="f-box">EAR = (1 + r/m)^m − 1</div>
-  <div class="f-label">Continuous compounding — the limit</div>
-  <div class="f-box">EAR = eʳ − 1</div>
-  <table class="vt">
-    <tr><td>r</td><td>Nominal annual interest rate as a decimal (12% → 0.12)</td></tr>
-    <tr><td>m</td><td>Number of compounding periods per year</td></tr>
-  </table>
+<div class="sh">Live EAR table — drag the nominal rate</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Nominal rate (%)</span><input type="range" min="1" max="24" step="0.5" value="12" id="t2-r"><span class="calc-out" id="t2-r-v">12%</span></div>
+</div>
+<table class="ct"><thead><tr><th>Compounding</th><th>Periods / year</th><th>EAR</th><th>On £10,000/yr</th></tr></thead><tbody id="t2-tbody"></tbody></table>
 
-  <div class="sh">Live EAR table — drag the rate</div>
-  <div class="calc-block">
-    <div class="calc-row">
-      <span class="calc-lbl">Nominal rate (%)</span>
-      <input type="range" min="1" max="24" step="0.5" value="12" id="t2-r">
-      <span class="calc-out" id="t2-r-v">12%</span>
-    </div>
-  </div>
-  <table class="ct">
-    <thead><tr><th>Compounding</th><th>Periods / year</th><th>EAR</th></tr></thead>
-    <tbody id="t2-tbody"></tbody>
-  </table>
+<div class="sh">Connection to continuous compounding</div>
+<div class="insight">
+  <div class="insight-lbl">Key relationship</div>
+  As compounding frequency increases, EAR approaches but never exceeds $e^r - 1$. This is the continuous compounding EAR — the theoretical maximum return you could earn from a given nominal rate. For $r = 12\%$: $EAR_{\text{continuous}} = e^{0.12} - 1 = 12.75\%$. No matter how frequently you compound 12%, you cannot exceed 12.75% effective annual return.
+</div>
 
-  <div class="sh">Worked example</div>
-  <div class="card-sm white" style="margin-bottom:20px;padding:16px 20px">
-    <p style="font-size:13px;color:var(--subtle);line-height:1.7">Bank A offers 12% compounded annually. Bank B offers 12% compounded monthly. Which is better?</p>
-    <p style="font-size:13px;color:var(--body);margin-top:8px;font-family:var(--font-mono)">Bank A EAR = (1 + 0.12)¹ − 1 = <strong>12.00%</strong><br>Bank B EAR = (1 + 0.12/12)¹² − 1 = <strong>12.68%</strong></p>
-    <p style="font-size:12px;color:var(--subtle);margin-top:6px">Bank B is better despite the same nominal rate — you earn 0.68% more per year because of more frequent compounding.</p>
-  </div>
-
-  <div class="sh">Why quants care</div>
-  <div class="qbox">
-    <div class="qbox-label">Appears in</div>
-    <p class="qbox-body">Quants constantly compare rates across instruments — risk-free rates, bond yields, strategy returns, funding costs. Without EAR, those comparisons are mathematically inconsistent. A strategy returning 8% daily compounded is vastly different from one returning 8% annually — EAR is what makes the comparison honest.</p>
-    <span class="qtag">Rate comparison</span>
-    <span class="qtag">Bond yield analysis</span>
-    <span class="qtag">Strategy performance</span>
-    <span class="qtag">Funding cost</span>
-  </div>`
+<div class="qbox">
+  <div class="qbox-lbl">Appears throughout quant finance</div>
+  <p class="qbox-body">Quants compare rates across different instruments constantly — risk-free rates, bond yields, strategy returns, repo rates, funding costs. Without EAR, comparisons between a daily-compounded repo rate, a semi-annual bond yield, and a continuously compounded model rate are mathematically inconsistent. EAR is the common currency that makes comparison valid.</p>
+  <span class="qtag">Rate comparison</span><span class="qtag">Bond yield analysis</span><span class="qtag">Strategy performance</span><span class="qtag">Repo and funding costs</span>
+</div>`
 },
 
-/* ── 3  NPV ─────────────────────────────────────────── */
+/* ── 3  NPV ── */
 {
-  title: "Net Present Value (NPV)",
-  eli5: "You're thinking about starting a business. You need to spend £10,000 today, and the business will pay you back £3,000 each year for 5 years. Is that a good deal? NPV answers this: it takes every future cash flow, converts it all back to TODAY'S money (using discounting), adds them all up, and subtracts what you paid. If the answer is positive, you made money in real terms. If it's negative, you'd have been better off just investing that £10,000 somewhere else.",
-  html: `
-  <div class="sh">What NPV measures</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">NPV > 0</div>
-      <div class="fc-def">The investment creates value. The future cash flows are worth MORE than what you paid, in today's money. Accept the project.</div>
-      <div class="fc-eg">NPV of £2,000 → you're £2,000 richer in real terms</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">NPV = 0</div>
-      <div class="fc-def">Break-even. The investment exactly matches your required return. You are indifferent — accept or reject.</div>
-      <div class="fc-eg">Just covers the cost of capital</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">NPV &lt; 0</div>
-      <div class="fc-def">The investment destroys value. The future cash flows are worth LESS than what you paid. Reject the project.</div>
-      <div class="fc-eg">NPV of −£1,500 → better to invest elsewhere</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Discount rate (r)</div>
-      <div class="fc-def">The rate used to discount future cash flows. Usually the cost of capital — the return you could earn elsewhere at the same risk level.</div>
-      <div class="fc-eg">Higher r → future cash flows are worth less today</div>
-    </div>
-  </div>
+title:"Net Present Value (NPV)",
+peb:"You are thinking about starting a business. You spend £10,000 today and the business returns £3,000 per year for 5 years. Is that a good deal? The problem is you cannot just add up the £15,000 you receive — because £3,000 in year 5 is worth less than £3,000 today (you had to wait for it). NPV solves this properly: it converts every future cash flow back into today's money using discounting, adds them all up, and subtracts what you paid upfront. If the answer is positive, you created real value. If it is negative, you would have been better off putting that money in the bank.",
+html:`
+<div class="sh">What NPV measures</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">NPV &gt; 0</div><div class="fc-def">The investment creates value in today's money. The present value of future cash flows exceeds the upfront cost. Accept the project.</div><div class="fc-eg">NPV = +£2,000 means you are genuinely £2,000 better off in today's terms</div></div>
+  <div class="fc"><div class="fc-term">NPV = 0</div><div class="fc-def">Break-even. Future cash flows exactly cover the cost at your required return. You earn exactly your discount rate — no more, no less.</div><div class="fc-eg">Indifferent — you could invest elsewhere for the same result</div></div>
+  <div class="fc"><div class="fc-term">NPV &lt; 0</div><div class="fc-def">The investment destroys value. Future cash flows are worth less than what you paid in today's money. Reject the project and invest elsewhere.</div><div class="fc-eg">NPV = -£1,500 means you lose £1,500 in real terms vs your next-best option</div></div>
+  <div class="fc"><div class="fc-term">Discount rate (r)</div><div class="fc-def">The rate used to discount future cash flows back to today. Should reflect the opportunity cost — the return available elsewhere at equivalent risk. Also called the required return or cost of capital.</div><div class="fc-eg">A riskier project needs a higher discount rate</div></div>
+</div>
 
-  <div class="sh">The formula</div>
-  <div class="f-label">Net Present Value — sum of all discounted cash flows</div>
-  <div class="f-box">NPV = −C₀ + CF₁/(1+r) + CF₂/(1+r)² + ... + CFₙ/(1+r)ⁿ</div>
-  <div class="f-label">Compact sigma notation</div>
-  <div class="f-box">NPV = Σ CFₜ / (1+r)ᵗ   where t = 0 to n</div>
-  <table class="vt">
-    <tr><td>C₀</td><td>Initial investment (negative cash flow at t=0)</td></tr>
-    <tr><td>CFₜ</td><td>Cash flow at time period t (can be positive or negative)</td></tr>
-    <tr><td>r</td><td>Discount rate — your required rate of return or cost of capital</td></tr>
-    <tr><td>n</td><td>Total number of periods</td></tr>
-    <tr><td>t</td><td>Time period index (0, 1, 2, ...n)</td></tr>
-  </table>
+<div class="sh">The formula</div>
+<div class="f-label">NPV — sum of all cash flows discounted to today</div>
+<div class="f-box"><span class="math">EAR = e<sup>r</sup> &minus; 1</span></div>
+<table class="vt">
+  <tr><td>$C_0$</td><td>Initial investment — a negative cash flow at time zero (money going out)</td></tr>
+  <tr><td>$CF_t$</td><td>Cash flow at time period $t$ — can be positive (inflow) or negative (outflow)</td></tr>
+  <tr><td>r</td><td>Discount rate per period — your required return or cost of capital</td></tr>
+  <tr><td>n</td><td>Total number of periods in the project</td></tr>
+</table>
 
-  <div class="sh">Visualising a cash flow timeline</div>
-  <table class="cft">
-    <thead><tr><th>Year (t)</th><th>Cash flow</th><th>Discount factor (r=10%)</th><th>Present value</th></tr></thead>
-    <tbody>
-      <tr class="neg"><td>0 (today)</td><td>−£10,000</td><td>1.000</td><td>−£10,000</td></tr>
-      <tr class="pos"><td>1</td><td>+£3,000</td><td>0.909</td><td>+£2,727</td></tr>
-      <tr class="pos"><td>2</td><td>+£3,000</td><td>0.826</td><td>+£2,479</td></tr>
-      <tr class="pos"><td>3</td><td>+£3,000</td><td>0.751</td><td>+£2,254</td></tr>
-      <tr class="pos"><td>4</td><td>+£3,000</td><td>0.683</td><td>+£2,049</td></tr>
-      <tr class="pos"><td>5</td><td>+£3,000</td><td>0.621</td><td>+£1,863</td></tr>
-      <tr style="font-weight:600"><td colspan="3">NPV</td><td style="color:var(--green)">+£1,372 ✓ Accept</td></tr>
-    </tbody>
-  </table>
+<div class="sh">Cash flow timeline — a visual breakdown</div>
+<table class="cft">
+  <thead><tr><th>Year (t)</th><th>Cash flow</th><th>Discount factor at r=10%</th><th>Present value</th></tr></thead>
+  <tbody>
+    <tr class="neg"><td>0 (today)</td><td>-£10,000</td><td style="font-family:var(--mono);font-size:12px">1 ÷ (1.10)⁰ = 1.000</td><td>-£10,000</td></tr>
+    <tr class="pos"><td>1</td><td>+£3,000</td><td style="font-family:var(--mono);font-size:12px">1 ÷ (1.10)¹ = 0.909</td><td>+£2,727</td></tr>
+    <tr class="pos"><td>2</td><td>+£3,000</td><td style="font-family:var(--mono);font-size:12px">1 ÷ (1.10)² = 0.826</td><td>+£2,479</td></tr>
+    <tr class="pos"><td>3</td><td>+£3,000</td><td style="font-family:var(--mono);font-size:12px">1 ÷ (1.10)³ = 0.751</td><td>+£2,254</td></tr>
+    <tr class="pos"><td>4</td><td>+£3,000</td><td style="font-family:var(--mono);font-size:12px">1 ÷ (1.10)⁴ = 0.683</td><td>+£2,049</td></tr>
+    <tr class="pos"><td>5</td><td>+£3,000</td><td style="font-family:var(--mono);font-size:12px">1 ÷ (1.10)⁵ = 0.621</td><td>+£1,863</td></tr>
+    <tr class="total"><td colspan="3">NPV</td><td style="color:var(--green)">+£1,372 → Accept ✓</td></tr>
+  </tbody>
+</table>
 
-  <div class="sh">Live NPV calculator</div>
-  <div class="calc-block">
-    <div class="calc-row">
-      <span class="calc-lbl">Initial investment (£)</span>
-      <input type="range" min="1000" max="20000" step="500" value="10000" id="t3-c0">
-      <span class="calc-out" id="t3-c0-v">£10,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Annual cash flow (£)</span>
-      <input type="range" min="500" max="8000" step="100" value="3000" id="t3-cf">
-      <span class="calc-out" id="t3-cf-v">£3,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Years</span>
-      <input type="range" min="1" max="15" step="1" value="5" id="t3-n">
-      <span class="calc-out" id="t3-n-v">5 yrs</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Discount rate (%)</span>
-      <input type="range" min="1" max="20" step="0.5" value="10" id="t3-r">
-      <span class="calc-out" id="t3-r-v">10%</span>
-    </div>
-    <div id="t3-result-box" class="result-strip">
-      <span class="result-label" id="t3-label">NPV</span>
-      <span class="result-value" id="t3-result">—</span>
-    </div>
-  </div>
+<div class="sh">Live NPV calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Initial investment (£)</span><input type="range" min="1000" max="20000" step="500" value="10000" id="t3-c0"><span class="calc-out" id="t3-c0-v">£10,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Annual cash flow (£)</span><input type="range" min="500" max="8000" step="100" value="3000" id="t3-cf"><span class="calc-out" id="t3-cf-v">£3,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Number of years</span><input type="range" min="1" max="15" step="1" value="5" id="t3-n"><span class="calc-out" id="t3-n-v">5 yrs</span></div>
+  <div class="calc-row"><span class="calc-lbl">Discount rate (%)</span><input type="range" min="1" max="25" step="0.5" value="10" id="t3-r"><span class="calc-out" id="t3-r-v">10%</span></div>
+  <div id="t3-result-box" class="result-strip"><span class="result-lbl" id="t3-label">NPV</span><span class="result-val" id="t3-result">—</span></div>
+</div>
 
-  <div class="sh">Key insight: NPV and the discount rate</div>
-  <div class="eli5" style="border-left-color:var(--blue);margin-bottom:20px">
-    <div class="eli5-label" style="color:var(--blue)">Important relationship</div>
-    As the discount rate r increases, NPV falls — because future cash flows are worth less in today's money. If r equals the IRR (next topic), NPV = 0 exactly. This relationship between NPV and the discount rate is called the "NPV profile" and is fundamental to investment analysis.
-  </div>
+<div class="sh">NPV and the discount rate</div>
+<div class="insight">
+  <div class="insight-lbl">Critical relationship</div>
+  As the discount rate $r$ increases, NPV decreases — because you are demanding a higher return, making future cash flows worth less today. If $r$ equals the investment's IRR, NPV equals exactly zero. This relationship is called the NPV profile and is fundamental to investment analysis. Plotting NPV against $r$ for any project reveals its break-even rate and how sensitive the decision is to your choice of discount rate.
+</div>
 
-  <div class="sh">Why quants care</div>
-  <div class="qbox">
-    <div class="qbox-label">Used in</div>
-    <p class="qbox-body">NPV is the correct decision rule for all investment decisions involving future cash flows. In quant finance, it appears in strategy evaluation (is this trading strategy generating positive economic value?), derivatives pricing, and any model that requires discounting expected future payoffs back to today.</p>
-    <span class="qtag">Investment decisions</span>
-    <span class="qtag">Strategy valuation</span>
-    <span class="qtag">Derivatives pricing</span>
-    <span class="qtag">DCF modelling</span>
-  </div>`
+<div class="qbox">
+  <div class="qbox-lbl">Used throughout quant finance</div>
+  <p class="qbox-body">NPV is the theoretically correct decision rule for any investment involving future cash flows. In quant contexts it appears in strategy evaluation (does this trading system generate positive economic value after accounting for the cost of capital?), derivatives pricing (the value of a derivative is the NPV of its expected payoffs under a risk-neutral measure), and any model requiring discounting of expected future outcomes.</p>
+  <span class="qtag">Investment decisions</span><span class="qtag">Strategy valuation</span><span class="qtag">Derivatives pricing</span><span class="qtag">Risk-neutral valuation</span>
+</div>`
 },
 
-/* ── 4  IRR ─────────────────────────────────────────── */
+/* ── 4  IRR ── */
 {
-  title: "Internal Rate of Return (IRR)",
-  eli5: "IRR is the answer to: 'What rate of return is this investment actually delivering?' It's the discount rate that makes NPV exactly zero — the break-even rate. If the IRR is higher than your required return (cost of capital), the investment is worth doing. If it's lower, walk away. Think of it as the investment's built-in annual return percentage — and you compare that to what you need to earn.",
-  html: `
-  <div class="sh">IRR and its relationship to NPV</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">IRR definition</div>
-      <div class="fc-def">The discount rate r that makes NPV = 0. It's the rate at which the present value of all future cash flows exactly equals the initial investment.</div>
-      <div class="fc-eg">If NPV = 0 when r = 15%, then IRR = 15%</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Decision rule</div>
-      <div class="fc-def">Accept if IRR > cost of capital (required return). Reject if IRR &lt; cost of capital. At IRR = cost of capital, you are indifferent.</div>
-      <div class="fc-eg">IRR = 15%, cost of capital = 10% → Accept</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">IRR vs NPV</div>
-      <div class="fc-def">IRR is a rate (a percentage). NPV is an amount (in £). Both measure the same thing differently. NPV is generally the more reliable rule.</div>
-      <div class="fc-eg">IRR: "this delivers 15%" — NPV: "this is worth £5,000 more"</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Cost of capital</div>
-      <div class="fc-def">The minimum return required to justify an investment. Also called the hurdle rate. IRR must exceed this to create value.</div>
-      <div class="fc-eg">A fund might require IRR > 20% before investing</div>
-    </div>
+title:"Internal Rate of Return (IRR)",
+peb:"IRR answers the question: what rate of return is this investment actually delivering? It is the specific discount rate at which NPV equals exactly zero — the break-even rate. If the IRR is higher than your required return (the minimum rate you need to justify investing), the project is worthwhile. If it is lower, walk away. Think of IRR as the built-in annual return percentage of an investment — and you compare that to your hurdle rate to decide whether it clears the bar.",
+html:`
+<div class="sh">Understanding IRR</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">IRR definition</div><div class="fc-def">The discount rate $r$ that makes NPV equal to zero. It is the rate at which the present value of all future inflows exactly equals the upfront cost.</div><div class="fc-eg">If NPV = 0 when r = 15.7%, then IRR = 15.7%</div></div>
+  <div class="fc"><div class="fc-term">Decision rule</div><div class="fc-def">Accept if IRR exceeds the hurdle rate (cost of capital). Reject if IRR falls below. At IRR = hurdle rate, the project earns exactly the required return.</div><div class="fc-eg">IRR = 18%, cost of capital = 10% → clear the bar, accept</div></div>
+  <div class="fc"><div class="fc-term">IRR vs NPV</div><div class="fc-def">IRR is a percentage rate. NPV is a monetary amount. Both measure value but differently. NPV is generally the more theoretically reliable rule for comparing projects of different scales.</div><div class="fc-eg">IRR ignores scale — 50% on £1k can lose to 15% on £1m in NPV terms</div></div>
+  <div class="fc"><div class="fc-term">Hurdle rate</div><div class="fc-def">The minimum required return — often the weighted average cost of capital (WACC). IRR must exceed this to justify the investment. Prop firms and funds set internal hurdle rates for strategy approval.</div><div class="fc-eg">Many hedge funds require IRR > 15-20% before allocating capital</div></div>
+</div>
+
+<div class="sh">The equation IRR solves</div>
+<div class="f-label">IRR is the rate $r$ that satisfies this equation</div>
+<div class="f-box"><span class="math">&Sigma;<sub>t=0</sub><sup>n</sup> <span class="frac"><span class="num">CF<sub>t</sub></span><span class="den">(1+r)<sup>t</sup></span></span> = &minus;C<sub>0</sub> + <span class="frac"><span class="num">CF<sub>1</sub></span><span class="den">(1+r)</span></span> + <span class="frac"><span class="num">CF<sub>2</sub></span><span class="den">(1+r)<sup>2</sup></span></span> + &ctdot; + <span class="frac"><span class="num">CF<sub>n</sub></span><span class="den">(1+r)<sup>n</sup></span></span></span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">There is no closed-form algebraic solution for $r$ when $n > 4$. IRR must always be found numerically — by trying different values of $r$ until NPV reaches zero. Your calculator, Excel's <code style="font-family:var(--mono)">IRR()</code>, or Python's <code style="font-family:var(--mono)">numpy_financial.irr()</code> all do this automatically using Newton-Raphson or bisection methods.</p>
+
+<div class="sh">Finding IRR by interpolation</div>
+<div class="worked">
+  <div class="worked-title">Example — £10,000 investment returning £3,000/year for 5 years</div>
+  <div class="worked-body">
+    <p>Step 1: Calculate NPV at two trial rates to bracket the IRR.</p>
+    <div class="worked-math">At r = 10%: NPV = +£1,372  (positive, so IRR > 10%)
+At r = 20%: NPV = -£1,030  (negative, so IRR < 20%)</div>
+    <p style="margin-top:8px">Step 2: Interpolate between the two rates.</p>
+    <div class="worked-math">IRR ≈ 10% + [1,372 ÷ (1,372 + 1,030)] × (20% - 10%)
+    ≈ 10% + 0.571 × 10%  ≈  15.7%</div>
+    <p class="worked-conclusion">IRR ≈ 15.7%. Since this exceeds a 10% cost of capital, the project is viable. The exact answer from a numerical solver is 15.24% — interpolation gives a close approximation.</p>
   </div>
+</div>
 
-  <div class="sh">The formula</div>
-  <div class="f-label">IRR is the rate r that solves this equation</div>
-  <div class="f-box">0 = −C₀ + CF₁/(1+r) + CF₂/(1+r)² + ... + CFₙ/(1+r)ⁿ</div>
-  <p style="font-size:13px;color:var(--subtle);line-height:1.65;margin-bottom:16px">There is no closed-form algebraic solution for r. In practice, IRR is always found numerically — either by trial and error, interpolation, or a root-finding algorithm (like Newton-Raphson). Your financial calculator or Python's <span style="font-family:var(--font-mono);font-size:12px">numpy.irr()</span> does this automatically.</p>
+<div class="sh">Live IRR calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Initial investment (£)</span><input type="range" min="1000" max="20000" step="500" value="10000" id="t4-c0"><span class="calc-out" id="t4-c0-v">£10,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Annual cash flow (£)</span><input type="range" min="500" max="8000" step="100" value="3000" id="t4-cf"><span class="calc-out" id="t4-cf-v">£3,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Years</span><input type="range" min="1" max="15" step="1" value="5" id="t4-n"><span class="calc-out" id="t4-n-v">5 yrs</span></div>
+  <div class="result-strip" style="background:var(--blue-bg)"><span class="result-lbl" style="color:var(--blue)">IRR (approx)</span><span class="result-val" style="color:var(--blue-dk)" id="t4-result">—</span></div>
+</div>
 
-  <div class="sh">Step-by-step: finding IRR by interpolation</div>
-  <div class="card-sm white" style="margin-bottom:20px;padding:16px 20px">
-    <p style="font-size:13px;color:var(--subtle);line-height:1.7"><strong style="color:var(--body)">Project:</strong> Invest £10,000 today. Receive £3,000/year for 5 years.</p>
-    <p style="font-size:13px;color:var(--body);margin-top:10px;font-family:var(--font-mono);line-height:1.9">At r = 10%: NPV = +£1,372 (positive)<br>At r = 20%: NPV = −£1,030 (negative)</p>
-    <p style="font-size:13px;color:var(--subtle);margin-top:8px;line-height:1.7">IRR lies between 10% and 20%. Interpolating:<br>IRR ≈ 10% + (1,372 / (1,372 + 1,030)) × 10% ≈ <strong style="color:var(--body)">15.7%</strong></p>
-    <p style="font-size:12px;color:var(--subtle);margin-top:8px">Since 15.7% > 10% cost of capital → Accept the project.</p>
-  </div>
+<div class="sh">Limitations of IRR — when not to use it</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Multiple IRRs</div><div class="fc-def">If cash flows change sign more than once (positive then negative then positive), the polynomial equation can have multiple solutions — multiple IRRs. NPV profile analysis or modified IRR (MIRR) should be used instead.</div></div>
+  <div class="fc"><div class="fc-term">Reinvestment assumption</div><div class="fc-def">IRR implicitly assumes intermediate cash flows are reinvested at the IRR rate itself — which is often unrealistic. NPV assumes reinvestment at the cost of capital, which is more conservative and accurate.</div></div>
+  <div class="fc"><div class="fc-term">Scale blindness</div><div class="fc-def">A 40% IRR on £1,000 creates less value than a 15% IRR on £100,000. IRR cannot distinguish between these. Always check NPV alongside IRR when comparing projects of different sizes.</div></div>
+</div>
 
-  <div class="sh">Live IRR calculator</div>
-  <div class="calc-block">
-    <div class="calc-row">
-      <span class="calc-lbl">Initial investment (£)</span>
-      <input type="range" min="1000" max="20000" step="500" value="10000" id="t4-c0">
-      <span class="calc-out" id="t4-c0-v">£10,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Annual cash flow (£)</span>
-      <input type="range" min="500" max="8000" step="100" value="3000" id="t4-cf">
-      <span class="calc-out" id="t4-cf-v">£3,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Years</span>
-      <input type="range" min="1" max="15" step="1" value="5" id="t4-n">
-      <span class="calc-out" id="t4-n-v">5 yrs</span>
-    </div>
-    <div class="result-strip" style="background:var(--blue-bg)">
-      <span class="result-label" style="color:var(--blue)">IRR (approx)</span>
-      <span class="result-value" style="color:#1e40af" id="t4-result">—</span>
-    </div>
-  </div>
-
-  <div class="sh">Limitations of IRR</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">Multiple IRRs</div>
-      <div class="fc-def">If cash flows change sign more than once (e.g. profit then loss then profit), there can be multiple IRRs. Use NPV instead in these cases.</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Reinvestment assumption</div>
-      <div class="fc-def">IRR assumes all intermediate cash flows are reinvested at the IRR itself — which is often unrealistic. NPV assumes reinvestment at the cost of capital, which is more conservative.</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Scale blindness</div>
-      <div class="fc-def">IRR ignores investment size. A 50% IRR on £1,000 is worse than a 20% IRR on £1,000,000. NPV captures scale — IRR does not.</div>
-    </div>
-  </div>
-
-  <div class="sh">Why quants care</div>
-  <div class="qbox">
-    <div class="qbox-label">Used in</div>
-    <p class="qbox-body">IRR is widely used to evaluate strategies, funds, and projects — especially in private equity, venture capital, and quant fund performance reporting. The "annualised return" of a trading strategy is conceptually the same as its IRR. When a prop firm asks "what returns does your strategy generate?" they want something analogous to an IRR.</p>
-    <span class="qtag">Strategy evaluation</span>
-    <span class="qtag">Fund performance</span>
-    <span class="qtag">Hurdle rates</span>
-    <span class="qtag">Capital allocation</span>
-  </div>`
+<div class="qbox">
+  <div class="qbox-lbl">In quant finance</div>
+  <p class="qbox-body">IRR is used to evaluate trading strategies and funds — the annualised return of a strategy with an upfront cost and ongoing cash flows is essentially its IRR. When a prop firm evaluates a systematic strategy, they want to know: what rate of return does it generate, and does that clear our internal hurdle rate? IRR answers that. It also appears in private equity, infrastructure investing, and any domain where upfront capital is deployed for future returns.</p>
+  <span class="qtag">Strategy evaluation</span><span class="qtag">Fund performance</span><span class="qtag">Hurdle rates</span><span class="qtag">Capital allocation</span>
+</div>`
 },
 
-/* ── 5  ANNUITIES & PERPETUITIES ────────────────────── */
+/* ── 5  ANNUITIES & PERPETUITIES ── */
 {
-  title: "Annuities & perpetuities",
-  eli5: "An annuity is just a stream of equal payments at regular intervals — like a monthly rent payment, pension, or mortgage. A perpetuity is an annuity that never stops — it pays forever. These sound abstract but they have incredibly clean formulas, and they're the building blocks of bond pricing, pension valuation, and mortgage calculations. Once you understand these, pricing a bond is basically just an annuity formula.",
-  html: `
-  <div class="sh">Four types to know</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">Ordinary annuity</div>
-      <div class="fc-def">Equal payments at the END of each period. The most common type. Mortgages, bond coupons, lease payments.</div>
-      <div class="fc-eg">£500/month, paid at end of each month for 5 years</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Annuity due</div>
-      <div class="fc-def">Equal payments at the BEGINNING of each period. Rent, insurance premiums. Worth slightly more than an ordinary annuity.</div>
-      <div class="fc-eg">£500/month, paid at start of each month for 5 years</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Perpetuity</div>
-      <div class="fc-def">Payments that continue forever. Theoretically models government bonds, preferred stock dividends, and some real estate income.</div>
-      <div class="fc-eg">£1,000/year forever — like a Consol bond</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Growing perpetuity</div>
-      <div class="fc-def">Payments that grow at a constant rate g every period, forever. Used in the Gordon Growth Model for stock valuation.</div>
-      <div class="fc-eg">Dividend starts at £2, grows 3%/year forever</div>
-    </div>
+title:"Annuities & perpetuities",
+peb:"An annuity is simply a stream of equal payments made at regular intervals — like a monthly mortgage payment, a pension, or a bond coupon. A perpetuity is an annuity that never stops — it pays forever. These sound simple but they have beautifully clean closed-form formulas, and they are the direct building blocks of bond pricing. A bond is literally just an annuity (the coupon payments) plus a lump sum (the face value at maturity) — once you understand annuities, bond pricing becomes straightforward algebra.",
+html:`
+<div class="sh">Four types</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Ordinary annuity</div><div class="fc-def">Equal payments at the END of each period. The standard assumption in finance. Mortgages, bond coupons, and most lease payments follow this structure.</div><div class="fc-eg">£500 received at the end of each month for 5 years</div></div>
+  <div class="fc"><div class="fc-term">Annuity due</div><div class="fc-def">Equal payments at the BEGINNING of each period. More valuable than an ordinary annuity because you receive each payment one period earlier — multiply ordinary PV by $(1+r)$.</div><div class="fc-eg">Rent paid at the start of each month</div></div>
+  <div class="fc"><div class="fc-term">Perpetuity</div><div class="fc-def">An infinite stream of equal payments — never ending. Used to model preference shares, consol bonds, and property income. Has a surprisingly simple valuation formula.</div><div class="fc-eg">£1,000 per year forever, like a UK Consol bond</div></div>
+  <div class="fc"><div class="fc-term">Growing perpetuity</div><div class="fc-def">An infinite stream of payments that grow at constant rate $g$ each period. The Gordon Growth Model for stock valuation is a growing perpetuity.</div><div class="fc-eg">Dividend starts at £2, grows 3% per year forever</div></div>
+</div>
+
+<div class="sh">The formulas</div>
+<div class="f-label">Present value of ordinary annuity</div>
+<div class="f-box"><span class="math">0 = &Sigma;<sub>t=0</sub><sup>n</sup> <span class="frac"><span class="num">CF<sub>t</sub></span><span class="den">(1+r)<sup>t</sup></span></span> = &minus;C<sub>0</sub> + <span class="frac"><span class="num">CF<sub>1</sub></span><span class="den">(1+r)</span></span> + <span class="frac"><span class="num">CF<sub>2</sub></span><span class="den">(1+r)<sup>2</sup></span></span> + &ctdot; + <span class="frac"><span class="num">CF<sub>n</sub></span><span class="den">(1+r)<sup>n</sup></span></span></span></div>
+<div class="f-label">Future value of ordinary annuity</div>
+<div class="f-box"><span class="math">PV = C &middot; <span class="frac"><span class="num">1 &minus; (1+r)<sup>&minus;n</sup></span><span class="den">r</span></span></span></div>
+<div class="f-label">Present value of perpetuity</div>
+<div class="f-box"><span class="math">FV = C &middot; <span class="frac"><span class="num">(1+r)<sup>n</sup> &minus; 1</span><span class="den">r</span></span></span></div>
+<div class="f-label">Present value of growing perpetuity (Gordon Growth Model)</div>
+<div class="f-box"><span class="math">PV = <span class="frac"><span class="num">C</span><span class="den">r</span></span></span></div>
+<table class="vt">
+  <tr><td>C</td><td>The constant periodic payment amount</td></tr>
+  <tr><td>r</td><td>Discount rate per period (must match the payment frequency)</td></tr>
+  <tr><td>n</td><td>Number of payment periods</td></tr>
+  <tr><td>g</td><td>Growth rate of payments per period (growing perpetuity only)</td></tr>
+</table>
+
+<div class="sh">Why is the perpetuity formula so simple?</div>
+<div class="insight">
+  <div class="insight-lbl">The elegant logic behind PV = C/r</div>
+  If you receive £100 per year forever and the discount rate is 10%, the present value must be exactly £1,000. Why? Because if you invested £1,000 at 10%, you would earn exactly £100 per year — forever — without ever touching the principal. So the perpetuity's present value equals the amount you would need to invest today to replicate the same cash flow stream. This gives $PV = C/r = 100/0.10 = £1{,}000$. Clean, logical, and directly useful.
+</div>
+
+<div class="sh">Application — bond pricing</div>
+<div class="worked">
+  <div class="worked-title">Example — pricing a 5-year £1,000 bond with 5% coupon, discount rate 6%</div>
+  <div class="worked-body">
+    <p>A bond pays £50 coupon per year for 5 years, then returns £1,000 face value at maturity. The required return is 6%.</p>
+    <div class="worked-math">Step 1 — PV of coupons (annuity):
+  PV = 50 × [1 - (1.06)⁻⁵] / 0.06 = 50 × 4.2124 = £210.62
+
+Step 2 — PV of face value (lump sum):
+  PV = 1,000 / (1.06)⁵ = 1,000 / 1.3382 = £747.26
+
+Step 3 — Bond price = 210.62 + 747.26 = £957.88</div>
+    <p class="worked-conclusion">The bond trades below £1,000 (at a discount) because the required return (6%) exceeds the coupon rate (5%). When required return rises above coupon rate, bond prices fall below par — a fundamental relationship in fixed income.</p>
   </div>
+</div>
 
-  <div class="sh">The formulas</div>
-  <div class="f-label">Present value of ordinary annuity</div>
-  <div class="f-box">PV = C × [1 − (1+r)^(−n)] / r</div>
-  <div class="f-label">Future value of ordinary annuity</div>
-  <div class="f-box">FV = C × [(1+r)ⁿ − 1] / r</div>
-  <div class="f-label">Present value of perpetuity</div>
-  <div class="f-box">PV = C / r</div>
-  <div class="f-label">Present value of growing perpetuity (g = growth rate)</div>
-  <div class="f-box">PV = C / (r − g)   where r > g</div>
-  <table class="vt">
-    <tr><td>C</td><td>Periodic cash payment (constant amount per period)</td></tr>
-    <tr><td>r</td><td>Discount rate per period</td></tr>
-    <tr><td>n</td><td>Number of periods</td></tr>
-    <tr><td>g</td><td>Growth rate of payments per period (growing perpetuity only)</td></tr>
-  </table>
-
-  <div class="sh">Perpetuity intuition — why is PV = C/r?</div>
-  <div class="eli5" style="border-left-color:var(--green);margin-bottom:20px">
-    <div class="eli5-label" style="color:var(--green)">The beautiful logic</div>
-    If you receive £100/year forever and the discount rate is 10%, the present value must be £1,000. Why? Because if you invested £1,000 at 10%, you'd earn exactly £100/year forever — you'd never touch the principal. So the present value of the cash flow stream equals the amount you'd need to invest to replicate it. That's C/r = 100/0.10 = £1,000. Elegant.
+<div class="sh">Live annuity calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Payment (£)</span><input type="range" min="100" max="5000" step="100" value="1000" id="t5-c"><span class="calc-out" id="t5-c-v">£1,000</span></div>
+  <div class="calc-row"><span class="calc-lbl">Discount rate (%)</span><input type="range" min="1" max="20" step="0.5" value="8" id="t5-r"><span class="calc-out" id="t5-r-v">8%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Number of periods</span><input type="range" min="1" max="30" step="1" value="10" id="t5-n"><span class="calc-out" id="t5-n-v">10</span></div>
+  <div class="results-3">
+    <div class="r3" style="background:var(--bg3)"><div class="r3-lbl" style="color:var(--tx2)">PV annuity</div><div class="r3-val" id="t5-pv">—</div></div>
+    <div class="r3" style="background:var(--bg3)"><div class="r3-lbl" style="color:var(--tx2)">FV annuity</div><div class="r3-val" id="t5-fv">—</div></div>
+    <div class="r3" style="background:var(--green-bg)"><div class="r3-lbl" style="color:var(--green)">PV perpetuity</div><div class="r3-val" style="color:var(--green-dk)" id="t5-perp">—</div></div>
   </div>
+</div>
 
-  <div class="sh">Live annuity calculator</div>
-  <div class="calc-block">
-    <div class="calc-row">
-      <span class="calc-lbl">Payment per period (£)</span>
-      <input type="range" min="100" max="5000" step="100" value="1000" id="t5-c">
-      <span class="calc-out" id="t5-c-v">£1,000</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Discount rate (%)</span>
-      <input type="range" min="1" max="20" step="0.5" value="8" id="t5-r">
-      <span class="calc-out" id="t5-r-v">8%</span>
-    </div>
-    <div class="calc-row">
-      <span class="calc-lbl">Number of periods</span>
-      <input type="range" min="1" max="30" step="1" value="10" id="t5-n">
-      <span class="calc-out" id="t5-n-v">10</span>
-    </div>
-    <div class="results-3">
-      <div class="r3" style="background:var(--off-white)">
-        <div class="r3-label" style="color:var(--subtle)">PV (annuity)</div>
-        <div class="r3-value" id="t5-pv">—</div>
-      </div>
-      <div class="r3" style="background:var(--off-white)">
-        <div class="r3-label" style="color:var(--subtle)">FV (annuity)</div>
-        <div class="r3-value" id="t5-fv">—</div>
-      </div>
-      <div class="r3" style="background:var(--green-bg)">
-        <div class="r3-label" style="color:var(--green)">PV (perpetuity)</div>
-        <div class="r3-value" style="color:var(--green-dark)" id="t5-perp">—</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sh">Worked example: bond pricing</div>
-  <div class="card-sm white" style="margin-bottom:20px;padding:16px 20px">
-    <p style="font-size:13px;color:var(--subtle);line-height:1.7">A bond pays £50 coupon per year for 5 years, plus £1,000 at maturity. Discount rate = 6%. Price?</p>
-    <p style="font-size:13px;color:var(--body);margin-top:10px;font-family:var(--font-mono);line-height:1.9">Coupon PV = 50 × [1−(1.06)⁻⁵] / 0.06 = £210.62<br>Face value PV = 1,000 / (1.06)⁵ = £747.26<br>Bond price = 210.62 + 747.26 = <strong>£957.88</strong></p>
-    <p style="font-size:12px;color:var(--subtle);margin-top:8px">The bond trades below £1,000 (at a discount) because the discount rate (6%) is higher than the coupon rate (5%).</p>
-  </div>
-
-  <div class="sh">Why quants care</div>
-  <div class="qbox">
-    <div class="qbox-label">Foundation for</div>
-    <p class="qbox-body">Annuity and perpetuity formulas are the backbone of fixed income — every bond is just a combination of an annuity (coupons) plus a lump sum (face value). The Gordon Growth Model, a fundamental equity valuation formula, is just a growing perpetuity formula. Mortgage pricing, pension liability calculations, and lease valuations all use annuity maths.</p>
-    <span class="qtag">Bond pricing (LV III)</span>
-    <span class="qtag">Dividend discount models</span>
-    <span class="qtag">Mortgage calculations</span>
-    <span class="qtag">Pension valuation</span>
-  </div>`
+<div class="qbox">
+  <div class="qbox-lbl">Foundation of fixed income and equity valuation</div>
+  <p class="qbox-body">Every bond is a combination of an annuity (coupons) and a lump sum (face value). Duration — the key interest rate sensitivity measure in fixed income — is derived directly from the annuity formula. The Gordon Growth Model ($PV = D_1 / (r-g)$), used to value dividend-paying stocks, is just a growing perpetuity. Understanding annuities unlocks bond pricing, dividend discount models, mortgage mathematics, and pension liability calculations in one step.</p>
+  <span class="qtag">Bond pricing (LV III)</span><span class="qtag">Duration and convexity</span><span class="qtag">Gordon Growth Model</span><span class="qtag">Mortgage mathematics</span>
+</div>`
 },
 
-/* ── 6  PORTFOLIO RISK TYPES ────────────────────────── */
+/* ── 6  PORTFOLIO RISK ── */
 {
-  title: "Portfolio risk types",
-  eli5: "When you own stocks, things can go wrong for three very different reasons. First, one company you own might collapse — that's just bad luck specific to that company (idiosyncratic risk). Second, an entire industry might get hit — like all energy stocks crashing when oil prices collapse (industry risk). Third, the entire stock market falls — a recession, a war, a global crisis (systematic risk). Here's the crucial bit: you can protect yourself from the first two just by owning lots of different stocks. The third one? You can NEVER escape it. No matter how many stocks you own, if the whole market crashes, you crash with it.",
-  html: `
-  <div class="sh">The three types of risk</div>
-  <div class="risk-grid">
-    <div class="risk-card" style="background:#fff1f2">
-      <div class="risk-title" style="color:#e11d48">Idiosyncratic risk</div>
-      <div class="risk-body" style="color:#9f1239">Company-specific events. CEO fraud, product recall, lawsuit, earnings miss. Completely unrelated to the broader market. Can be diversified away.</div>
-    </div>
-    <div class="risk-card" style="background:#fffbeb">
-      <div class="risk-title" style="color:#d97706">Industry risk</div>
-      <div class="risk-body" style="color:#78350f">Affects a whole sector simultaneously. A chip shortage hits every semiconductor stock. Oil price crash hits all energy companies. Partly diversifiable by owning stocks across sectors.</div>
-    </div>
-    <div class="risk-card" style="background:#fef2f2">
-      <div class="risk-title" style="color:#dc2626">Systematic risk</div>
-      <div class="risk-body" style="color:#7f1d1d">Market-wide shocks. Recession, interest rate hike, geopolitical crisis, global pandemic. Affects ALL assets. Impossible to diversify away — this is beta. You are always exposed.</div>
-    </div>
-  </div>
+title:"Portfolio risk types",
+peb:"When you own stocks, bad things can happen for three very different reasons. First, one company might blow up — a scandal, a product failure, a fraud (idiosyncratic risk). Second, a whole industry gets hammered — all airlines during a pandemic, all banks during a financial crisis (industry risk). Third, the entire market falls — a recession, a war, a rate shock (systematic risk). Here is the crucial insight that drives modern portfolio theory: you can eliminate the first two just by owning many different stocks. Own 30 uncorrelated stocks and the company-specific risks largely cancel each other out. The third type — systematic risk — you can NEVER escape no matter how many stocks you own. When the whole market falls 30%, your diversified portfolio falls 30% too. This irreducible market exposure is what beta measures.",
+html:`
+<div class="sh">The three types</div>
+<div class="risk-grid">
+  <div class="risk-card" style="background:var(--amber-bg)"><div class="risk-title" style="color:var(--amber)">Idiosyncratic risk</div><div class="risk-body" style="color:var(--tx2)">Company-specific. CEO fraud, product recall, regulatory fine, earnings miss, competitor disruption. Completely unrelated to broader market moves. Fully diversifiable by owning many uncorrelated stocks.</div></div>
+  <div class="risk-card" style="background:var(--blue-bg)"><div class="risk-title" style="color:var(--blue)">Industry risk</div><div class="risk-body" style="color:var(--tx2)">Affects an entire sector simultaneously. A chip shortage hits all semiconductor stocks. An oil price crash hits all energy companies. Diversifiable by holding stocks across multiple uncorrelated industries.</div></div>
+  <div class="risk-card" style="background:var(--red-bg)"><div class="risk-title" style="color:var(--red)">Systematic risk</div><div class="risk-body" style="color:var(--tx2)">Market-wide shocks that affect all assets. Recessions, interest rate hikes, geopolitical crises, global pandemics. Impossible to diversify away. This is what beta measures. You are always exposed to this.</div></div>
+</div>
 
-  <div class="sh">The key insight: what diversification can and cannot do</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">Diversifiable risk</div>
-      <div class="fc-def">Idiosyncratic + industry risk. Owning 20-30 uncorrelated stocks removes most of this. It costs nothing to eliminate — you just buy more stocks.</div>
-      <div class="fc-eg">Own AAPL, BP, HSBC, Tesla → their specific risks cancel out</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Non-diversifiable risk</div>
-      <div class="fc-def">Systematic market risk. Adding more stocks DOES NOT help. When the market falls 30%, a diversified portfolio still falls roughly 30%. You are compensated for bearing this risk through higher expected returns.</div>
-      <div class="fc-eg">2008 crash hit every diversified portfolio</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">The risk-return principle</div>
-      <div class="fc-def">Higher expected return requires higher risk — specifically systematic risk. You are NOT compensated for idiosyncratic risk because you could have diversified it away for free.</div>
-      <div class="fc-eg">Equities earn more than cash because of systematic risk premium</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Correlation matters</div>
-      <div class="fc-def">Diversification only works when assets are imperfectly correlated. If all your stocks move together (correlation = 1), owning 100 of them is no better than owning 1.</div>
-      <div class="fc-eg">All UK bank stocks are highly correlated — poor diversification</div>
-    </div>
-  </div>
+<div class="sh">What diversification can and cannot do</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Diversifiable risk</div><div class="fc-def">Idiosyncratic + industry risk. Holding 20-30 uncorrelated stocks eliminates most of this. The residual company-specific risks tend to cancel each other out. It costs nothing to eliminate — just buy more stocks.</div><div class="fc-eg">AAPL + BP + HSBC + Tesla — their specific risks offset</div></div>
+  <div class="fc"><div class="fc-term">Non-diversifiable risk</div><div class="fc-def">Systematic market risk. Cannot be reduced by adding more assets to a portfolio. When you hold the entire market, all that remains is systematic risk. You are compensated for bearing this through higher expected returns.</div><div class="fc-eg">2008 crash: even a perfectly diversified portfolio fell ~40%</div></div>
+  <div class="fc"><div class="fc-term">The risk-return principle</div><div class="fc-def">Higher expected return requires higher systematic risk. You are NOT compensated for idiosyncratic risk because you could have eliminated it for free by diversifying. Only bearing unavoidable risk earns a risk premium.</div><div class="fc-eg">Equities earn more than bonds because of higher systematic exposure</div></div>
+  <div class="fc"><div class="fc-term">Correlation is key</div><div class="fc-def">Diversification only works when assets are imperfectly correlated. If all your holdings move in lockstep (correlation = 1), owning 100 of them is no better than owning 1. Low or negative correlation between assets is what makes diversification valuable.</div><div class="fc-eg">Adding gold (negative correlation to equities) genuinely reduces portfolio risk</div></div>
+</div>
 
-  <div class="sh">Visualising diversification</div>
-  <div class="card-sm white" style="margin-bottom:20px;padding:16px 20px">
-    <div id="div-chart" style="padding:8px 0"></div>
-  </div>
+<div class="sh">Connecting risk types to alpha and beta</div>
+<div class="worked">
+  <div class="worked-title">The return decomposition: $R = \alpha + \beta \cdot R_m + \varepsilon$</div>
+  <div class="worked-body">
+    <p>Every portfolio or strategy return can be decomposed into three components:</p>
+    <div class="worked-math">Total return = Alpha + Beta × Market return + Residual noise
 
-  <div class="sh">Connection to alpha and beta</div>
-  <div class="fc-grid">
-    <div class="fc">
-      <div class="fc-term">Beta (β)</div>
-      <div class="fc-def">Measures systematic risk exposure. β = 1 means you move with the market. β = 1.5 means you amplify market moves by 50%. This IS non-diversifiable risk.</div>
-      <div class="fc-eg">β = 0.8: if market falls 10%, you fall ~8%</div>
-    </div>
-    <div class="fc">
-      <div class="fc-term">Alpha (α)</div>
-      <div class="fc-def">Return above what your beta exposure predicts. Genuine skill — finding return that isn't explained by market risk. This is what quants spend their careers building.</div>
-      <div class="fc-eg">Strategy returns 15%, market returns 10%, β=0.8 → α = 7%</div>
-    </div>
+R = α + β·Rₘ + ε</div>
+    <p style="margin-top:8px;color:var(--tx2);font-size:13px">Beta ($\beta$) is your systematic risk exposure — the portion of return explained by market movement. Alpha ($\alpha$) is the return above what your beta exposure predicts — genuine skill or edge. The residual ($\varepsilon$) is idiosyncratic noise — ideally zero in a well-constructed strategy.</p>
+    <p class="worked-conclusion">A great quant strategy maximises alpha while keeping beta controlled — earning returns that are NOT just a leveraged bet on the market going up.</p>
   </div>
+</div>
 
-  <div class="sh">Why quants care</div>
-  <div class="qbox">
-    <div class="qbox-label">Foundation for everything that comes next</div>
-    <p class="qbox-body">Understanding these three risk types is the conceptual foundation of modern portfolio theory. CAPM (LV II) formalises the relationship between systematic risk and expected return. Factor models (LV V) decompose risk and return across multiple systematic factors. Every quant strategy is evaluated by how much alpha it generates per unit of systematic risk taken — which is exactly the Sharpe ratio.</p>
-    <span class="qtag">CAPM (LV II)</span>
-    <span class="qtag">Sharpe ratio</span>
-    <span class="qtag">Factor models (LV V)</span>
-    <span class="qtag">Portfolio optimisation</span>
-    <span class="qtag">Alpha generation</span>
-  </div>`
+<div class="sh">Risk type summary</div>
+<table class="ct">
+  <thead><tr><th>Risk type</th><th>Source</th><th>Diversifiable?</th><th>Measured by</th><th>Compensated?</th></tr></thead>
+  <tbody>
+    <tr><td>Idiosyncratic</td><td>Individual companies</td><td>Yes — fully</td><td>Residual variance</td><td>No</td></tr>
+    <tr><td>Industry</td><td>Sector-wide events</td><td>Partially</td><td>Sector beta</td><td>Partially</td></tr>
+    <tr class="hl"><td>Systematic</td><td>Macroeconomic shocks</td><td>No — never</td><td>Beta (β)</td><td>Yes — risk premium</td></tr>
+  </tbody>
+</table>
+
+<div class="qbox">
+  <div class="qbox-lbl">Foundation for everything in LV II onwards</div>
+  <p class="qbox-body">Understanding these three risk types is the conceptual bedrock of modern portfolio theory. CAPM (LV II) formalises the relationship between systematic risk and expected return. Factor models (LV V) decompose return and risk across multiple systematic factors — size, value, momentum, quality. The Sharpe ratio (return per unit of total risk) and the Information Ratio (alpha per unit of tracking error) are both built on this framework. Every quant strategy is ultimately judged by how much alpha it generates per unit of systematic risk taken.</p>
+  <span class="qtag">CAPM (LV II)</span><span class="qtag">Sharpe ratio</span><span class="qtag">Factor models (LV V)</span><span class="qtag">Portfolio construction</span><span class="qtag">Alpha generation</span>
+</div>`
 }
-
-]; // end topics array
+]; /* end topics */
 
 /* =====================================================
    ENGINE
    ===================================================== */
 let cur = 0;
+let bookMode = false;
+const theme = () => document.documentElement.getAttribute('data-theme');
 
 function fmt(n) {
   const abs = Math.abs(Math.round(n));
-  const str = '£' + abs.toLocaleString();
-  return n < 0 ? '-' + str : str;
+  const s = '£' + abs.toLocaleString();
+  return n < 0 ? '-' + s : s;
 }
 
 function go(i) {
   cur = i;
-  // sidebar
   document.querySelectorAll('.sb-item').forEach((el, idx) => {
     el.classList.toggle('active', idx === i);
     if (idx < i) el.classList.add('done'); else el.classList.remove('done');
   });
-  // render
+
   const t = T[i];
   document.getElementById('content').innerHTML = `
     <div class="progress-pips" id="pips"></div>
     <div class="topic-eyebrow">
-      <span class="tag tag-green">LV I · Topic ${i+1} of ${T.length}</span>
-      <span class="tag tag-subtle">Core concept</span>
+      <span class="badge badge-green">LV I · Topic ${i+1} of ${T.length}</span>
+      <span class="badge badge-subtle">Core concept</span>
     </div>
     <div class="topic-title-lg">${t.title}</div>
-    <div class="eli5">
-      <div class="eli5-label">ELI5 — plain English first</div>
-      ${t.eli5}
-    </div>
+    <div class="peb"><div class="peb-label">Plain English First</div>${t.peb}</div>
     ${t.html}
-    <div style="display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:0.5px solid var(--light)">
-      ${i > 0 ? `<button class="btn" onclick="go(${i-1})">← Previous</button>` : ''}
-      ${i < T.length-1 ? `<button class="btn btn-primary" onclick="go(${i+1})" style="margin-left:auto">Next →</button>` : '<span style="font-size:13px;color:var(--subtle);margin-left:auto;align-self:center">LV I complete ✓</span>'}
+    <div class="topic-nav">
+      ${i > 0 ? `<button class="tn-btn" onclick="go(${i-1})">← Previous</button>` : ''}
+      ${i < T.length-1
+        ? `<button class="tn-btn primary" onclick="go(${i+1})" style="margin-left:auto">Next →</button>`
+        : '<span style="font-size:13px;color:var(--tx3);margin-left:auto;align-self:center">LV I complete ✓</span>'}
     </div>`;
+
   renderPips();
+
+  
+
   bindCalcs();
   document.getElementById('content').scrollTop = 0;
-  buildDivChart();
 }
 
 function renderPips() {
   const el = document.getElementById('pips');
   if (!el) return;
-  el.innerHTML = T.map((t,i) => {
-    const bg = i === cur ? 'var(--body)' : i < cur ? 'var(--green)' : 'var(--mid)';
+  el.innerHTML = T.map((t, i) => {
+    const bg = i === cur ? 'var(--tx1)' : i < cur ? 'var(--green)' : 'var(--br2)';
     return `<button class="pip" title="${t.title}" style="background:${bg}" onclick="go(${i})"></button>`;
   }).join('');
 }
 
+function toggleLayout() {
+  bookMode = !bookMode;
+  document.getElementById('shell').classList.toggle('book-mode', bookMode);
+  const btn = document.getElementById('layout-btn');
+  btn.classList.toggle('active', bookMode);
+  btn.title = bookMode ? 'Switch to sidebar mode' : 'Switch to book mode';
+  // Re-render math after layout change
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(document.getElementById('content'), {
+      delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+      throwOnError:false
+    });
+  }
+}
+
+function toggleTheme() {
+  const isDark = theme() === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('theme-btn');
+  btn.classList.toggle('active', !isDark);
+}
+
+/* =====================================================
+   CALCULATOR BINDINGS
+   ===================================================== */
 function bindCalcs() {
   const $ = id => document.getElementById(id);
 
-  /* Topic 0 — TVM */
+  // T0 — TVM
   if ($('t0-pv')) {
     const up = () => {
-      const pv = +$('t0-pv').value, r = +$('t0-r').value/100, n = +$('t0-n').value;
-      $('t0-pv-v').textContent = '£'+pv.toLocaleString();
-      $('t0-r-v').textContent  = $('t0-r').value+'%';
-      $('t0-n-v').textContent  = n+' yrs';
-      $('t0-result').textContent = fmt(pv * Math.pow(1+r, n));
+      const pv=+$('t0-pv').value, r=+$('t0-r').value/100, n=+$('t0-n').value;
+      $('t0-pv-v').textContent='£'+pv.toLocaleString();
+      $('t0-r-v').textContent=$('t0-r').value+'%';
+      $('t0-n-v').textContent=n+' yrs';
+      $('t0-result').textContent=fmt(pv*Math.pow(1+r,n));
     };
-    [$('t0-pv'),$('t0-r'),$('t0-n')].forEach(e => e.addEventListener('input', up)); up();
+    [$('t0-pv'),$('t0-r'),$('t0-n')].forEach(e=>e.addEventListener('input',up)); up();
   }
 
-  /* Topic 1 — Compounding */
+  // T1 — Compounding
   if ($('t1-pv')) {
     const up = () => {
-      const pv = +$('t1-pv').value, r = +$('t1-r').value/100, n = +$('t1-n').value;
-      $('t1-pv-v').textContent = '£'+pv.toLocaleString();
-      $('t1-r-v').textContent  = $('t1-r').value+'%';
-      $('t1-n-v').textContent  = n;
-      $('t1-ann').textContent  = fmt(pv * Math.pow(1+r, n));
-      $('t1-mon').textContent  = fmt(pv * Math.pow(1+r/12, 12*n));
-      $('t1-con').textContent  = fmt(pv * Math.exp(r*n));
+      const pv=+$('t1-pv').value, r=+$('t1-r').value/100, n=+$('t1-n').value;
+      $('t1-pv-v').textContent='£'+pv.toLocaleString();
+      $('t1-r-v').textContent=$('t1-r').value+'%';
+      $('t1-n-v').textContent=n;
+      $('t1-ann').textContent=fmt(pv*Math.pow(1+r,n));
+      $('t1-mon').textContent=fmt(pv*Math.pow(1+r/12,12*n));
+      $('t1-con').textContent=fmt(pv*Math.exp(r*n));
     };
-    [$('t1-pv'),$('t1-r'),$('t1-n')].forEach(e => e.addEventListener('input', up)); up();
+    [$('t1-pv'),$('t1-r'),$('t1-n')].forEach(e=>e.addEventListener('input',up)); up();
   }
 
-  /* Topic 2 — EAR */
+  // T2 — EAR
   if ($('t2-r')) {
     const up = () => {
-      const r = +$('t2-r').value/100;
-      $('t2-r-v').textContent = $('t2-r').value+'%';
-      const rows = [{l:'Annually',m:1},{l:'Quarterly',m:4},{l:'Monthly',m:12},{l:'Daily',m:365},{l:'Continuous',m:Infinity}];
-      $('t2-tbody').innerHTML = rows.map(row => {
-        const ear = row.m===Infinity ? Math.exp(r)-1 : Math.pow(1+r/row.m,row.m)-1;
-        return `<tr${row.m===Infinity?' class="highlight"':''}><td>${row.l}</td><td>${row.m===Infinity?'∞':row.m}</td><td>${(ear*100).toFixed(4)}%</td></tr>`;
+      const r=+$('t2-r').value/100;
+      $('t2-r-v').textContent=$('t2-r').value+'%';
+      const rows=[{l:'Annually',m:1},{l:'Quarterly',m:4},{l:'Monthly',m:12},{l:'Weekly',m:52},{l:'Daily',m:365},{l:'Continuous',m:Infinity}];
+      $('t2-tbody').innerHTML=rows.map(row=>{
+        const ear=row.m===Infinity?Math.exp(r)-1:Math.pow(1+r/row.m,row.m)-1;
+        const annual=r*10000;
+        const earAmt=(ear*10000).toFixed(2);
+        return`<tr${row.m===Infinity?' class="hl"':''}><td>${row.l}</td><td>${row.m===Infinity?'∞':row.m}</td><td>${(ear*100).toFixed(4)}%</td><td>£${earAmt} on £10k</td></tr>`;
       }).join('');
     };
-    $('t2-r').addEventListener('input', up); up();
+    $('t2-r').addEventListener('input',up); up();
   }
 
-  /* Topic 3 — NPV */
+  // T3 — NPV
   if ($('t3-c0')) {
     const up = () => {
       const c0=+$('t3-c0').value, cf=+$('t3-cf').value, n=+$('t3-n').value, r=+$('t3-r').value/100;
@@ -836,94 +898,68 @@ function bindCalcs() {
       $('t3-cf-v').textContent='£'+cf.toLocaleString();
       $('t3-n-v').textContent=n+' yrs';
       $('t3-r-v').textContent=$('t3-r').value+'%';
-      let npv = -c0;
-      for(let t=1;t<=n;t++) npv += cf/Math.pow(1+r,t);
-      const el = $('t3-result');
-      el.textContent = fmt(npv);
-      const box = $('t3-result-box');
-      if(npv >= 0) {
-        box.style.background='var(--green-bg)';
-        el.style.color='var(--green-dark)';
-        $('t3-label').style.color='var(--green)';
-        $('t3-label').textContent='NPV — Accept ✓';
-      } else {
-        box.style.background='var(--red-bg)';
-        el.style.color='var(--red)';
-        $('t3-label').style.color='var(--red)';
-        $('t3-label').textContent='NPV — Reject ✗';
-      }
+      let npv=-c0;
+      for(let t=1;t<=n;t++) npv+=cf/Math.pow(1+r,t);
+      const el=$('t3-result'), box=$('t3-result-box'), lbl=$('t3-label');
+      el.textContent=fmt(npv);
+      const pos=npv>=0;
+      box.style.background=pos?'var(--green-bg)':'var(--red-bg)';
+      el.style.color=pos?'var(--green-dk)':'var(--red)';
+      lbl.style.color=pos?'var(--green)':'var(--red)';
+      lbl.textContent=pos?'NPV — Accept ✓':'NPV — Reject ✗';
     };
-    [$('t3-c0'),$('t3-cf'),$('t3-n'),$('t3-r')].forEach(e => e.addEventListener('input', up)); up();
+    [$('t3-c0'),$('t3-cf'),$('t3-n'),$('t3-r')].forEach(e=>e.addEventListener('input',up)); up();
   }
 
-  /* Topic 4 — IRR */
+  // T4 — IRR (Newton-Raphson)
   if ($('t4-c0')) {
-    const calcIRR = (c0, cf, n) => {
-      // Newton-Raphson method
-      let r = 0.1;
-      for(let iter=0; iter<200; iter++) {
-        let npv=-c0, dnpv=0;
-        for(let t=1;t<=n;t++){
-          npv  += cf/Math.pow(1+r,t);
-          dnpv -= t*cf/Math.pow(1+r,t+1);
-        }
-        if(Math.abs(npv)<0.001) break;
-        r = r - npv/dnpv;
-        if(r < -0.99) r = -0.99;
+    const calcIRR=(c0,cf,n)=>{
+      let r=0.1;
+      for(let iter=0;iter<200;iter++){
+        let npv=-c0,dnpv=0;
+        for(let t=1;t<=n;t++){npv+=cf/Math.pow(1+r,t);dnpv-=t*cf/Math.pow(1+r,t+1);}
+        if(Math.abs(npv)<0.001)break;
+        r=r-npv/dnpv;
+        if(r<-0.99)r=-0.99;
       }
       return r;
     };
-    const up = () => {
+    const up=()=>{
       const c0=+$('t4-c0').value, cf=+$('t4-cf').value, n=+$('t4-n').value;
       $('t4-c0-v').textContent='£'+c0.toLocaleString();
       $('t4-cf-v').textContent='£'+cf.toLocaleString();
       $('t4-n-v').textContent=n+' yrs';
-      const irr = calcIRR(c0, cf, n);
-      $('t4-result').textContent = (irr*100).toFixed(1)+'%';
+      const irr=calcIRR(c0,cf,n);
+      $('t4-result').textContent=(irr*100).toFixed(2)+'%';
     };
-    [$('t4-c0'),$('t4-cf'),$('t4-n')].forEach(e => e.addEventListener('input', up)); up();
+    [$('t4-c0'),$('t4-cf'),$('t4-n')].forEach(e=>e.addEventListener('input',up)); up();
   }
 
-  /* Topic 5 — Annuities */
+  // T5 — Annuities
   if ($('t5-c')) {
-    const up = () => {
+    const up=()=>{
       const c=+$('t5-c').value, r=+$('t5-r').value/100, n=+$('t5-n').value;
       $('t5-c-v').textContent='£'+c.toLocaleString();
       $('t5-r-v').textContent=$('t5-r').value+'%';
       $('t5-n-v').textContent=n;
-      const pvAnn = c * (1 - Math.pow(1+r,-n)) / r;
-      const fvAnn = c * (Math.pow(1+r,n) - 1) / r;
-      const pvPerp = c / r;
-      $('t5-pv').textContent  = fmt(pvAnn);
-      $('t5-fv').textContent  = fmt(fvAnn);
-      $('t5-perp').textContent= fmt(pvPerp);
+      $('t5-pv').textContent=fmt(c*(1-Math.pow(1+r,-n))/r);
+      $('t5-fv').textContent=fmt(c*(Math.pow(1+r,n)-1)/r);
+      $('t5-perp').textContent=fmt(c/r);
     };
-    [$('t5-c'),$('t5-r'),$('t5-n')].forEach(e => e.addEventListener('input', up)); up();
+    [$('t5-c'),$('t5-r'),$('t5-n')].forEach(e=>e.addEventListener('input',up)); up();
   }
 }
 
-function buildDivChart() {
-  const el = document.getElementById('div-chart');
-  if (!el) return;
-  const points = [
-    {n:1,r:40},{n:2,r:30},{n:5,r:20},{n:10,r:13},{n:20,r:8},{n:30,r:6},{n:50,r:5}
-  ];
-  const maxR = 42, w = 340, h = 100;
-  let path = `M ${points[0].n/50*w} ${h - points[0].r/maxR*h}`;
-  points.forEach(p => { path += ` L ${p.n/50*w} ${h - p.r/maxR*h}`; });
-  el.innerHTML = `
-  <div style="font-size:11px;color:var(--subtle);margin-bottom:8px">Portfolio risk as you add more stocks</div>
-  <svg width="100%" viewBox="0 0 ${w} ${h+20}" style="overflow:visible">
-    <line x1="0" y1="${h}" x2="${w}" y2="${h}" stroke="var(--light)" stroke-width="0.5"/>
-    <text x="0" y="${h+14}" font-size="9" fill="var(--subtle)">1 stock</text>
-    <text x="${w-36}" y="${h+14}" font-size="9" fill="var(--subtle)">50 stocks</text>
-    <path d="${path}" fill="none" stroke="var(--red)" stroke-width="1.5"/>
-    <line x1="0" y1="${h - 5/maxR*h}" x2="${w}" y2="${h - 5/maxR*h}" stroke="var(--green)" stroke-width="1" stroke-dasharray="4,3"/>
-    <text x="${w+4}" y="${h - 5/maxR*h + 4}" font-size="9" fill="var(--green)">Systematic risk (unavoidable)</text>
-  </svg>`;
+/* Init */
+// Check system preference
+// Set theme from system preference immediately
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.setAttribute('data-theme','dark');
+} else {
+  document.documentElement.setAttribute('data-theme','light');
 }
 
-/* Init */
+// Wait for KaTeX to load before rendering
 go(0);
 </script>
 </body>
