@@ -418,35 +418,30 @@ html:`
 <div class="sh">Why compounding frequency matters</div>
 <p style="font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:16px">If you invest £100 at 12% for one year, the final amount depends entirely on how often interest is applied. More frequent compounding means interest earns its own interest sooner, leading to a higher final value.</p>
 
-<table class="ct">
-  <thead><tr><th>Type</th><th>Formula structure</th><th>£100 at 12%, 1 year</th><th>Extra vs annual</th></tr></thead>
-  <tbody>
-    <tr><td>Annual (1×/yr)</td><td>$(1+r)^n$</td><td>£112.00</td><td>—</td></tr>
-    <tr><td>Quarterly (4×/yr)</td><td>$(1+r/4)^{4n}$</td><td>£112.55</td><td>+£0.55</td></tr>
-    <tr><td>Monthly (12×/yr)</td><td>$(1+r/12)^{12n}$</td><td>£112.68</td><td>+£0.68</td></tr>
-    <tr><td>Daily (365×/yr)</td><td>$(1+r/365)^{365n}$</td><td>£112.747</td><td>+£0.75</td></tr>
-    <tr class="hl"><td>Continuous (∞)</td><td>$e^{rt}$</td><td>£112.750</td><td>+£0.75 (max)</td></tr>
-  </tbody>
-</table>
+<tr><td>Annual (1×/yr)</td><td><span class="math">(1+r)<sup>n</sup></span></td><td>£112.00</td><td>—</td></tr>
+    <tr><td>Quarterly (4×/yr)</td><td><span class="math">(1+r/4)<sup>4n</sup></span></td><td>£112.55</td><td>+£0.55</td></tr>
+    <tr><td>Monthly (12×/yr)</td><td><span class="math">(1+r/12)<sup>12n</sup></span></td><td>£112.68</td><td>+£0.68</td></tr>
+    <tr><td>Daily (365×/yr)</td><td><span class="math">(1+r/365)<sup>365n</sup></span></td><td>£112.747</td><td>+£0.75</td></tr>
+    <tr class="hl"><td>Continuous (∞)</td><td><span class="math">e<sup>rt</sup></span></td><td>£112.750</td><td>+£0.75 (max)</td></tr>
 
 <div class="sh">The three key formulas</div>
 <div class="f-label">Annual discrete compounding</div>
-<div class="f-box"><span class="math">FV = PV(1 + r)<sup>n</sup></span></div>
-<div class="f-label">Periodic compounding — $m$ times per year</div>
+<div class="f-box"><span class="math">FV = PV (1 + r)<sup>n</sup></span></div>
+<div class="f-label">Periodic compounding — <span class="math">m</span> times per year</div>
 <div class="f-box"><span class="math">FV = PV <span class="big-paren">(</span>1 + <span class="frac"><span class="num">r</span><span class="den">m</span></span><span class="big-paren">)</span><sup>mn</sup></span></div>
-<div class="f-label">Continuous compounding — the theoretical limit as $m \to \infty$</div>
+<div class="f-label">Continuous compounding — the theoretical limit as <span class="math">m \to \infty</span></div>
 <div class="f-box"><span class="math">FV = PV &middot; e<sup>rt</sup></span></div>
 <table class="vt">
   <tr><td>m</td><td>Compounding periods per year (12 = monthly, 52 = weekly, 365 = daily)</td></tr>
   <tr><td>e</td><td>Euler's number ≈ 2.71828 — arises naturally from continuous compounding</td></tr>
-  <tr><td>t</td><td>Time in years (equivalent to n in discrete formulas)</td></tr>
+  <tr><td>t</td><td>Time in years (equivalent to <span class="math">n</span> in discrete formulas)</td></tr>
 </table>
 
-<div class="sh">Where does e come from?</div>
+<div class="sh">Where does <span class="math">e</span> come from?</div>
 <div class="insight">
   <div class="insight-lbl">Mathematical insight</div>
-  As you compound more and more frequently, a remarkable thing happens: the formula (1 + r/m)<sup>m</sup> converges to a fixed limit as $m \to \infty$. That limit is $e^r$ — where $e \approx 2.71828$ is Euler's number. So continuous compounding is not some exotic concept — it is simply the natural mathematical limit of compounding infinitely often. This is one reason $e$ appears everywhere in finance, physics, and probability.
-  $$\lim_{m \to \infty}\left(1 + \frac{r}{m}\right)^{mn} = e^{rn}$$
+  As you compound more and more frequently, a remarkable thing happens: the formula <span class="math">\left(1 + \frac{r}{m}\right)^m</span> converges to a fixed limit as <span class="math">m \to \infty</span>. That limit is <span class="math">e^r</span> — where <span class="math">e \approx 2.71828</span> is Euler's number. So continuous compounding is not some exotic concept — it is simply the natural mathematical limit of compounding infinitely often. This is one reason <span class="math">e</span> appears everywhere in finance, physics, and probability.
+  <span class="math">\lim_{m \to \infty}\left(1 + \frac{r}{m}\right)^{mn} = e^{rn}</span>
 </div>
 
 <div class="sh">Worked example</div>
@@ -475,7 +470,7 @@ Continuous: 1,000 × e^(0.06 × 5)       = £1,349.86</div>
 <div class="sh">Why quants use continuous compounding</div>
 <div class="qbox">
   <div class="qbox-lbl">Critical for quant work</div>
-  <p class="qbox-body">Continuous compounding makes calculus work cleanly. The function $e^{rt}$ has a derivative of $r \cdot e^{rt}$ — perfectly proportional to itself, which makes differential equations tractable. Log returns (the natural log of price relatives: $\ln(P_t / P_{t-1})$) are the continuous-compounding equivalent of discrete returns. Black-Scholes, geometric Brownian motion, and all stochastic calculus assume a continuous-time framework — and continuous compounding is baked into every formula.</p>
+  <p class="qbox-body">Continuous compounding makes calculus work cleanly. The function <span class="math">e^{rt}</span> has a derivative of <span class="math">r \cdot e^{rt}</span> — perfectly proportional to itself, which makes differential equations tractable. Log returns (the natural log of price relatives: <span class="math">\ln(P_t / P_{t-1})</span>) are the continuous-compounding equivalent of discrete returns. Black-Scholes, geometric Brownian motion, and all stochastic calculus assume a continuous-time framework — and continuous compounding is baked into every formula.</p>
   <span class="qtag">Log returns</span><span class="qtag">Black-Scholes</span><span class="qtag">Geometric Brownian Motion</span><span class="qtag">Stochastic calculus</span>
 </div>`
 },
@@ -493,7 +488,7 @@ html:`
 </div>
 
 <div class="sh">The formulas</div>
-<div class="f-label">Periodic compounding — $m$ periods per year</div>
+<div class="f-label">Periodic compounding — <span class="math">m</span> periods per year</div>
 <div class="f-box"><span class="math">lim<sub>m&rarr;&infin;</sub> <span class="big-paren">(</span>1 + <span class="frac"><span class="num">r</span><span class="den">m</span></span><span class="big-paren">)</span><sup>mn</sup> = e<sup>rn</sup></span></div>
 <div class="f-label">Continuous compounding</div>
 <div class="f-box"><span class="math">EAR = <span class="big-paren">(</span>1 + <span class="frac"><span class="num">r</span><span class="den">m</span></span><span class="big-paren">)</span><sup>m</sup> &minus; 1</span></div>
@@ -522,7 +517,7 @@ Bank B EAR = (1 + 0.12/12)¹² - 1           = 12.68%</div>
 <div class="sh">Connection to continuous compounding</div>
 <div class="insight">
   <div class="insight-lbl">Key relationship</div>
-  As compounding frequency increases, EAR approaches but never exceeds $e^r - 1$. This is the continuous compounding EAR — the theoretical maximum return you could earn from a given nominal rate. For $r = 12\%$: $EAR_{\text{continuous}} = e^{0.12} - 1 = 12.75\%$. No matter how frequently you compound 12%, you cannot exceed 12.75% effective annual return.
+  As compounding frequency increases, EAR approaches but never exceeds <span class="math">e^r - 1</span>. This is the continuous compounding EAR — the theoretical maximum return you could earn from a given nominal rate. For <span class="math">r = 12\% : EAR_{\text{continuous}} = e^{0.12} - 1 = 12.75\%</span>. No matter how frequently you compound 12%, you cannot exceed 12.75% effective annual return.
 </div>
 
 <div class="qbox">
@@ -549,10 +544,10 @@ html:`
 <div class="f-label">NPV — sum of all cash flows discounted to today</div>
 <div class="f-box"><span class="math">EAR = e<sup>r</sup> &minus; 1</span></div>
 <table class="vt">
-  <tr><td>$C_0$</td><td>Initial investment — a negative cash flow at time zero (money going out)</td></tr>
-  <tr><td>$CF_t$</td><td>Cash flow at time period $t$ — can be positive (inflow) or negative (outflow)</td></tr>
-  <tr><td>r</td><td>Discount rate per period — your required return or cost of capital</td></tr>
-  <tr><td>n</td><td>Total number of periods in the project</td></tr>
+  <tr><td><span class="math">C_0</span></td><td>Initial investment — a negative cash flow at time zero (money going out)</td></tr>
+  <tr><td><span class="math">CF_t</span></td><td>Cash flow at time period <span class="math">t</span> — can be positive (inflow) or negative (outflow)</td></tr>
+  <tr><td><span class="math">r</span></td><td>Discount rate per period — your required return or cost of capital</td></tr>
+  <tr><td><span class="math">n</span></td><td>Total number of periods in the project</td></tr>
 </table>
 
 <div class="sh">Cash flow timeline — a visual breakdown</div>
@@ -581,7 +576,7 @@ html:`
 <div class="sh">NPV and the discount rate</div>
 <div class="insight">
   <div class="insight-lbl">Critical relationship</div>
-  As the discount rate $r$ increases, NPV decreases — because you are demanding a higher return, making future cash flows worth less today. If $r$ equals the investment's IRR, NPV equals exactly zero. This relationship is called the NPV profile and is fundamental to investment analysis. Plotting NPV against $r$ for any project reveals its break-even rate and how sensitive the decision is to your choice of discount rate.
+  As the discount rate <span class="math">r</span> increases, NPV decreases — because you are demanding a higher return, making future cash flows worth less today. If <span class="math">r</span> equals the investment's IRR, NPV equals exactly zero. This relationship is called the NPV profile and is fundamental to investment analysis. Plotting NPV against <span class="math">r</span> for any project reveals its break-even rate and how sensitive the decision is to your choice of discount rate.
 </div>
 
 <div class="qbox">
@@ -594,20 +589,20 @@ html:`
 /* ── 4  IRR ── */
 {
 title:"Internal Rate of Return (IRR)",
-peb:"IRR answers the question: what rate of return is this investment actually delivering? It is the specific discount rate at which NPV equals exactly zero — the break-even rate. If the IRR is higher than your required return (the minimum rate you need to justify investing), the project is worthwhile. If it is lower, walk away. Think of IRR as the built-in annual return percentage of an investment — and you compare that to your hurdle rate to decide whether it clears the bar.",
+peb:"IRR answers the question: what rate of return is this investment actually delivering? It is the specific discount rate at which NPV equals exactly zero — (the break-even rate). If the IRR is higher than your required return (the minimum rate you need to justify investing), the project is worthwhile. If it is lower, walk away. Think of IRR as the built-in annual return percentage of an investment — and you compare that to your hurdle rate to decide whether it clears the bar.",
 html:`
 <div class="sh">Understanding IRR</div>
 <div class="fc-grid">
-  <div class="fc"><div class="fc-term">IRR definition</div><div class="fc-def">The discount rate $r$ that makes NPV equal to zero. It is the rate at which the present value of all future inflows exactly equals the upfront cost.</div><div class="fc-eg">If NPV = 0 when r = 15.7%, then IRR = 15.7%</div></div>
+  <div class="fc"><div class="fc-term">IRR definition</div><div class="fc-def">The discount rate <span class="math">r</span> that makes NPV equal to zero. It is the rate at which the present value of all future inflows exactly equals the upfront cost.</div><div class="fc-eg">If NPV = 0 when <span class="math">r</span> = 15.7%, then IRR = 15.7%</div></div>
   <div class="fc"><div class="fc-term">Decision rule</div><div class="fc-def">Accept if IRR exceeds the hurdle rate (cost of capital). Reject if IRR falls below. At IRR = hurdle rate, the project earns exactly the required return.</div><div class="fc-eg">IRR = 18%, cost of capital = 10% → clear the bar, accept</div></div>
   <div class="fc"><div class="fc-term">IRR vs NPV</div><div class="fc-def">IRR is a percentage rate. NPV is a monetary amount. Both measure value but differently. NPV is generally the more theoretically reliable rule for comparing projects of different scales.</div><div class="fc-eg">IRR ignores scale — 50% on £1k can lose to 15% on £1m in NPV terms</div></div>
   <div class="fc"><div class="fc-term">Hurdle rate</div><div class="fc-def">The minimum required return — often the weighted average cost of capital (WACC). IRR must exceed this to justify the investment. Prop firms and funds set internal hurdle rates for strategy approval.</div><div class="fc-eg">Many hedge funds require IRR > 15-20% before allocating capital</div></div>
 </div>
 
 <div class="sh">The equation IRR solves</div>
-<div class="f-label">IRR is the rate $r$ that satisfies this equation</div>
+<div class="f-label">IRR is the rate <span class="math">r</span> that satisfies this equation</div>
 <div class="f-box"><span class="math">&Sigma;<sub>t=0</sub><sup>n</sup> <span class="frac"><span class="num">CF<sub>t</sub></span><span class="den">(1+r)<sup>t</sup></span></span> = &minus;C<sub>0</sub> + <span class="frac"><span class="num">CF<sub>1</sub></span><span class="den">(1+r)</span></span> + <span class="frac"><span class="num">CF<sub>2</sub></span><span class="den">(1+r)<sup>2</sup></span></span> + &ctdot; + <span class="frac"><span class="num">CF<sub>n</sub></span><span class="den">(1+r)<sup>n</sup></span></span></span></div>
-<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">There is no closed-form algebraic solution for $r$ when $n > 4$. IRR must always be found numerically — by trying different values of $r$ until NPV reaches zero. Your calculator, Excel's <code style="font-family:var(--mono)">IRR()</code>, or Python's <code style="font-family:var(--mono)">numpy_financial.irr()</code> all do this automatically using Newton-Raphson or bisection methods.</p>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">There is no closed-form algebraic solution for <span class="math">r</span> when <span class="math">n > 4</span>. IRR must always be found numerically — by trying different values of <span class="math">r</span> until NPV reaches zero. Your calculator, Excel's <code style="font-family:var(--mono)">IRR()</code>, or Python's <code style="font-family:var(--mono)">numpy_financial.irr()</code> all do this automatically using Newton-Raphson or bisection methods.</p>
 
 <div class="sh">Finding IRR by interpolation</div>
 <div class="worked">
@@ -653,9 +648,9 @@ html:`
 <div class="sh">Four types</div>
 <div class="fc-grid">
   <div class="fc"><div class="fc-term">Ordinary annuity</div><div class="fc-def">Equal payments at the END of each period. The standard assumption in finance. Mortgages, bond coupons, and most lease payments follow this structure.</div><div class="fc-eg">£500 received at the end of each month for 5 years</div></div>
-  <div class="fc"><div class="fc-term">Annuity due</div><div class="fc-def">Equal payments at the BEGINNING of each period. More valuable than an ordinary annuity because you receive each payment one period earlier — multiply ordinary PV by $(1+r)$.</div><div class="fc-eg">Rent paid at the start of each month</div></div>
+  <div class="fc"><div class="fc-term">Annuity due</div><div class="fc-def">Equal payments at the BEGINNING of each period. More valuable than an ordinary annuity because you receive each payment one period earlier — multiply ordinary PV by <span class="math">(1+r)</span>.</div><div class="fc-eg">Rent paid at the start of each month</div></div>
   <div class="fc"><div class="fc-term">Perpetuity</div><div class="fc-def">An infinite stream of equal payments — never ending. Used to model preference shares, consol bonds, and property income. Has a surprisingly simple valuation formula.</div><div class="fc-eg">£1,000 per year forever, like a UK Consol bond</div></div>
-  <div class="fc"><div class="fc-term">Growing perpetuity</div><div class="fc-def">An infinite stream of payments that grow at constant rate $g$ each period. The Gordon Growth Model for stock valuation is a growing perpetuity.</div><div class="fc-eg">Dividend starts at £2, grows 3% per year forever</div></div>
+  <div class="fc"><div class="fc-term">Growing perpetuity</div><div class="fc-def">An infinite stream of payments that grow at constant rate <span class="math">g</span> each period. The Gordon Growth Model for stock valuation is a growing perpetuity.</div><div class="fc-eg">Dividend starts at £2, grows 3% per year forever</div></div>
 </div>
 
 <div class="sh">The formulas</div>
@@ -677,7 +672,7 @@ html:`
 <div class="sh">Why is the perpetuity formula so simple?</div>
 <div class="insight">
   <div class="insight-lbl">The elegant logic behind PV = C/r</div>
-  If you receive £100 per year forever and the discount rate is 10%, the present value must be exactly £1,000. Why? Because if you invested £1,000 at 10%, you would earn exactly £100 per year — forever — without ever touching the principal. So the perpetuity's present value equals the amount you would need to invest today to replicate the same cash flow stream. This gives $PV = C/r = 100/0.10 = £1{,}000$. Clean, logical, and directly useful.
+  If you receive £100 per year forever and the discount rate is 10%, the present value must be exactly £1,000. Why? Because if you invested £1,000 at 10%, you would earn exactly £100 per year — forever — without ever touching the principal. So the perpetuity's present value equals the amount you would need to invest today to replicate the same cash flow stream. This gives <span class="math">PV = C/r = 100/0.10 = £1{,}000</span>. Clean, logical, and directly useful.
 </div>
 
 <div class="sh">Application — bond pricing</div>
@@ -710,7 +705,7 @@ Step 3 — Bond price = 210.62 + 747.26 = £957.88</div>
 
 <div class="qbox">
   <div class="qbox-lbl">Foundation of fixed income and equity valuation</div>
-  <p class="qbox-body">Every bond is a combination of an annuity (coupons) and a lump sum (face value). Duration — the key interest rate sensitivity measure in fixed income — is derived directly from the annuity formula. The Gordon Growth Model ($PV = D_1 / (r-g)$), used to value dividend-paying stocks, is just a growing perpetuity. Understanding annuities unlocks bond pricing, dividend discount models, mortgage mathematics, and pension liability calculations in one step.</p>
+  <p class="qbox-body">Every bond is a combination of an annuity (coupons) and a lump sum (face value). Duration — the key interest rate sensitivity measure in fixed income — is derived directly from the annuity formula. The Gordon Growth Model (<span class="math">PV = D_1 / (r-g)</span>), used to value dividend-paying stocks, is just a growing perpetuity. Understanding annuities unlocks bond pricing, dividend discount models, mortgage mathematics, and pension liability calculations in one step.</p>
   <span class="qtag">Bond pricing (LV III)</span><span class="qtag">Duration and convexity</span><span class="qtag">Gordon Growth Model</span><span class="qtag">Mortgage mathematics</span>
 </div>`
 },
@@ -737,13 +732,13 @@ html:`
 
 <div class="sh">Connecting risk types to alpha and beta</div>
 <div class="worked">
-  <div class="worked-title">The return decomposition: $R = \alpha + \beta \cdot R_m + \varepsilon$</div>
+  <div class="worked-title">The return decomposition: <span class="math">R = \alpha + \beta \cdot R_m + \varepsilon</span></div>
   <div class="worked-body">
     <p>Every portfolio or strategy return can be decomposed into three components:</p>
     <div class="worked-math">Total return = Alpha + Beta × Market return + Residual noise
 
 R = α + β·Rₘ + ε</div>
-    <p style="margin-top:8px;color:var(--tx2);font-size:13px">Beta ($\beta$) is your systematic risk exposure — the portion of return explained by market movement. Alpha ($\alpha$) is the return above what your beta exposure predicts — genuine skill or edge. The residual ($\varepsilon$) is idiosyncratic noise — ideally zero in a well-constructed strategy.</p>
+    <p style="margin-top:8px;color:var(--tx2);font-size:13px">Beta (<span class="math">\beta</span>) is your systematic risk exposure — the portion of return explained by market movement. Alpha (<span class="math">\alpha</span>) is the return above what your beta exposure predicts — genuine skill or edge. The residual (<span class="math">\varepsilon</span>) is idiosyncratic noise — ideally zero in a well-constructed strategy.</p>
     <p class="worked-conclusion">A great quant strategy maximises alpha while keeping beta controlled — earning returns that are NOT just a leveraged bet on the market going up.</p>
   </div>
 </div>
