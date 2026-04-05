@@ -11,60 +11,41 @@
 :root {
   --font: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono: 'DM Mono', 'Courier New', monospace;
-  --bg:       #ffffff;
-  --bg2:      #f5f5f7;
-  --bg3:      #e8e8ed;
-  --surface:  #f5f5f7;
-  --border:   rgba(0,0,0,0.08);
-  --border-h: rgba(0,0,0,0.15);
-  --tx1:      #1d1d1f;
-  --tx2:      #6e6e73;
-  --tx3:      #aeaeb2;
-  --green:    #059669;
-  --green-glow: rgba(5,150,105,0.1);
-  --green-dim:  rgba(5,150,105,0.06);
+  --bg: #ffffff; --bg2: #f5f5f7; --bg3: #e8e8ed;
+  --surface: #f5f5f7;
+  --border: rgba(0,0,0,0.08); --border-h: rgba(0,0,0,0.15);
+  --tx1: #1d1d1f; --tx2: #6e6e73; --tx3: #aeaeb2;
+  --green: #059669; --green-glow: rgba(5,150,105,0.1); --green-dim: rgba(5,150,105,0.06);
   --r: 10px; --r-lg: 16px; --r-xl: 24px;
 }
 [data-theme="dark"] {
-  --bg:       #09090b;
-  --bg2:      #131316;
-  --bg3:      #1c1c21;
-  --surface:  #18181b;
-  --border:   rgba(255,255,255,0.06);
-  --border-h: rgba(255,255,255,0.12);
-  --tx1:      #fafafa;
-  --tx2:      #a1a1aa;
-  --tx3:      #52525b;
-  --green:    #10b981;
-  --green-glow: rgba(16,185,129,0.15);
-  --green-dim:  rgba(16,185,129,0.08);
+  --bg: #09090b; --bg2: #131316; --bg3: #1c1c21;
+  --surface: #18181b;
+  --border: rgba(255,255,255,0.06); --border-h: rgba(255,255,255,0.12);
+  --tx1: #fafafa; --tx2: #a1a1aa; --tx3: #52525b;
+  --green: #10b981; --green-glow: rgba(16,185,129,0.15); --green-dim: rgba(16,185,129,0.08);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font-family:var(--font);cursor:pointer;border:none;background:none}
-
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-d1{transition-delay:0.08s}
-.reveal-d2{transition-delay:0.16s}
-.reveal-d3{transition-delay:0.24s}
-.reveal-d4{transition-delay:0.32s}
-
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.7);
-  [data-theme="dark"] .nav{background:rgba(9,9,11,0.7)}
+.reveal-d1{transition-delay:0.08s}.reveal-d2{transition-delay:0.16s}.reveal-d3{transition-delay:0.24s}.reveal-d4{transition-delay:0.32s}
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.7);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--border);height:56px;display:flex;align-items:center;padding:0 clamp(20px,4vw,48px)}
+[data-theme="dark"] .nav{background:rgba(9,9,11,0.7)}
 .nav-logo{font-size:17px;font-weight:600;letter-spacing:-0.03em;margin-right:auto}.nav-logo span{color:var(--green)}
 .nav-links{display:flex;gap:2px}
 .nav-link{padding:7px 14px;font-size:13px;font-weight:400;color:var(--tx3);border-radius:var(--r);transition:color 0.2s,background 0.2s}
-.nav-link:hover{background:rgba(255,255,255,0.04);color:var(--tx2)}
+.nav-link:hover{background:var(--bg2);color:var(--tx2)}
 .nav-link.active{color:var(--tx1);font-weight:500}
-
+.theme-btn{padding:6px 12px;font-size:15px;color:var(--tx3);border-radius:var(--r);transition:color 0.2s,background 0.2s}
+.theme-btn:hover{background:var(--bg2);color:var(--tx2)}
 .container{max-width:1080px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
-
 .hero{padding:160px 0 100px;position:relative}
 .hero::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--green-glow) 0%,transparent 70%);pointer-events:none;opacity:0.5;filter:blur(60px)}
-.hero-kicker{display:inline-flex;align-items:center;gap:10px;padding:6px 16px 6px 10px;background:var(--green-dim);border:0.5px solid rgba(16,185,129,0.15);border-radius:980px;margin-bottom:32px}
+.hero-kicker{display:inline-flex;align-items:center;gap:10px;padding:6px 16px 6px 10px;background:var(--green-dim);border:0.5px solid rgba(5,150,105,0.15);border-radius:980px;margin-bottom:32px}
 .kicker-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
 .kicker-text{font-size:12px;font-weight:500;color:var(--green);letter-spacing:0.02em}
@@ -78,18 +59,15 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .quick-link{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--tx2);background:var(--surface);border:0.5px solid var(--border);border-radius:980px;transition:border-color 0.2s,color 0.2s,background 0.2s}
 .quick-link:hover{border-color:var(--border-h);color:var(--tx1);background:var(--bg3)}
 .ql-icon{font-size:15px}
-
 .section{padding:0 0 120px}
 .section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:32px}
 .section-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--tx3)}
 .section-link{font-size:13px;color:var(--green);font-weight:500;transition:opacity 0.15s}
 .section-link:hover{opacity:0.7}
-
 .subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .subject-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-xl);padding:28px;display:block;transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;position:relative;overflow:hidden}
-.subject-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);opacity:0;transition:opacity 0.25s}
-.subject-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 16px 48px -12px rgba(0,0,0,0.5)}
-.subject-card:hover::before{opacity:1}
+.subject-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 16px 48px -12px rgba(0,0,0,0.08)}
+[data-theme="dark"] .subject-card:hover{box-shadow:0 16px 48px -12px rgba(0,0,0,0.5)}
 .s-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;font-family:var(--mono);margin-bottom:18px}
 .s-name{font-size:16px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px}
 .s-desc{font-size:13px;color:var(--tx3);line-height:1.55;margin-bottom:20px}
@@ -99,44 +77,35 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .s-foot{display:flex;align-items:center;justify-content:space-between}
 .s-progress{font-size:11px;color:var(--tx3)}
 .s-cta{font-size:12px;font-weight:500;color:var(--tx2);padding:5px 14px;border:0.5px solid var(--border);border-radius:980px;background:transparent;transition:background 0.15s,color 0.15s,border-color 0.15s}
-.subject-card:hover .s-cta{background:rgba(255,255,255,0.04);color:var(--tx1);border-color:var(--border-h)}
-
+.subject-card:hover .s-cta{background:var(--bg3);color:var(--tx1);border-color:var(--border-h)}
 .callout{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-xl);padding:48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;overflow:hidden}
 .callout::after{content:'';position:absolute;bottom:0;left:48px;right:48px;height:1px;background:linear-gradient(90deg,transparent,var(--green-dim),transparent)}
 .callout-text h3{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:8px}
 .callout-text p{font-size:14px;color:var(--tx3);max-width:440px;line-height:1.65}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;font-size:13px;font-weight:500;border-radius:980px;transition:all 0.2s;cursor:pointer}
 .btn-primary{background:var(--tx1);color:var(--bg);border:none}
-.btn-primary:hover{background:#d4d4d8;transform:scale(0.98)}
-
+.btn-primary:hover{opacity:0.85;transform:scale(0.98)}
 .divider{width:100%;height:0.5px;background:var(--border);margin:0 0 120px}
-
 .footer{border-top:0.5px solid var(--border);padding:28px clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}
 .footer a{transition:color 0.15s}.footer a:hover{color:var(--tx1)}
-
 @media(max-width:700px){.hero{padding:120px 0 60px}.stats-row{gap:24px}.callout{padding:28px}.footer{padding:20px;flex-direction:column;gap:8px;text-align:center}}
 @media(max-width:480px){.nav-links{display:none}}
 </style>
 </head>
 <body>
-
 <nav class="nav">
   <div class="nav-logo">Road to <span>Quant</span></div>
   <div class="nav-links">
     <a class="nav-link active" href="index.html">Home</a>
     <a class="nav-link" href="study-guide/study-guide.html">Study Guide</a>
     <a class="nav-link" href="projects/projects.html">Projects</a>
-   <a class="nav-link" href="blog/blog.html">Blog</a>
+    <a class="nav-link" href="blog/blog.html">Blog</a>
   </div>
-  <button onclick="toggleTheme()" style="padding:6px 12px;font-size:13px;color:var(--tx3);background:none;border:none;cursor:pointer;font-family:var(--font)">☼</button>
+  <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">&#9788;</button>
 </nav>
-
 <div class="container">
   <section class="hero">
-    <div class="hero-kicker reveal">
-      <div class="kicker-dot"></div>
-      <span class="kicker-text">2026 Goal — Quantitative Finance</span>
-    </div>
+    <div class="hero-kicker reveal"><div class="kicker-dot"></div><span class="kicker-text">2026 Goal — Quantitative Finance</span></div>
     <h1 class="hero-headline reveal reveal-d1">Learning quant<br>finance from <em>zero.</em></h1>
     <p class="hero-sub reveal reveal-d2">Self-teaching the mathematics, statistics, coding, and finance needed to become a quantitative trader — from first principles, in public.</p>
     <div class="stats-row reveal reveal-d3">
@@ -153,50 +122,40 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
     </div>
   </section>
 </div>
-
 <div class="container"><div class="divider"></div></div>
-
 <div class="container">
   <section class="section">
-    <div class="section-header reveal">
-      <span class="section-label">Study subjects</span>
-      <a class="section-link" href="study-guide/study-guide.html">View all →</a>
-    </div>
+    <div class="section-header reveal"><span class="section-label">Study subjects</span><a class="section-link" href="study-guide/study-guide.html">View all →</a></div>
     <div class="subject-grid">
       <a class="subject-card reveal reveal-d1" href="study-guide/Finance/finance-lv1.html">
         <div class="s-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b">£</div>
-        <div class="s-name">Finance</div>
-        <div class="s-desc">Valuation, pricing, derivatives, options, and quantitative strategy.</div>
+        <div class="s-name">Finance</div><div class="s-desc">Valuation, pricing, derivatives, options, and quantitative strategy.</div>
         <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
         <div class="s-foot"><span class="s-progress">LV I · 7 topics complete</span><span class="s-cta">Study →</span></div>
       </a>
       <a class="subject-card reveal reveal-d2" href="study-guide/Maths/maths-lv1.html">
         <div class="s-icon" style="background:rgba(139,92,246,0.1);color:#8b5cf6">∑</div>
-        <div class="s-name">Mathematics</div>
-        <div class="s-desc">Calculus, linear algebra, differential equations, and stochastic calculus.</div>
+        <div class="s-name">Mathematics</div><div class="s-desc">Calculus, linear algebra, differential equations, and stochastic calculus.</div>
         <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
         <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">Study →</span></div>
       </a>
       <a class="subject-card reveal reveal-d3" href="study-guide/Probability/probability-lv1.html">
         <div class="s-icon" style="background:rgba(59,130,246,0.1);color:#3b82f6;font-size:12px">P(x)</div>
-        <div class="s-name">Probability & Statistics</div>
-        <div class="s-desc">Distributions, Bayes, stochastic processes, and martingales.</div>
+        <div class="s-name">Probability & Statistics</div><div class="s-desc">Distributions, Bayes, stochastic processes, and martingales.</div>
         <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
-        <div class="s-foot"><span class="s-progress">LV I · 7 topics complete</span><span class="s-cta">View →</span></div>
+        <div class="s-foot"><span class="s-progress">LV I · 7 topics complete</span><span class="s-cta">Study →</span></div>
       </a>
       <a class="subject-card reveal reveal-d1" href="study-guide/CS/cs-lv1.html">
-        <div class="s-icon" style="background:rgba(16,185,129,0.1);color:#10b981;font-size:12px">&lt;/&gt;</div>
-        <div class="s-name">Computer Science</div>
-        <div class="s-desc">Python, algorithms, numerical methods, and quant infrastructure.</div>
+        <div class="s-icon" style="background:rgba(5,150,105,0.1);color:#059669;font-size:12px">&lt;/&gt;</div>
+        <div class="s-name">Computer Science</div><div class="s-desc">Python, algorithms, numerical methods, and quant infrastructure.</div>
         <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
-        <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">View →</span></div>
+        <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">Study →</span></div>
       </a>
       <a class="subject-card reveal reveal-d2" href="study-guide/ML/ml-lv1.html">
         <div class="s-icon" style="background:rgba(239,68,68,0.1);color:#ef4444;font-size:12px">f(x)</div>
-        <div class="s-name">Machine Learning</div>
-        <div class="s-desc">Statistical learning, supervised models, and quantitative alpha modelling.</div>
+        <div class="s-name">Machine Learning</div><div class="s-desc">Statistical learning, supervised models, and quantitative alpha modelling.</div>
         <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
-        <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">View →</span></div>
+        <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">Study →</span></div>
       </a>
     </div>
     <div class="callout reveal" style="margin-top:48px">
@@ -208,12 +167,10 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
     </div>
   </section>
 </div>
-
 <footer class="footer">
   <span>Road to Quant · 2026 · Built in public</span>
   <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell ↗</a>
 </footer>
-
 <script>
 function toggleTheme(){
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -222,7 +179,6 @@ function toggleTheme(){
 if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
   document.documentElement.setAttribute('data-theme','dark');
 }
-
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
