@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Computer Science LV I — Road to Quant</title>
+<style>
+.math{font-family:'Times New Roman',Georgia,serif;font-size:1.05em;letter-spacing:.01em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}
+.num{border-bottom:1.5px solid currentColor;padding:0 4px 2px;text-align:center}
+.den{padding:2px 4px 0;text-align:center}
+.f-box{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;background:rgba(0,0,0,.04);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+[data-theme="dark"] .f-box{background:rgba(255,255,255,.07)}
+:root{--bg:#fff;--bg2:#f5f5f7;--bg3:#e8e8ed;--tx1:#1d1d1f;--tx2:#6e6e73;--tx3:#aeaeb2;--br:rgba(0,0,0,.10);--br2:rgba(0,0,0,.18);--green:#059669;--green-bg:#ecfdf5;--green-dk:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--blue:#2563eb;--blue-bg:#eff6ff;--blue-dk:#1e40af;--purple:#7c3aed;--purple-bg:#f5f3ff;--red:#dc2626;--red-bg:#fff1f2}
+[data-theme="dark"]{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--tx1:#f5f5f7;--tx2:#98989d;--tx3:#636366;--br:rgba(255,255,255,.09);--br2:rgba(255,255,255,.16);--green-bg:#022c22;--green:#34d399;--green-dk:#6ee7b7;--amber-bg:#1c1200;--amber:#fbbf24;--blue-bg:#0d1b3e;--blue:#60a5fa;--blue-dk:#93c5fd;--purple-bg:#1e0e3e;--purple:#a78bfa;--red-bg:#1c0505;--red:#f87171}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;border:none;background:none}
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--br);height:52px;display:flex;align-items:center;padding:0 32px;gap:8px}
+[data-theme="dark"] .nav{background:rgba(28,28,30,.82)}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-right:auto}.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px}.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:10px;transition:background .15s,color .15s}.nav-link:hover{background:var(--bg2);color:var(--tx1)}.nav-link.active{color:var(--tx1);font-weight:500}
+.nav-divider{width:.5px;height:20px;background:var(--br2);margin:0 6px}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:15px;transition:background .15s,color .15s;border:.5px solid transparent}.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br)}.icon-btn.active{background:var(--bg2);border-color:var(--br2)}
+.page-header{padding:28px 32px 0;border-bottom:.5px solid var(--br)}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);margin-bottom:10px}.breadcrumb a:hover{color:var(--tx1)}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--tx2);margin-bottom:18px}
+.lv-tabs{display:flex}.lv-tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-.5px;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s;display:flex;align-items:center;gap:6px}.lv-tab.active{color:var(--tx1);font-weight:500;border-bottom-color:var(--tx1)}.lv-tab.locked{opacity:.35;cursor:default}
+.lv-pip{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.lv-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--tx3)}
+.study-shell{display:flex;min-height:calc(100vh - 52px)}
+.study-sidebar{width:196px;flex-shrink:0;border-right:.5px solid var(--br);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;background:var(--bg)}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);padding:8px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 18px;font-size:13px;color:var(--tx2);cursor:pointer;border-left:2px solid transparent;background:none;width:100%;text-align:left;transition:color .12s,background .12s;line-height:1.4}.sb-item:hover{color:var(--tx1);background:var(--bg2)}.sb-item.active{color:var(--tx1);font-weight:500;border-left-color:var(--green);background:var(--bg2)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--br2);flex-shrink:0}.sb-item.active .sb-dot{background:var(--green)}.sb-item.done .sb-dot{background:var(--green);opacity:.4}
+.study-content{flex:1;padding:28px 48px 64px;overflow-y:auto;max-height:calc(100vh - 52px)}
+.study-shell.book-mode .study-sidebar{display:none}.study-shell.book-mode .study-content{column-count:2;column-gap:52px;column-rule:.5px solid var(--br);padding:28px 52px 64px}.study-shell.book-mode .study-content>*{break-inside:avoid}
+.progress-pips{display:flex;gap:6px;margin-bottom:20px}.pip{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:transform .15s;padding:0}.pip:hover{transform:scale(1.4)}
+.topic-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.topic-title-lg{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:20px;line-height:1.15}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:980px;font-weight:500}
+.badge-green{background:var(--green-bg);color:var(--green)}.badge-subtle{background:var(--bg2);color:var(--tx2)}
+.peb{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.7}
+.peb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
+.sh{font-size:13px;font-weight:600;color:var(--tx1);margin:24px 0 12px;padding-bottom:5px;border-bottom:.5px solid var(--br);letter-spacing:-.01em}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.fc{background:var(--bg2);border-radius:16px;padding:14px 16px}.fc-term{font-size:12px;font-weight:600;margin-bottom:6px}.fc-def{font-size:12px;color:var(--tx2);line-height:1.55}.fc-eg{font-size:11px;color:var(--tx3);margin-top:7px;padding-top:7px;border-top:.5px solid var(--br);font-style:italic}
+.f-label{font-size:11px;color:var(--tx3);text-align:center;margin-bottom:4px;font-style:italic}
+.vt{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:18px}.vt td{padding:6px 10px;border-bottom:.5px solid var(--br);vertical-align:top}.vt td:first-child{font-family:'DM Mono','Courier New',monospace;font-weight:500;color:var(--green);width:120px;font-size:12px}.vt td:last-child{color:var(--tx2)}.vt tr:last-child td{border-bottom:none}
+.rt{width:100%;font-size:13px;border-collapse:collapse;margin:10px 0 18px}.rt th{padding:7px 10px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:.5px solid var(--br2);color:var(--tx2)}.rt td{padding:7px 10px;border-bottom:.5px solid var(--br)}.rt tr:last-child td{border-bottom:none}
+.worked{background:var(--bg2);border:.5px solid var(--br);border-radius:16px;padding:18px 20px;margin:14px 0 18px;break-inside:avoid}.worked-title{font-size:12px;font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--br)}.worked-body{font-size:13px;color:var(--tx2);line-height:1.7}.worked-math{font-family:'DM Mono','Courier New',monospace;background:var(--bg);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12.5px;overflow-x:auto;white-space:pre-wrap;line-height:1.6}.worked-conclusion{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic}
+.insight{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.65;break-inside:avoid}.insight-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px}
+.qbox{background:var(--purple-bg);border-radius:16px;padding:16px 18px;margin-top:18px;break-inside:avoid}.qbox-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:8px}.qbox-body{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px}.qtag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:980px;background:var(--purple-bg);color:var(--purple);border:.5px solid rgba(124,58,237,.2);margin:2px}
+.topic-nav{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:.5px solid var(--br)}.tn-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:980px;border:.5px solid var(--br2);background:var(--bg);color:var(--tx1);cursor:pointer;transition:background .15s}.tn-btn:hover{background:var(--bg2)}.tn-btn.primary{background:var(--tx1);color:var(--bg);border-color:var(--tx1)}.tn-btn.primary:hover{opacity:.85}
+.footer{border-top:.5px solid var(--br);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}.footer a:hover{color:var(--tx1)}
+@media(max-width:700px){.study-sidebar{display:none}.study-content{padding:20px 20px 48px}.nav{padding:0 16px}.page-header{padding:20px 16px 0}.study-shell.book-mode .study-content{column-count:1;padding:20px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">Road to <span>Quant</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="../../index.html">Home</a>
+    <a class="nav-link active" href="../study-guide.html">Study Guide</a>
+    <a class="nav-link" href="../../projects/projects.html">Projects</a>
+    <a class="nav-link" href="../../blog/blog.html">Blog</a>
+  </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" id="layout-btn" title="Toggle layout" onclick="toggleLayout()">&#9700;</button>
+  <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">&#9788;</button>
+</nav>
+<div class="page-header">
+  <div class="breadcrumb"><a href="../../index.html">Home</a><span>/</span><a href="../study-guide.html">Study Guide</a><span>/</span><span>Computer Science &mdash; LV I</span></div>
+  <div class="page-title">Computer Science</div>
+  <div class="page-sub">Programming Foundations &mdash; Level I</div>
+  <div class="lv-tabs">
+    <button class="lv-tab active"><div class="lv-pip"></div>LV I &mdash; Foundations</button>
+    <button class="lv-tab locked">LV II <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV III <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV IV <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV V <span class="lv-badge">locked</span></button>
+  </div>
+</div>
+<div class="study-shell" id="shell">
+  <aside class="study-sidebar">
+    <div class="sb-label" style="margin-top:8px">LV I Topics</div>
+    <button class="sb-item active" onclick="go(0)"><div class="sb-dot"></div>Python fundamentals</button>
+    <button class="sb-item" onclick="go(1)"><div class="sb-dot"></div>Control flow</button>
+    <button class="sb-item" onclick="go(2)"><div class="sb-dot"></div>Functions</button>
+    <button class="sb-item" onclick="go(3)"><div class="sb-dot"></div>Basic OOP</button>
+    <button class="sb-item" onclick="go(4)"><div class="sb-dot"></div>NumPy &amp; Pandas</button>
+    <button class="sb-item" onclick="go(5)"><div class="sb-dot"></div>Writing clean code</button>
+  </aside>
+  <main class="study-content" id="content"></main>
+</div>
+<footer class="footer">
+  <span>Road to Quant &middot; CS LV I</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
+</footer>
+<script>
+const T=[
+{title:"Python fundamentals",peb:"In quant finance you don&rsquo;t just read formulas and memorise equations &mdash; you simulate models, backtest strategies, compute probabilities, price assets, and process data. All of that requires code. Python is the industry standard language because it is readable, has a massive ecosystem of scientific libraries, and lets you go from idea to working prototype faster than any alternative. Even something as simple as FV = PV(1+r)^n should live in a function so you can call it a million times in a Monte Carlo simulation.",
+html:`
+<div class="sh">Variables &mdash; storing values</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What a variable is</div><div class="fc-def">A named container that stores a value. You create one by assigning with =. The name goes on the left, the value on the right.</div><div class="fc-eg">pv = 1000 &ensp; r = 0.05 &ensp; n = 3</div></div>
+  <div class="fc"><div class="fc-term">Integer (int)</div><div class="fc-def">Whole numbers. No decimal point. Used for counts &mdash; number of trades, number of periods, array indices.</div><div class="fc-eg">n = 10 &ensp; trades = 252</div></div>
+  <div class="fc"><div class="fc-term">Float</div><div class="fc-def">Decimal numbers. Used for anything continuous &mdash; rates, prices, returns, probabilities. Most financial data is floats.</div><div class="fc-eg">rate = 0.08 &ensp; price = 142.57</div></div>
+  <div class="fc"><div class="fc-term">String (str)</div><div class="fc-def">Text data enclosed in quotes. Used for ticker symbols, column names, file paths, labels. Cannot do arithmetic on strings.</div><div class="fc-eg">ticker = "AAPL" &ensp; name = "Portfolio"</div></div>
+  <div class="fc"><div class="fc-term">Boolean (bool)</div><div class="fc-def">True or False. The result of any comparison. Used in filtering data, conditional logic, and signal generation.</div><div class="fc-eg">is_profitable = True &ensp; above_ma = price > 150</div></div>
+  <div class="fc"><div class="fc-term">Dynamic typing</div><div class="fc-def">Python figures out the type automatically. You do not declare types. x = 5 makes x an int. x = 5.0 makes x a float. x = "hello" makes x a string.</div><div class="fc-eg">type(5) &rarr; int &ensp; type(5.0) &rarr; float</div></div>
+</div>
+
+<div class="sh">Operators &mdash; doing things with values</div>
+<table class="rt">
+  <thead><tr><th>Operation</th><th>Symbol</th><th>Example</th><th>Finance use</th></tr></thead>
+  <tbody>
+    <tr><td>Addition</td><td style="font-family:'DM Mono',monospace">+</td><td>2 + 3 = 5</td><td>Summing returns</td></tr>
+    <tr><td>Subtraction</td><td style="font-family:'DM Mono',monospace">-</td><td>5 - 1 = 4</td><td>P&amp;L calculation</td></tr>
+    <tr><td>Multiplication</td><td style="font-family:'DM Mono',monospace">*</td><td>4 * 2 = 8</td><td>Position sizing</td></tr>
+    <tr><td>Division</td><td style="font-family:'DM Mono',monospace">/</td><td>10 / 3 = 3.33</td><td>Average return</td></tr>
+    <tr><td>Power</td><td style="font-family:'DM Mono',monospace">**</td><td>2 ** 3 = 8</td><td>(1+r)**n compounding</td></tr>
+    <tr><td>Modulo</td><td style="font-family:'DM Mono',monospace">%</td><td>10 % 3 = 1</td><td>Remainder (cycling)</td></tr>
+    <tr><td>Floor division</td><td style="font-family:'DM Mono',monospace">//</td><td>10 // 3 = 3</td><td>Integer division</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">Lists &mdash; ordered collections</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What a list is</div><div class="fc-def">An ordered, mutable collection of values. Created with square brackets. Can hold any mix of types. The workhorse data structure.</div><div class="fc-eg">prices = [100, 102, 98, 105]</div></div>
+  <div class="fc"><div class="fc-term">Indexing</div><div class="fc-def">Access items by position, starting from 0. Negative indices count from the end. -1 is the last item.</div><div class="fc-eg">prices[0] &rarr; 100 &ensp; prices[-1] &rarr; 105</div></div>
+  <div class="fc"><div class="fc-term">Slicing</div><div class="fc-def">Extract a sub-list with [start:end]. The end index is excluded. Omitting start means &ldquo;from the beginning.&rdquo;</div><div class="fc-eg">prices[1:3] &rarr; [102, 98]</div></div>
+  <div class="fc"><div class="fc-term">Methods</div><div class="fc-def">.append(x) adds to end. .pop() removes last. len(list) gives length. .sort() sorts in place. These are used constantly in data processing.</div><div class="fc-eg">prices.append(110) &ensp; len(prices) &rarr; 5</div></div>
+</div>
+
+<div class="sh">Dictionaries &mdash; key-value pairs</div>
+<div class="worked">
+  <div class="worked-title">Dictionaries map names to values</div>
+  <div class="worked-body">
+    <div class="worked-math">portfolio = {
+    "AAPL": 0.40,
+    "MSFT": 0.35,
+    "GOOG": 0.25
+}
+
+portfolio["AAPL"]    # returns 0.40
+portfolio["TSLA"] = 0.10  # adds new key</div>
+    <p class="worked-conclusion">Dictionaries are how you represent structured data: portfolio weights, strategy parameters, configuration settings. They map a unique key (the name) to a value (the data).</p>
+  </div>
+</div>
+
+<div class="sh">Your first quant calculation</div>
+<div class="worked">
+  <div class="worked-title">Future Value in Python</div>
+  <div class="worked-body">
+    <div class="worked-math">pv = 1000
+r  = 0.05
+n  = 3
+
+fv = pv * (1 + r) ** n
+print(fv)   # 1157.625</div>
+    <p class="worked-conclusion">This is the TVM formula from Finance LV I, now executable. You can change pv, r, or n and instantly see the result &mdash; the first step toward building financial models in code.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Why Python dominates quant finance</div>
+  <p class="qbox-body">Python is used at virtually every quant desk, hedge fund, and prop firm. NumPy and Pandas handle data manipulation. SciPy provides optimisation and statistics. Matplotlib and Plotly create visualisations. Scikit-learn and PyTorch power ML models. QuantLib prices derivatives. The Python ecosystem means you rarely need to build anything from scratch &mdash; you assemble existing tools into pipelines. This is why quant interviews test Python fluency.</p>
+  <span class="qtag">NumPy (topic 5)</span><span class="qtag">Pandas (topic 5)</span><span class="qtag">Backtesting</span><span class="qtag">Monte Carlo</span>
+</div>`
+},
+{title:"Control flow",peb:"Code runs top to bottom by default, but real programs need to make decisions and repeat actions. Control flow is how you tell Python to do different things depending on conditions (if/else) and to repeat things many times (loops). In quant finance, you use if/else to apply different logic depending on market conditions, and loops to iterate through thousands of trades, days, or simulations. A backtest is literally a for loop walking through historical data day by day.",
+html:`
+<div class="sh">Conditional logic &mdash; if / elif / else</div>
+<div class="worked">
+  <div class="worked-title">Making decisions in code</div>
+  <div class="worked-body">
+    <div class="worked-math">signal = 0.65
+
+if signal > 0.8:
+    action = "strong buy"
+elif signal > 0.5:
+    action = "buy"
+elif signal > 0.2:
+    action = "hold"
+else:
+    action = "sell"
+
+print(action)   # "buy"</div>
+    <p class="worked-conclusion">The code checks each condition top to bottom and executes the first one that is True. This is how trading systems convert continuous signals into discrete actions.</p>
+  </div>
+</div>
+
+<div class="sh">Comparison and logical operators</div>
+<table class="rt">
+  <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:'DM Mono',monospace">==</td><td>Equal to</td><td>x == 5</td></tr>
+    <tr><td style="font-family:'DM Mono',monospace">!=</td><td>Not equal to</td><td>x != 0</td></tr>
+    <tr><td style="font-family:'DM Mono',monospace">&lt; &gt; &lt;= &gt;=</td><td>Less/greater than</td><td>price &gt; 100</td></tr>
+    <tr><td style="font-family:'DM Mono',monospace">and</td><td>Both must be True</td><td>price &gt; 100 and volume &gt; 1000</td></tr>
+    <tr><td style="font-family:'DM Mono',monospace">or</td><td>At least one True</td><td>signal &gt; 0.8 or override == True</td></tr>
+    <tr><td style="font-family:'DM Mono',monospace">not</td><td>Reverses True/False</td><td>not is_halted</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">For loops &mdash; iterating through data</div>
+<div class="worked">
+  <div class="worked-title">Calculating total return from daily returns</div>
+  <div class="worked-body">
+    <div class="worked-math">daily_returns = [0.01, -0.005, 0.02, -0.01, 0.015]
+
+cumulative = 1.0
+for r in daily_returns:
+    cumulative *= (1 + r)
+
+total_return = cumulative - 1
+print(f"Total return: {total_return:.4f}")   # 0.0298</div>
+    <p class="worked-conclusion">The loop walks through each daily return and compounds them. This is the core logic of every backtest &mdash; stepping through time and accumulating results.</p>
+  </div>
+</div>
+
+<div class="sh">While loops &mdash; repeat until a condition is met</div>
+<div class="worked">
+  <div class="worked-title">Newton-Raphson IRR solver</div>
+  <div class="worked-body">
+    <div class="worked-math">cashflows = [-10000, 3000, 3000, 3000, 3000, 3000]
+r = 0.10  # initial guess
+
+for _ in range(100):  # max iterations
+    npv = sum(cf / (1+r)**t for t, cf in enumerate(cashflows))
+    dnpv = sum(-t * cf / (1+r)**(t+1) for t, cf in enumerate(cashflows))
+    if abs(npv) < 0.01:
+        break
+    r = r - npv / dnpv
+
+print(f"IRR = {r:.4f}")   # 0.1524</div>
+    <p class="worked-conclusion">This is the Newton-Raphson method from Finance LV I (IRR topic) implemented in code. The loop iterates until NPV is close enough to zero. This is how financial calculators and Excel&rsquo;s IRR() function work internally.</p>
+  </div>
+</div>
+
+<div class="sh">List comprehensions &mdash; compact loops</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Basic comprehension</div><div class="fc-def">A one-line loop that builds a new list. Cleaner and faster than a multi-line for loop for simple transformations.</div><div class="fc-eg">squares = [x**2 for x in range(10)]</div></div>
+  <div class="fc"><div class="fc-term">With condition</div><div class="fc-def">Add an if clause to filter. Only items passing the condition are included in the result.</div><div class="fc-eg">gains = [r for r in returns if r > 0]</div></div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Control flow in real quant systems</div>
+  <p class="qbox-body">A backtest engine is a for loop iterating through historical bars. Position sizing logic uses if/else to apply different rules based on volatility regime. Risk checks use conditionals to halt trading when drawdown limits are hit. Monte Carlo simulations use loops to run thousands of scenarios. Every quant system, no matter how sophisticated, is built from these basic building blocks of sequential execution, branching, and repetition.</p>
+  <span class="qtag">Backtesting loops</span><span class="qtag">Signal logic</span><span class="qtag">Risk checks</span><span class="qtag">Monte Carlo</span>
+</div>`
+},
+{title:"Functions",peb:"A function is a reusable block of code that takes inputs, does something, and returns an output. Instead of writing the future value calculation every time you need it, you write a function once and call it whenever you want. This is how quants scale from a single calculation to processing millions of data points. Functions make code modular, testable, and readable. Every quant library &mdash; NumPy, Pandas, scikit-learn &mdash; is just a collection of functions someone else wrote that you can use.",
+html:`
+<div class="sh">Defining and calling functions</div>
+<div class="worked">
+  <div class="worked-title">A reusable future value calculator</div>
+  <div class="worked-body">
+    <div class="worked-math">def future_value(pv, r, n):
+    """Calculate future value with compound interest."""
+    return pv * (1 + r) ** n
+
+# Call it with different inputs
+print(future_value(1000, 0.05, 3))    # 1157.625
+print(future_value(5000, 0.08, 10))   # 10794.62
+print(future_value(100, 0.10, 1))     # 110.0</div>
+    <p class="worked-conclusion">Write once, use forever. The function encapsulates the logic so you never need to remember the formula again &mdash; just call future_value() with your inputs.</p>
+  </div>
+</div>
+
+<div class="sh">Key concepts</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Parameters</div><div class="fc-def">The inputs listed in the function definition (pv, r, n). They act as placeholders that get filled in when you call the function.</div><div class="fc-eg">def npv(rate, cashflows):</div></div>
+  <div class="fc"><div class="fc-term">Return value</div><div class="fc-def">What the function gives back. Use the return keyword. Without it, the function returns None. A function can return any type: number, list, dictionary, even another function.</div><div class="fc-eg">return pv * (1 + r) ** n</div></div>
+  <div class="fc"><div class="fc-term">Default arguments</div><div class="fc-def">Pre-set values for parameters. If the caller does not provide that argument, the default is used. Makes functions flexible without requiring every input every time.</div><div class="fc-eg">def sharpe(returns, rf=0.02):</div></div>
+  <div class="fc"><div class="fc-term">Docstrings</div><div class="fc-def">A string on the first line inside a function that describes what it does. Accessed via help(function_name). Essential for code others will read.</div><div class="fc-eg">"""Calculate the Sharpe ratio."""</div></div>
+  <div class="fc"><div class="fc-term">Scope</div><div class="fc-def">Variables created inside a function only exist inside that function. They cannot be accessed from outside. This prevents accidental interference between different parts of your code.</div><div class="fc-eg">x inside func is invisible outside</div></div>
+  <div class="fc"><div class="fc-term">Multiple returns</div><div class="fc-def">A function can return multiple values as a tuple. Useful when a calculation produces several related results.</div><div class="fc-eg">return mean, std, sharpe</div></div>
+</div>
+
+<div class="sh">Building a quant toolkit</div>
+<div class="worked">
+  <div class="worked-title">A small library of financial functions</div>
+  <div class="worked-body">
+    <div class="worked-math">def simple_return(p0, p1):
+    """Simple return between two prices."""
+    return (p1 - p0) / p0
+
+def log_return(p0, p1):
+    """Log return between two prices."""
+    import math
+    return math.log(p1 / p0)
+
+def sharpe_ratio(returns, rf=0.0):
+    """Annualised Sharpe ratio from daily returns."""
+    import math
+    mean_excess = sum(returns) / len(returns) - rf / 252
+    std = (sum((r - mean_excess)**2 for r in returns) / len(returns)) ** 0.5
+    return (mean_excess / std) * math.sqrt(252) if std > 0 else 0</div>
+    <p class="worked-conclusion">Each function does one thing well. You can now call sharpe_ratio(my_returns) without remembering the formula. This is how real quant codebases are structured &mdash; small, tested, composable functions.</p>
+  </div>
+</div>
+
+<div class="sh">Lambda functions &mdash; one-line shortcuts</div>
+<div class="worked">
+  <div class="worked-title">Quick throwaway functions</div>
+  <div class="worked-body">
+    <div class="worked-math">fv = lambda pv, r, n: pv * (1 + r) ** n
+print(fv(1000, 0.05, 3))   # 1157.625
+
+# Useful with sorting and filtering
+trades = [{"pnl": 500}, {"pnl": -200}, {"pnl": 300}]
+sorted_trades = sorted(trades, key=lambda t: t["pnl"], reverse=True)</div>
+    <p class="worked-conclusion">Lambdas are anonymous functions for simple one-off operations. Use them for sorting keys, filtering conditions, and quick transforms. For anything more complex, use a proper def function.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Functions are how quants think</div>
+  <p class="qbox-body">A pricing model is a function: inputs (spot price, vol, rate, time) &rarr; output (option price). A risk model is a function: portfolio &rarr; VaR. A signal generator is a function: market data &rarr; trading signal. Decomposing complex systems into small, testable functions is the core engineering skill in quant finance. When something breaks, you can test each function individually to find the bug. When requirements change, you replace one function without touching the rest.</p>
+  <span class="qtag">Modular design</span><span class="qtag">Testing</span><span class="qtag">Code reuse</span><span class="qtag">Pricing models</span>
+</div>`
+},
+{title:"Basic OOP",peb:"Object-Oriented Programming (OOP) is a way of organising code around objects &mdash; bundles that contain both data (attributes) and behaviour (methods). Instead of having loose variables and functions scattered around, you group related things together into a class. A Portfolio class might store holdings, weights, and returns as data, and have methods like calculate_sharpe() and rebalance(). This is how real trading systems are built &mdash; strategies, portfolios, risk managers, and order engines are all objects that interact with each other.",
+html:`
+<div class="sh">Classes and objects</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Class</div><div class="fc-def">A blueprint or template for creating objects. Defines what data an object holds (attributes) and what it can do (methods). Like a recipe &mdash; not the cake itself.</div><div class="fc-eg">class Portfolio: defines what a portfolio is</div></div>
+  <div class="fc"><div class="fc-term">Object (instance)</div><div class="fc-def">A specific thing created from a class. You can create many objects from one class, each with different data but the same structure.</div><div class="fc-eg">my_port = Portfolio() &mdash; an actual portfolio</div></div>
+  <div class="fc"><div class="fc-term">Attribute</div><div class="fc-def">Data stored inside an object. Accessed with dot notation: object.attribute. Each instance can have different attribute values.</div><div class="fc-eg">my_port.value = 100000</div></div>
+  <div class="fc"><div class="fc-term">Method</div><div class="fc-def">A function that belongs to an object. It can access and modify the object&rsquo;s attributes. Called with dot notation: object.method().</div><div class="fc-eg">my_port.calculate_return()</div></div>
+</div>
+
+<div class="sh">Building a class</div>
+<div class="worked">
+  <div class="worked-title">A simple Portfolio class</div>
+  <div class="worked-body">
+    <div class="worked-math">class Portfolio:
+    def __init__(self, name, capital):
+        self.name = name
+        self.capital = capital
+        self.trades = []
+
+    def add_trade(self, pnl):
+        self.trades.append(pnl)
+        self.capital += pnl
+
+    def win_rate(self):
+        if not self.trades:
+            return 0
+        wins = sum(1 for t in self.trades if t > 0)
+        return wins / len(self.trades)
+
+    def summary(self):
+        return f"{self.name}: £{self.capital:.0f} | {len(self.trades)} trades | {self.win_rate():.0%} win rate"
+
+# Use it
+port = Portfolio("FTMO Challenge", 10000)
+port.add_trade(200)
+port.add_trade(-150)
+port.add_trade(300)
+print(port.summary())
+# "FTMO Challenge: £10350 | 3 trades | 67% win rate"</div>
+    <p class="worked-conclusion">The class bundles the data (name, capital, trades) with the behaviour (add_trade, win_rate, summary). Everything about a portfolio lives in one place. You can create multiple Portfolio objects to track different accounts or strategies independently.</p>
+  </div>
+</div>
+
+<div class="sh">Key OOP concepts</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">__init__ (constructor)</div><div class="fc-def">The special method called when you create a new object. Sets up the initial state &mdash; the starting values for all attributes. Always takes self as its first argument.</div><div class="fc-eg">def __init__(self, name, capital):</div></div>
+  <div class="fc"><div class="fc-term">self</div><div class="fc-def">A reference to the current object. Used inside methods to access that specific object&rsquo;s attributes and other methods. Python passes it automatically.</div><div class="fc-eg">self.capital += pnl</div></div>
+  <div class="fc"><div class="fc-term">Encapsulation</div><div class="fc-def">Bundling data and methods together, and controlling access. The internal workings are hidden &mdash; users of the class just call methods without knowing the implementation details.</div><div class="fc-eg">Users call port.win_rate(), not recalculate it themselves</div></div>
+  <div class="fc"><div class="fc-term">Inheritance</div><div class="fc-def">Creating a new class based on an existing one. The child class gets all the parent&rsquo;s attributes and methods, and can add or override them. Useful for specialisation.</div><div class="fc-eg">class FTMOPortfolio(Portfolio): adds FTMO-specific rules</div></div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">OOP in real trading systems</div>
+  <p class="qbox-body">Production trading systems are built as interacting objects. A Strategy object generates signals. A RiskManager object validates position sizes. An OrderEngine object sends orders to the exchange. A Portfolio object tracks positions and P&amp;L. Each object has a clear responsibility and communicates through well-defined methods. When you want to swap one strategy for another, you replace one object &mdash; everything else stays the same. This modularity is what makes complex systems manageable.</p>
+  <span class="qtag">Strategy objects</span><span class="qtag">Risk management</span><span class="qtag">Backtesting frameworks</span><span class="qtag">System architecture</span>
+</div>`
+},
+{title:"NumPy &amp; Pandas",peb:"NumPy and Pandas are the two libraries that make Python viable for quantitative work. NumPy gives you fast arrays and vectorised mathematics &mdash; instead of looping through a million prices one by one, you operate on the entire array at once, hundreds of times faster. Pandas gives you DataFrames &mdash; essentially spreadsheets in code, with labelled rows and columns, dates as indices, and built-in functions for everything from rolling averages to group-by aggregations. Every quant uses these two libraries daily. They are not optional.",
+html:`
+<div class="sh">NumPy &mdash; fast numerical arrays</div>
+<div class="worked">
+  <div class="worked-title">Arrays vs lists &mdash; why NumPy matters</div>
+  <div class="worked-body">
+    <div class="worked-math">import numpy as np
+
+# Python list way (slow)
+prices = [100, 102, 98, 105, 110]
+returns_list = [(prices[i] - prices[i-1]) / prices[i-1] for i in range(1, len(prices))]
+
+# NumPy way (fast, clean)
+prices = np.array([100, 102, 98, 105, 110])
+returns = np.diff(prices) / prices[:-1]
+# array([0.02, -0.0392, 0.0714, 0.0476])</div>
+    <p class="worked-conclusion">NumPy operates on entire arrays at once (vectorisation). No explicit loops needed. On large datasets this is 10-100x faster than Python lists.</p>
+  </div>
+</div>
+
+<div class="sh">Essential NumPy operations</div>
+<table class="rt">
+  <thead><tr><th>Operation</th><th>Code</th><th>Quant use</th></tr></thead>
+  <tbody>
+    <tr><td>Create array</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.array([1, 2, 3])</td><td>Price series</td></tr>
+    <tr><td>Zeros / Ones</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.zeros(100)</td><td>Initialise arrays</td></tr>
+    <tr><td>Mean</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.mean(returns)</td><td>Average return</td></tr>
+    <tr><td>Std deviation</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.std(returns)</td><td>Volatility</td></tr>
+    <tr><td>Cumulative sum</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.cumsum(returns)</td><td>Equity curve</td></tr>
+    <tr><td>Cumulative product</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.cumprod(1 + returns)</td><td>Compounded returns</td></tr>
+    <tr><td>Max drawdown helper</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.maximum.accumulate(x)</td><td>Running peak</td></tr>
+    <tr><td>Random normal</td><td style="font-family:'DM Mono',monospace;font-size:12px">np.random.normal(0, 1, 10000)</td><td>Monte Carlo sims</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">Pandas &mdash; structured financial data</div>
+<div class="worked">
+  <div class="worked-title">Loading and exploring market data</div>
+  <div class="worked-body">
+    <div class="worked-math">import pandas as pd
+
+# Create a DataFrame from a dictionary
+data = pd.DataFrame({
+    "date": pd.date_range("2026-01-01", periods=5),
+    "close": [100, 102, 98, 105, 110],
+    "volume": [1000, 1200, 800, 1500, 1100]
+})
+data = data.set_index("date")
+
+# Key operations
+data["return"] = data["close"].pct_change()   # daily returns
+data["sma_3"]  = data["close"].rolling(3).mean()  # 3-day moving average
+print(data.describe())   # summary statistics</div>
+    <p class="worked-conclusion">Pandas DataFrames are how you handle any tabular data. Date-indexed time series, OHLCV bars, portfolio holdings &mdash; everything becomes a DataFrame with column names and date labels.</p>
+  </div>
+</div>
+
+<div class="sh">Essential Pandas operations</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">.pct_change()</div><div class="fc-def">Calculates percentage change between consecutive rows. The standard way to compute returns from a price series.</div><div class="fc-eg">df["return"] = df["close"].pct_change()</div></div>
+  <div class="fc"><div class="fc-term">.rolling(n)</div><div class="fc-def">Creates a rolling window of n periods. Chain with .mean(), .std(), .max() etc. Essential for moving averages, rolling volatility, and Bollinger Bands.</div><div class="fc-eg">df["vol_20"] = df["return"].rolling(20).std()</div></div>
+  <div class="fc"><div class="fc-term">.shift(n)</div><div class="fc-def">Shifts data by n periods. Positive = shift down (look back), negative = shift up (look forward). Critical for avoiding look-ahead bias in backtests.</div><div class="fc-eg">df["prev_close"] = df["close"].shift(1)</div></div>
+  <div class="fc"><div class="fc-term">Boolean filtering</div><div class="fc-def">Select rows where a condition is True. The bread and butter of data analysis &mdash; filter for up days, high volume days, specific date ranges.</div><div class="fc-eg">up_days = df[df["return"] > 0]</div></div>
+</div>
+
+<div class="sh">Putting it together &mdash; a simple backtest</div>
+<div class="worked">
+  <div class="worked-title">Moving average crossover in 10 lines</div>
+  <div class="worked-body">
+    <div class="worked-math">import pandas as pd
+import numpy as np
+
+df = pd.read_csv("EURUSD.csv", parse_dates=["date"], index_col="date")
+df["sma_fast"] = df["close"].rolling(10).mean()
+df["sma_slow"] = df["close"].rolling(50).mean()
+df["signal"]   = np.where(df["sma_fast"] > df["sma_slow"], 1, -1)
+df["return"]   = df["close"].pct_change()
+df["strat"]    = df["signal"].shift(1) * df["return"]  # shift to avoid look-ahead
+sharpe = df["strat"].mean() / df["strat"].std() * np.sqrt(252)
+print(f"Sharpe: {sharpe:.2f}")</div>
+    <p class="worked-conclusion">This is a complete (simple) backtest. NumPy and Pandas handle the heavy lifting &mdash; rolling averages, signal generation, return calculation, and performance measurement in 10 lines.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The foundation of all quant analysis</div>
+  <p class="qbox-body">Every quant workflow starts with data in a Pandas DataFrame and calculations in NumPy arrays. Factor construction, signal generation, portfolio optimisation, risk analytics, performance attribution &mdash; all are built on these two libraries. When you encounter QuantLib, zipline, or any quant-specific library, they all accept and return NumPy arrays and Pandas DataFrames. Mastering these two tools is the single highest-leverage skill in computational finance.</p>
+  <span class="qtag">Data manipulation</span><span class="qtag">Backtesting</span><span class="qtag">Time series analysis</span><span class="qtag">Performance analytics</span>
+</div>`
+},
+{title:"Writing clean code",peb:"Code that works but is unreadable is almost as bad as code that does not work. In a quant team, other people need to understand your code &mdash; to review it, debug it, extend it, or audit it for errors. Writing clean code means choosing clear variable names, structuring your files logically, adding comments where the intent is not obvious, and following consistent conventions. The difference between a junior and senior quant developer is not cleverness &mdash; it is clarity. Clean code catches bugs before they cost money.",
+html:`
+<div class="sh">Naming conventions</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Variables and functions</div><div class="fc-def">Use snake_case (lowercase with underscores). Names should describe what the thing IS, not how it was computed. Be specific.</div><div class="fc-eg">daily_returns not dr. portfolio_value not pv2.</div></div>
+  <div class="fc"><div class="fc-term">Classes</div><div class="fc-def">Use PascalCase (capitalise each word, no underscores). The name should be a noun describing what the object represents.</div><div class="fc-eg">Portfolio, RiskManager, BacktestEngine</div></div>
+  <div class="fc"><div class="fc-term">Constants</div><div class="fc-def">Use UPPER_SNAKE_CASE. These are values that never change &mdash; configuration parameters, magic numbers, thresholds.</div><div class="fc-eg">TRADING_DAYS = 252 &ensp; MAX_DRAWDOWN = 0.10</div></div>
+  <div class="fc"><div class="fc-term">Avoid single letters</div><div class="fc-def">Except for loop counters (i, j) and well-known math conventions (n, r, t). In all other cases, a descriptive name prevents confusion.</div><div class="fc-eg">window_size not w. risk_free_rate not rf.</div></div>
+</div>
+
+<div class="sh">Code structure</div>
+<div class="worked">
+  <div class="worked-title">Bad vs good structure</div>
+  <div class="worked-body">
+    <div class="worked-math"># BAD — everything in one block, unclear names
+p = [100,102,98,105,110]
+r = []
+for i in range(1,len(p)):
+    r.append((p[i]-p[i-1])/p[i-1])
+s = sum(r)/len(r)/(sum((x-sum(r)/len(r))**2 for x in r)/len(r))**.5*252**.5
+
+# GOOD — functions, clear names, comments
+def calculate_returns(prices):
+    """Calculate simple returns from a price series."""
+    return [(prices[i] - prices[i-1]) / prices[i-1]
+            for i in range(1, len(prices))]
+
+def sharpe_ratio(returns, annualise=252):
+    """Annualised Sharpe ratio assuming zero risk-free rate."""
+    mean_r = sum(returns) / len(returns)
+    std_r = (sum((r - mean_r)**2 for r in returns) / len(returns)) ** 0.5
+    if std_r == 0:
+        return 0.0
+    return (mean_r / std_r) * (annualise ** 0.5)
+
+prices = [100, 102, 98, 105, 110]
+returns = calculate_returns(prices)
+print(f"Sharpe: {sharpe_ratio(returns):.2f}")</div>
+    <p class="worked-conclusion">Both produce the same answer, but the second version can be read, tested, debugged, and reused. In a production environment, the first version would fail code review instantly.</p>
+  </div>
+</div>
+
+<div class="sh">Best practices</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">One function, one job</div><div class="fc-def">Each function should do exactly one thing. If you cannot describe what it does in one sentence, split it. Small functions are easier to test and reuse.</div></div>
+  <div class="fc"><div class="fc-term">Comment the why, not the what</div><div class="fc-def">The code shows WHAT it does. Comments explain WHY &mdash; the business logic, the reasoning behind a threshold, the source of a formula.</div><div class="fc-eg"># ATR multiplier of 1.5 from ICT methodology</div></div>
+  <div class="fc"><div class="fc-term">Handle edge cases</div><div class="fc-def">What happens with empty data? Division by zero? Missing values? Good code anticipates failure and handles it gracefully rather than crashing silently.</div><div class="fc-eg">if len(returns) == 0: return 0.0</div></div>
+  <div class="fc"><div class="fc-term">DRY &mdash; Don&rsquo;t Repeat Yourself</div><div class="fc-def">If you write the same logic twice, extract it into a function. Duplication means bugs need to be fixed in multiple places &mdash; and you WILL forget one.</div></div>
+</div>
+
+<div class="insight">
+  <div class="insight-lbl">The real cost of messy code</div>
+  <p>In quant finance, a bug in your code is a bug in your P&amp;L. An unclear variable name might mean you applied the wrong sign to a position, turning a hedge into a doubled bet. A missing edge case might mean your risk check fails silently during a crash &mdash; exactly when you need it most. Knight Capital lost $440 million in 45 minutes due to a deployment error in their trading code. Clean code is not about aesthetics &mdash; it is about not losing money.</p>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Professional standards in quant development</div>
+  <p class="qbox-body">Quant teams use version control (Git) to track every change. Code is reviewed before merging. Functions have unit tests that verify correctness. Style is enforced by linters (flake8, black). Documentation is maintained alongside code. These practices exist because the cost of a bug in a trading system is measured in real money. Writing clean code from day one builds the habits that separate hobby projects from production systems.</p>
+  <span class="qtag">Git version control</span><span class="qtag">Code review</span><span class="qtag">Unit testing</span><span class="qtag">Production standards</span>
+</div>`
+}
+];
+
+let cur=0,bookMode=false;
+function go(i){cur=i;document.querySelectorAll('.sb-item').forEach((el,idx)=>{el.classList.toggle('active',idx===i);if(idx<i)el.classList.add('done');else el.classList.remove('done')});const t=T[i];document.getElementById('content').innerHTML=`<div class="progress-pips" id="pips"></div><div class="topic-eyebrow"><span class="badge badge-green">LV I &middot; Topic ${i+1} of ${T.length}</span><span class="badge badge-subtle">Core concept</span></div><div class="topic-title-lg">${t.title}</div><div class="peb"><div class="peb-label">Plain English First</div>${t.peb}</div>${t.html}<div class="topic-nav">${i>0?`<button class="tn-btn" onclick="go(${i-1})">&#8592; Previous</button>`:''}${i<T.length-1?`<button class="tn-btn primary" onclick="go(${i+1})" style="margin-left:auto">Next &#8594;</button>`:'<span style="font-size:13px;color:var(--tx3);margin-left:auto;align-self:center">LV I complete &#10003;</span>'}</div>`;renderPips();document.getElementById('content').scrollTop=0}
+function renderPips(){const el=document.getElementById('pips');if(!el)return;el.innerHTML=T.map((t,i)=>{const bg=i===cur?'var(--tx1)':i<cur?'var(--green)':'var(--br2)';return`<button class="pip" title="${t.title}" style="background:${bg}" onclick="go(${i})"></button>`}).join('')}
+function toggleLayout(){bookMode=!bookMode;document.getElementById('shell').classList.toggle('book-mode',bookMode);document.getElementById('layout-btn').classList.toggle('active',bookMode)}
+function toggleTheme(){const dark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',dark?'light':'dark');document.getElementById('theme-btn').classList.toggle('active',!dark)}
+if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}
+go(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Probability &amp; Statistics LV I — Road to Quant</title>
+<style>
+.math{font-family:'Times New Roman',Georgia,serif;font-size:1.05em;letter-spacing:.01em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}
+.num{border-bottom:1.5px solid currentColor;padding:0 4px 2px;text-align:center}
+.den{padding:2px 4px 0;text-align:center}
+.big-paren{font-size:1.35em;vertical-align:middle;line-height:1}
+.f-box{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;background:rgba(0,0,0,.04);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+[data-theme="dark"] .f-box{background:rgba(255,255,255,.07)}
+
+:root{--bg:#fff;--bg2:#f5f5f7;--bg3:#e8e8ed;--tx1:#1d1d1f;--tx2:#6e6e73;--tx3:#aeaeb2;--br:rgba(0,0,0,.10);--br2:rgba(0,0,0,.18);--green:#059669;--green-bg:#ecfdf5;--green-dk:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--blue:#2563eb;--blue-bg:#eff6ff;--blue-dk:#1e40af;--purple:#7c3aed;--purple-bg:#f5f3ff;--red:#dc2626;--red-bg:#fff1f2}
+[data-theme="dark"]{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--tx1:#f5f5f7;--tx2:#98989d;--tx3:#636366;--br:rgba(255,255,255,.09);--br2:rgba(255,255,255,.16);--green-bg:#022c22;--green:#34d399;--green-dk:#6ee7b7;--amber-bg:#1c1200;--amber:#fbbf24;--blue-bg:#0d1b3e;--blue:#60a5fa;--blue-dk:#93c5fd;--purple-bg:#1e0e3e;--purple:#a78bfa;--red-bg:#1c0505;--red:#f87171}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--br);height:52px;display:flex;align-items:center;padding:0 32px;gap:8px}
+[data-theme="dark"] .nav{background:rgba(28,28,30,.82)}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-right:auto}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px}
+.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:10px;transition:background .15s,color .15s}
+.nav-link:hover{background:var(--bg2);color:var(--tx1)}
+.nav-link.active{color:var(--tx1);font-weight:500}
+.nav-divider{width:.5px;height:20px;background:var(--br2);margin:0 6px}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:15px;transition:background .15s,color .15s;border:.5px solid transparent}
+.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br)}
+.icon-btn.active{background:var(--bg2);border-color:var(--br2)}
+
+.page-header{padding:28px 32px 0;border-bottom:.5px solid var(--br)}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);margin-bottom:10px}
+.breadcrumb a:hover{color:var(--tx1)}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--tx2);margin-bottom:18px}
+.lv-tabs{display:flex}
+.lv-tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-.5px;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s;display:flex;align-items:center;gap:6px}
+.lv-tab.active{color:var(--tx1);font-weight:500;border-bottom-color:var(--tx1)}
+.lv-tab.locked{opacity:.35;cursor:default}
+.lv-pip{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.lv-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--tx3)}
+
+.study-shell{display:flex;min-height:calc(100vh - 52px)}
+.study-sidebar{width:196px;flex-shrink:0;border-right:.5px solid var(--br);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;background:var(--bg)}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);padding:8px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 18px;font-size:13px;color:var(--tx2);cursor:pointer;border-left:2px solid transparent;background:none;width:100%;text-align:left;transition:color .12s,background .12s;line-height:1.4}
+.sb-item:hover{color:var(--tx1);background:var(--bg2)}
+.sb-item.active{color:var(--tx1);font-weight:500;border-left-color:var(--blue);background:var(--bg2)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--br2);flex-shrink:0}
+.sb-item.active .sb-dot{background:var(--blue)}
+.sb-item.done .sb-dot{background:var(--blue);opacity:.4}
+.study-content{flex:1;padding:28px 48px 64px;overflow-y:auto;max-height:calc(100vh - 52px)}
+.study-shell.book-mode .study-sidebar{display:none}
+.study-shell.book-mode .study-content{column-count:2;column-gap:52px;column-rule:.5px solid var(--br);padding:28px 52px 64px}
+.study-shell.book-mode .study-content>*{break-inside:avoid}
+
+.progress-pips{display:flex;gap:6px;margin-bottom:20px}
+.pip{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:transform .15s;padding:0}
+.pip:hover{transform:scale(1.4)}
+.topic-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.topic-title-lg{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:20px;line-height:1.15}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:980px;font-weight:500}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-subtle{background:var(--bg2);color:var(--tx2)}
+.peb{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.7}
+.peb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
+.sh{font-size:13px;font-weight:600;color:var(--tx1);margin:24px 0 12px;padding-bottom:5px;border-bottom:.5px solid var(--br);letter-spacing:-.01em}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.fc{background:var(--bg2);border-radius:16px;padding:14px 16px}
+.fc-term{font-size:12px;font-weight:600;margin-bottom:6px}
+.fc-def{font-size:12px;color:var(--tx2);line-height:1.55}
+.fc-eg{font-size:11px;color:var(--tx3);margin-top:7px;padding-top:7px;border-top:.5px solid var(--br);font-style:italic}
+.f-label{font-size:11px;color:var(--tx3);text-align:center;margin-bottom:4px;font-style:italic}
+.vt{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:18px}
+.vt td{padding:6px 10px;border-bottom:.5px solid var(--br);vertical-align:top}
+.vt td:first-child{font-family:'DM Mono','Courier New',monospace;font-weight:500;color:var(--blue);width:60px;font-size:12px}
+.vt td:last-child{color:var(--tx2)}
+.vt tr:last-child td{border-bottom:none}
+.rt{width:100%;font-size:13px;border-collapse:collapse;margin:10px 0 18px}
+.rt th{padding:7px 10px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:.5px solid var(--br2);color:var(--tx2)}
+.rt td{padding:7px 10px;border-bottom:.5px solid var(--br)}
+.rt tr:last-child td{border-bottom:none}
+.worked{background:var(--bg2);border:.5px solid var(--br);border-radius:16px;padding:18px 20px;margin:14px 0 18px;break-inside:avoid}
+.worked-title{font-size:12px;font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--br)}
+.worked-body{font-size:13px;color:var(--tx2);line-height:1.7}
+.worked-math{font-family:'DM Mono','Courier New',monospace;background:var(--bg);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13px;overflow-x:auto;white-space:pre-wrap}
+.worked-conclusion{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic}
+.insight{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.65;break-inside:avoid}
+.insight-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px}
+.qbox{background:var(--purple-bg);border-radius:16px;padding:16px 18px;margin-top:18px;break-inside:avoid}
+.qbox-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:8px}
+.qbox-body{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px}
+.qtag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:980px;background:var(--purple-bg);color:var(--purple);border:.5px solid rgba(124,58,237,.2);margin:2px}
+
+.calc-block{background:var(--bg2);border-radius:16px;padding:20px;margin-bottom:18px;break-inside:avoid}
+.calc-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.calc-lbl{font-size:12px;color:var(--tx2);min-width:120px}
+.calc-out{font-size:13px;font-weight:600;color:var(--tx1);min-width:70px;text-align:right}
+input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--bg3);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--tx1);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--tx1);border:none;cursor:pointer}
+.result-strip{display:flex;align-items:baseline;gap:10px;border-radius:10px;padding:14px 18px;margin-top:12px}
+.result-lbl{font-size:12px}
+.result-val{font-size:30px;font-weight:600;letter-spacing:-.03em}
+.results-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.r3{border-radius:10px;padding:12px 14px}
+.r3-lbl{font-size:11px;margin-bottom:4px}
+.r3-val{font-size:20px;font-weight:600;letter-spacing:-.02em}
+
+.topic-nav{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:.5px solid var(--br)}
+.tn-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:980px;border:.5px solid var(--br2);background:var(--bg);color:var(--tx1);cursor:pointer;transition:background .15s}
+.tn-btn:hover{background:var(--bg2)}
+.tn-btn.primary{background:var(--tx1);color:var(--bg);border-color:var(--tx1)}
+.tn-btn.primary:hover{opacity:.85}
+.footer{border-top:.5px solid var(--br);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}
+.footer a:hover{color:var(--tx1)}
+@media(max-width:700px){.study-sidebar{display:none}.study-content{padding:20px 20px 48px}.nav{padding:0 16px}.page-header{padding:20px 16px 0}.study-shell.book-mode .study-content{column-count:1;padding:20px}.results-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Road to <span>Quant</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="../../index.html">Home</a>
+    <a class="nav-link active" href="../study-guide.html">Study Guide</a>
+    <a class="nav-link" href="../../projects/projects.html">Projects</a>
+    <a class="nav-link" href="../../blog/blog.html">Blog</a>
+  </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" id="layout-btn" title="Toggle layout" onclick="toggleLayout()">&#9700;</button>
+  <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">&#9788;</button>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="../../index.html">Home</a><span>/</span>
+    <a href="../study-guide.html">Study Guide</a><span>/</span>
+    <span>Probability &amp; Statistics &mdash; LV I</span>
+  </div>
+  <div class="page-title">Probability &amp; Statistics</div>
+  <div class="page-sub">Foundations of Probability &mdash; Level I</div>
+  <div class="lv-tabs">
+    <button class="lv-tab active"><div class="lv-pip"></div>LV I &mdash; Foundations</button>
+    <button class="lv-tab locked">LV II <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV III <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV IV <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV V <span class="lv-badge">locked</span></button>
+  </div>
+</div>
+
+<div class="study-shell" id="shell">
+  <aside class="study-sidebar">
+    <div class="sb-label" style="margin-top:8px">LV I Topics</div>
+    <button class="sb-item active" onclick="go(0)"><div class="sb-dot"></div>Basic probability</button>
+    <button class="sb-item" onclick="go(1)"><div class="sb-dot"></div>Conditional probability</button>
+    <button class="sb-item" onclick="go(2)"><div class="sb-dot"></div>Bayes' theorem</button>
+    <button class="sb-item" onclick="go(3)"><div class="sb-dot"></div>Random variables</button>
+    <button class="sb-item" onclick="go(4)"><div class="sb-dot"></div>Expectation &amp; variance</button>
+    <button class="sb-item" onclick="go(5)"><div class="sb-dot"></div>Discrete distributions</button>
+    <button class="sb-item" onclick="go(6)"><div class="sb-dot"></div>Continuous distributions</button>
+  </aside>
+  <main class="study-content" id="content"></main>
+</div>
+
+<footer class="footer">
+  <span>Road to Quant &middot; Probability LV I</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
+</footer>
+
+<script>
+const T = [
+
+/* ── 0  BASIC PROBABILITY ── */
+{
+title:"Basic probability",
+peb:"Probability is a number between 0 and 1 that measures how likely something is to happen. 0 means impossible, 1 means certain, and everything in between represents varying degrees of uncertainty. If you roll a fair die, each face has a probability of 1/6 &mdash; not because of magic, but because there are 6 equally likely outcomes and each face is one of them. This is the language that quant finance is written in. Every model, every price, every risk calculation is ultimately a statement about probability.",
+html:`
+<div class="sh">The building blocks</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Experiment</div><div class="fc-def">Any process with an uncertain outcome. Rolling a die, observing a stock price tomorrow, measuring portfolio returns over a month.</div><div class="fc-eg">Will AAPL close higher or lower tomorrow?</div></div>
+  <div class="fc"><div class="fc-term">Sample space (&Omega;)</div><div class="fc-def">The set of ALL possible outcomes. Must be exhaustive. Can be finite (coin toss: {H, T}), countable (number of trades), or continuous (a stock return).</div><div class="fc-eg">Die: &Omega; = {1, 2, 3, 4, 5, 6}. Market direction: &Omega; = {Up, Down}</div></div>
+  <div class="fc"><div class="fc-term">Event</div><div class="fc-def">A subset of the sample space &mdash; one or more outcomes grouped together. Events can overlap, be disjoint, or one can contain another.</div><div class="fc-eg">Rolling an even number: A = {2, 4, 6}</div></div>
+  <div class="fc"><div class="fc-term">Probability P(A)</div><div class="fc-def">A number between 0 and 1 assigned to event A. Measures the long-run frequency with which A occurs if the experiment is repeated many times.</div><div class="fc-eg">P(even) = 3/6 = 0.5</div></div>
+</div>
+
+<div class="sh">The three axioms of probability</div>
+<div class="insight">
+  <div class="insight-lbl">Kolmogorov's axioms &mdash; everything is built on these three rules</div>
+  <p>All of probability theory is derived from exactly three axioms. These are why probabilities behave nicely and don't contradict themselves:</p>
+  <div class="f-box" style="margin:10px 0;flex-direction:column;gap:8px">
+    <span class="math"><strong>1. Non-negativity:</strong>&ensp; P(A) &ge; 0 &ensp; for any event A</span>
+    <span class="math"><strong>2. Normalisation:</strong>&ensp; P(&Omega;) = 1 &ensp; (something must happen)</span>
+    <span class="math"><strong>3. Additivity:</strong>&ensp; If A &cap; B = &empty;, then P(A &cup; B) = P(A) + P(B)</span>
+  </div>
+  <p style="font-size:13px;color:var(--tx2);margin-top:8px">The third axiom is the powerful one. If events are mutually exclusive &mdash; they cannot occur at the same time &mdash; you simply add their probabilities. This extends to any number of non-overlapping events.</p>
+</div>
+
+<div class="sh">Equally likely outcomes</div>
+<div class="f-label">When all outcomes in &Omega; are equally likely</div>
+<div class="f-box"><span class="math">P(A) = <span class="frac"><span class="num">|A|</span><span class="den">|&Omega;|</span></span> = <span class="frac"><span class="num">favourable outcomes</span><span class="den">total outcomes</span></span></span></div>
+
+<div class="sh">Complements, unions, and intersections</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Complement (A<sup>c</sup>)</div><div class="fc-def">Everything NOT in A. P(A<sup>c</sup>) = 1 &minus; P(A). Often the easiest way to calculate a probability is to find the complement and subtract from 1.</div><div class="fc-eg">P(stock goes up) = 0.55 &rarr; P(not up) = 0.45</div></div>
+  <div class="fc"><div class="fc-term">Union (A &cup; B)</div><div class="fc-def">A OR B (or both). P(A &cup; B) = P(A) + P(B) &minus; P(A &cap; B). You subtract the overlap to avoid double-counting.</div><div class="fc-eg">P(even OR &gt;4) = P({2,4,6}) + P({5,6}) &minus; P({6})</div></div>
+  <div class="fc"><div class="fc-term">Intersection (A &cap; B)</div><div class="fc-def">A AND B simultaneously. The overlap. If events are independent: P(A &cap; B) = P(A) &times; P(B).</div><div class="fc-eg">P(heads AND heads) = 0.5 &times; 0.5 = 0.25</div></div>
+  <div class="fc"><div class="fc-term">Mutually exclusive</div><div class="fc-def">Events that CANNOT occur together &mdash; P(A &cap; B) = 0. If mutually exclusive, P(A &cup; B) = P(A) + P(B). No overlap to subtract.</div><div class="fc-eg">Rolling a 3 and rolling a 5 on a single throw</div></div>
+</div>
+
+<div class="sh">The inclusion-exclusion formula</div>
+<div class="f-label">General addition rule &mdash; prevents double counting</div>
+<div class="f-box"><span class="math">P(A &cup; B) = P(A) + P(B) &minus; P(A &cap; B)</span></div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; probability of drawing a heart or a face card</div>
+  <div class="worked-body">
+    <p>A standard deck has 52 cards. Hearts = 13 cards. Face cards (J, Q, K) = 12 cards. Face cards that are hearts = 3.</p>
+    <div class="worked-math">P(heart) = 13/52 = 0.250
+P(face)  = 12/52 = 0.231
+P(heart AND face) = 3/52 = 0.058
+
+P(heart OR face) = 0.250 + 0.231 - 0.058 = 0.423</div>
+    <p class="worked-conclusion">About 42.3% of cards are either hearts or face cards. Without subtracting the overlap, we would double-count the 3 face-card hearts and get 48.1% &mdash; wrong.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Why quants care</div>
+  <p class="qbox-body">Markets are uncertain and probability provides a consistent way to reason under that uncertainty. It helps separate signal from random noise, enables thinking in expected outcomes rather than predictions, and forms the basis of all risk measurement. Every later concept &mdash; distributions, stochastic processes, pricing models &mdash; is built on these axioms. Value at Risk asks "what is the probability losses exceed X?" Option pricing is the expected payoff under a probability distribution. The axioms are the grammar of the language.</p>
+  <span class="qtag">Value at Risk</span><span class="qtag">Option pricing</span><span class="qtag">Risk modelling</span><span class="qtag">Portfolio theory</span>
+</div>`
+},
+
+/* ── 1  CONDITIONAL PROBABILITY ── */
+{
+title:"Conditional probability",
+peb:"Conditional probability answers the question: does knowing something change how likely something else is? If the market was volatile today, is the probability of negative returns still the same as on a normal day &mdash; or has it changed? P(A|B) reads 'the probability of A given that B has already happened.' When we condition on B, we shrink our universe to only the outcomes where B happened, and then ask: within that smaller universe, how often does A also occur? This is perhaps the single most important concept in probability &mdash; it is how quants model contagion, correlation, and regime-dependent behaviour.",
+html:`
+<div class="sh">The definition</div>
+<div class="f-label">Conditional probability &mdash; updating probability with new information</div>
+<div class="f-box"><span class="math">P(A|B) = <span class="frac"><span class="num">P(A &cap; B)</span><span class="den">P(B)</span></span></span></div>
+<table class="vt">
+  <tr><td>P(A|B)</td><td>Probability of A given that B has occurred &mdash; read "A given B"</td></tr>
+  <tr><td>P(A&cap;B)</td><td>Probability that both A and B occur</td></tr>
+  <tr><td>P(B)</td><td>Probability that B occurs &mdash; must be greater than 0</td></tr>
+</table>
+
+<div class="sh">Shrinking the sample space</div>
+<p style="font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:16px">This is the most important conceptual insight. When we condition on B, we restrict the sample space to only outcomes where B happens. Instead of looking at all possible outcomes, we look only inside event B, and ask: within B, how often does A also occur? The original universe shrinks to the "B region" &mdash; and conditional probability measures A's share of that region.</p>
+
+<div class="sh">The multiplication rule</div>
+<div class="f-label">Rearranging the conditional probability formula</div>
+<div class="f-box"><span class="math">P(A &cap; B) = P(A|B) &times; P(B) = P(B|A) &times; P(A)</span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">This is how you calculate joint probabilities when events are NOT independent. Decompose the probability of both happening into a chain: probability of the first, multiplied by the probability of the second given the first. This identity is foundational for Bayes' theorem, joint probability models, and ML likelihood functions.</p>
+
+<div class="sh">Independence &mdash; when conditioning changes nothing</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Independent events</div><div class="fc-def">P(A|B) = P(A). Knowing B gives zero information about A. The multiplication shortcut applies: P(A &cap; B) = P(A) &times; P(B).</div><div class="fc-eg">Two successive fair coin flips &mdash; the first has no effect on the second</div></div>
+  <div class="fc"><div class="fc-term">Dependent events</div><div class="fc-def">Knowing B changes the probability of A. Most real-world financial events are dependent. Stock returns across correlated sectors, default probabilities within the same industry.</div><div class="fc-eg">P(bank B defaults | bank A defaults) &gt; P(bank B defaults)</div></div>
+  <div class="fc"><div class="fc-term">Common mistake</div><div class="fc-def">Assuming independence when events are dependent. The 2008 crisis was partly caused by models that assumed mortgage defaults were independent &mdash; they were catastrophically correlated.</div><div class="fc-eg">CDO pricing assumed low default correlation</div></div>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; negative returns on volatile days</div>
+  <div class="worked-body">
+    <p>Over 100 trading days: 40 days were volatile (B). On 25 of those volatile days, returns were negative (A &cap; B).</p>
+    <div class="worked-math">P(negative | volatile) = P(A &cap; B) / P(B)
+                        = 25/100 &divide; 40/100
+                        = 25/40
+                        = 0.625 = 62.5%</div>
+    <p class="worked-conclusion">Given volatility, the probability of negative returns is 62.5% &mdash; much higher than the unconditional probability. This is exactly the kind of conditional analysis quants do daily.</p>
+  </div>
+</div>
+
+<div class="sh">The law of total probability</div>
+<div class="f-label">If B<sub>1</sub>, B<sub>2</sub>, &hellip;, B<sub>n</sub> partition the sample space</div>
+<div class="f-box"><span class="math">P(A) = &Sigma;<sub>i</sub> P(A|B<sub>i</sub>) &middot; P(B<sub>i</sub>)</span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">Split the world into scenarios (the B<sub>i</sub>'s), compute P(A) in each scenario, and take the weighted average. A market crash could occur because of recession, geopolitical shock, or financial crisis &mdash; each scenario contributes some probability. The total probability considers all paths.</p>
+
+<div class="qbox">
+  <div class="qbox-lbl">Foundation for all quant modelling</div>
+  <p class="qbox-body">Quants constantly think in conditional terms: probability of loss given high volatility, expected return given market regime, probability of default given credit downgrade. Factor models condition returns on market factors. Regime-switching models condition volatility on the current state. Even machine learning is fundamentally modelling P(y|X) &mdash; the conditional probability of the target given features. Modern quant models are essentially layers of conditional probability.</p>
+  <span class="qtag">Regime-switching models</span><span class="qtag">Credit risk</span><span class="qtag">Factor conditioning</span><span class="qtag">Machine learning P(y|X)</span>
+</div>`
+},
+
+/* ── 2  BAYES' THEOREM ── */
+{
+title:"Bayes' theorem",
+peb:"Bayes' theorem answers one of the most practical questions in the world: how should I update my beliefs when I receive new evidence? You start with a prior belief &mdash; maybe a 10% chance the economy enters recession. Then you observe data &mdash; unemployment ticks up. Bayes' theorem tells you the mathematically correct way to update that 10% to a new number that accounts for the evidence. It works like this: Prior + Evidence = Posterior. The formula flips conditional probabilities &mdash; instead of asking 'what is the probability of this evidence given a cause?' it asks 'given the evidence, what is the probability the cause was responsible?'",
+html:`
+<div class="sh">The formula</div>
+<div class="f-label">Bayes' theorem &mdash; inverting conditional probabilities</div>
+<div class="f-box"><span class="math">P(H|E) = <span class="frac"><span class="num">P(E|H) &middot; P(H)</span><span class="den">P(E)</span></span></span></div>
+<table class="vt">
+  <tr><td>P(H|E)</td><td>Posterior &mdash; updated probability of hypothesis H after observing evidence E</td></tr>
+  <tr><td>P(H)</td><td>Prior &mdash; your belief about H before seeing evidence</td></tr>
+  <tr><td>P(E|H)</td><td>Likelihood &mdash; probability of seeing this evidence IF H is true</td></tr>
+  <tr><td>P(E)</td><td>Marginal likelihood &mdash; total probability of observing E under all hypotheses</td></tr>
+</table>
+
+<div class="insight">
+  <div class="insight-lbl">The belief update cycle</div>
+  <p style="text-align:center;font-size:14px;margin:8px 0"><strong>Prior</strong> &ensp;&xrarr;&ensp; <strong>Evidence</strong> &ensp;&xrarr;&ensp; <strong>Posterior</strong></p>
+  <p style="font-size:13px;color:var(--tx2)">The posterior from one round of evidence becomes the prior for the next round. As more data arrives, beliefs are continuously refined. This is the core of statistical inference and how Bayesian trading strategies update signal strength in real time.</p>
+</div>
+
+<div class="sh">The intuition</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Prior P(H)</div><div class="fc-def">What you believed before seeing the data. Based on historical rates, domain knowledge, or previous analysis. The starting point.</div><div class="fc-eg">"I think there is a 20% chance this stock is undervalued"</div></div>
+  <div class="fc"><div class="fc-term">Likelihood P(E|H)</div><div class="fc-def">How well the evidence fits your hypothesis. If the hypothesis is true, how likely would you be to see this particular data?</div><div class="fc-eg">"If it IS undervalued, earnings beats like this happen 80% of the time"</div></div>
+  <div class="fc"><div class="fc-term">Posterior P(H|E)</div><div class="fc-def">Your updated belief after combining prior with evidence. This becomes the new prior when more data arrives.</div><div class="fc-eg">"After the earnings beat, I now think 55% chance it is undervalued"</div></div>
+  <div class="fc"><div class="fc-term">Why humans fail at this</div><div class="fc-def">Humans often ignore base rates (priors). A rare event with a strong signal still has a low posterior if the prior is low enough. Bayes forces us to account for base rates and prevents reasoning errors.</div><div class="fc-eg">A 95% accurate test for a 1% disease &mdash; most positives are false</div></div>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; a medical test for a rare disease</div>
+  <div class="worked-body">
+    <p>A disease affects 1% of the population. A test has a 95% true positive rate and a 3% false positive rate. You test positive. What is the probability you actually have the disease?</p>
+    <div class="worked-math">P(disease)    = 0.01     (prior)
+P(+|disease)  = 0.95     (sensitivity)
+P(+|healthy)  = 0.03     (false positive rate)
+
+P(+) = P(+|disease)&middot;P(disease) + P(+|healthy)&middot;P(healthy)
+     = 0.95 &times; 0.01 + 0.03 &times; 0.99
+     = 0.0095 + 0.0297 = 0.0392
+
+P(disease|+) = 0.0095 / 0.0392 = 0.242 = 24.2%</div>
+    <p class="worked-conclusion">Despite a 95% accurate test, a positive result only means a 24.2% chance of disease. The low base rate (1%) means most positives are false positives. This is the base rate fallacy &mdash; one of the most common errors in probabilistic reasoning.</p>
+  </div>
+</div>
+
+<div class="sh">Live Bayes calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Prior P(H) %</span><input type="range" min="1" max="50" step="1" value="10" id="bay-prior"><span class="calc-out" id="bay-prior-v">10%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Sensitivity P(E|H) %</span><input type="range" min="50" max="99" step="1" value="95" id="bay-sens"><span class="calc-out" id="bay-sens-v">95%</span></div>
+  <div class="calc-row"><span class="calc-lbl">False positive %</span><input type="range" min="1" max="30" step="1" value="5" id="bay-fp"><span class="calc-out" id="bay-fp-v">5%</span></div>
+  <div class="result-strip" style="background:var(--blue-bg)"><span class="result-lbl" style="color:var(--blue)">Posterior P(H|E)</span><span class="result-val" style="color:var(--blue-dk)" id="bay-result">&mdash;</span></div>
+</div>
+
+<div class="sh">Using Bayes in quant finance</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; is the market in a recession given high volatility?</div>
+  <div class="worked-body">
+    <p>We want P(Recession | High Volatility). We know: P(Recession) = 0.15, P(High Vol | Recession) = 0.80, P(High Vol) = 0.30.</p>
+    <div class="worked-math">P(Recession | High Vol) = P(High Vol | Recession) &times; P(Recession) / P(High Vol)
+                          = 0.80 &times; 0.15 / 0.30
+                          = 0.12 / 0.30
+                          = 0.40 = 40%</div>
+    <p class="worked-conclusion">High volatility doubles our estimate of recession probability from 15% to 40%. Bayes lets us combine separate pieces of information into a coherent updated belief.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Central to quantitative trading</div>
+  <p class="qbox-body">Black-Litterman portfolio optimisation is literally Bayes' theorem applied to asset allocation &mdash; combining market equilibrium (prior) with investor views (evidence) to produce optimal weights (posterior). Bayesian signal processing updates trading signal strength as new data arrives. Spam filters, fraud detection, and NLP classifiers are all Bayesian at their core. Every time a quant model updates a parameter estimate with new data, it is performing Bayesian inference.</p>
+  <span class="qtag">Black-Litterman</span><span class="qtag">Signal updating</span><span class="qtag">Bayesian estimation</span><span class="qtag">Classification</span>
+</div>`
+},
+
+/* ── 3  RANDOM VARIABLES ── */
+{
+title:"Random variables",
+peb:"A random variable is a number that depends on the outcome of a random experiment. If you roll a die, the number that comes up is a random variable &mdash; you do not know what it will be in advance, but you know all the possible values and how likely each one is. This is how probability moves from abstract events ('rolling an even number') to concrete numbers you can compute with. Stock returns, portfolio values, option payoffs &mdash; these are all random variables, and everything in quant finance is about understanding their behaviour.",
+html:`
+<div class="sh">Discrete vs continuous</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Discrete random variable</div><div class="fc-def">Takes countable values &mdash; you can list them. Each value has a specific probability. The probabilities must sum to 1.</div><div class="fc-eg">Number of trades in a day: X = 0, 1, 2, 3, &hellip;</div></div>
+  <div class="fc"><div class="fc-term">Continuous random variable</div><div class="fc-def">Takes any value in a range &mdash; cannot list them all. The probability of any single exact value is 0. Probabilities are measured over intervals.</div><div class="fc-eg">Daily stock return: X = &minus;8.2%, 0.34%, 2.71%, &hellip; any real number</div></div>
+  <div class="fc"><div class="fc-term">PMF &mdash; probability mass function</div><div class="fc-def">For discrete variables. P(X = x) gives the probability of each specific value. Looks like a bar chart &mdash; each bar is the probability of that value.</div><div class="fc-eg">Die: P(X=1) = P(X=2) = &hellip; = P(X=6) = 1/6</div></div>
+  <div class="fc"><div class="fc-term">PDF &mdash; probability density function</div><div class="fc-def">For continuous variables. f(x) gives the density, NOT the probability. Probability = area under the curve over an interval. Total area = 1.</div><div class="fc-eg">Normal distribution bell curve &mdash; height is density, area is probability</div></div>
+</div>
+
+<div class="sh">The CDF &mdash; cumulative distribution function</div>
+<div class="f-label">Works for both discrete and continuous variables</div>
+<div class="f-box"><span class="math">F(x) = P(X &le; x)</span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">The CDF gives the probability that X takes a value less than or equal to x. It starts at 0 (for x &rarr; &minus;&infin;), ends at 1 (for x &rarr; +&infin;), and never decreases. For continuous variables, the CDF is the integral of the PDF: F(x) = &int;<sub>&minus;&infin;</sub><sup>x</sup> f(t) dt.</p>
+
+<div class="sh">Key properties</div>
+<table class="rt">
+  <thead><tr><th>Property</th><th>Discrete</th><th>Continuous</th></tr></thead>
+  <tbody>
+    <tr><td>Probability of exact value</td><td>P(X = x) = p(x) &gt; 0</td><td>P(X = x) = 0 always</td></tr>
+    <tr><td>Probability over range</td><td>&Sigma; p(x<sub>i</sub>)</td><td>&int; f(x) dx = area under curve</td></tr>
+    <tr><td>Must sum/integrate to</td><td>&Sigma; p(x) = 1</td><td>&int; f(x) dx = 1</td></tr>
+    <tr><td>CDF shape</td><td>Step function (jumps)</td><td>Smooth curve</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; profit from a simple bet</div>
+  <div class="worked-body">
+    <p>You bet &pound;10 on a coin flip. Heads: win &pound;10. Tails: lose &pound;10. Define X as your profit.</p>
+    <div class="worked-math">X = +10  with probability 0.5
+X = -10  with probability 0.5
+
+PMF:  P(X = 10) = 0.5,  P(X = -10) = 0.5
+CDF:  F(-10) = 0.5,  F(10) = 1.0</div>
+    <p class="worked-conclusion">X is a discrete random variable with two possible values. This is the simplest possible model of a trading outcome &mdash; every more complex model builds from here.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Everything in quant finance is a random variable</div>
+  <p class="qbox-body">A stock price is a continuous random variable. The number of trades per second is discrete. An option payoff max(S &minus; K, 0) is a function of a random variable. Portfolio return is a weighted sum of random variables. When a quant builds a model, they are choosing a probability distribution for a random variable and computing its properties. The entire field is the study of random variables and their interactions.</p>
+  <span class="qtag">Return distributions</span><span class="qtag">Option payoffs</span><span class="qtag">Portfolio returns</span><span class="qtag">Stochastic processes (LV II)</span>
+</div>`
+},
+
+/* ── 4  EXPECTATION & VARIANCE ── */
+{
+title:"Expectation &amp; variance",
+peb:"If a random variable is like a number that could be many things, expectation is the single number that best summarises it &mdash; the probability-weighted average of all possible values. Variance tells you how spread out those values are around the average. Together they are the two most important numbers you can compute about any random variable. Expected return and variance of return are the exact two inputs to Markowitz mean-variance portfolio optimisation &mdash; the foundation of modern portfolio theory.",
+html:`
+<div class="sh">Expected value (mean)</div>
+<div class="f-label">Discrete</div>
+<div class="f-box"><span class="math">E[X] = &Sigma;<sub>i</sub> x<sub>i</sub> &middot; P(X = x<sub>i</sub>)</span></div>
+<div class="f-label">Continuous</div>
+<div class="f-box"><span class="math">E[X] = &int;<sub>&minus;&infin;</sub><sup>&infin;</sup> x &middot; f(x) dx</span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">E[X] is the long-run average &mdash; if you repeated the experiment infinitely many times, the average outcome would converge to E[X]. It is NOT the most likely outcome &mdash; it is the probability-weighted centre of mass.</p>
+
+<div class="sh">Key properties of expectation</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Linearity</div><div class="fc-def">E[aX + b] = aE[X] + b. Constants factor out, sums split. Works ALWAYS &mdash; even for dependent variables. The most important property.</div><div class="fc-eg">E[3X + 5] = 3E[X] + 5</div></div>
+  <div class="fc"><div class="fc-term">Sum of expectations</div><div class="fc-def">E[X + Y] = E[X] + E[Y]. Always true regardless of dependence. This is why portfolio expected return = weighted sum of asset expected returns.</div><div class="fc-eg">E[r<sub>portfolio</sub>] = w<sub>1</sub>E[r<sub>1</sub>] + w<sub>2</sub>E[r<sub>2</sub>]</div></div>
+  <div class="fc"><div class="fc-term">Expected value of a function</div><div class="fc-def">E[g(X)] = &Sigma; g(x<sub>i</sub>)P(x<sub>i</sub>) or &int; g(x)f(x)dx. Used to compute expected payoffs of derivatives.</div><div class="fc-eg">E[max(S&minus;K, 0)] = expected call option payoff</div></div>
+</div>
+
+<div class="sh">Variance and standard deviation</div>
+<div class="f-label">Variance &mdash; average squared distance from the mean</div>
+<div class="f-box"><span class="math">Var(X) = E[(X &minus; &mu;)<sup>2</sup>] = E[X<sup>2</sup>] &minus; (E[X])<sup>2</sup></span></div>
+<div class="f-label">Standard deviation &mdash; same units as X</div>
+<div class="f-box"><span class="math">&sigma; = &radic;Var(X)</span></div>
+
+<div class="sh">Variance properties and covariance</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Var(aX + b) = a&sup2;Var(X)</div><div class="fc-def">Constants that multiply scale variance by their square. Adding a constant shifts the distribution without changing spread.</div></div>
+  <div class="fc"><div class="fc-term">Var(X + Y)</div><div class="fc-def">= Var(X) + Var(Y) + 2Cov(X,Y). Only simplifies to Var(X) + Var(Y) when X and Y are independent.</div></div>
+  <div class="fc"><div class="fc-term">Covariance</div><div class="fc-def">Cov(X,Y) = E[XY] &minus; E[X]E[Y]. Measures how two variables move together. Positive = same direction. Negative = opposite. Zero = uncorrelated.</div></div>
+  <div class="fc"><div class="fc-term">Correlation</div><div class="fc-def">&rho; = Cov(X,Y) / (&sigma;<sub>X</sub>&sigma;<sub>Y</sub>). Normalised covariance between &minus;1 and +1. The key input to portfolio diversification.</div></div>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; expected value and risk of a trading strategy</div>
+  <div class="worked-body">
+    <p>A strategy wins &pound;500 with probability 0.6 and loses &pound;400 with probability 0.4.</p>
+    <div class="worked-math">E[X] = 500(0.6) + (-400)(0.4) = 300 - 160 = &pound;140
+
+E[X&sup2;] = 500&sup2;(0.6) + 400&sup2;(0.4) = 150,000 + 64,000 = 214,000
+Var(X) = 214,000 - 140&sup2; = 214,000 - 19,600 = 194,400
+&sigma; = &radic;194,400 = &pound;441</div>
+    <p class="worked-conclusion">Expected profit is &pound;140 per trade, but the standard deviation is &pound;441 &mdash; high volatility relative to the expected gain. The ratio 140/441 = 0.32 is a crude Sharpe-like measure: how much return per unit of risk.</p>
+  </div>
+</div>
+
+<div class="sh">Live expected value calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Win amount (&pound;)</span><input type="range" min="100" max="2000" step="50" value="500" id="ev-win"><span class="calc-out" id="ev-win-v">&pound;500</span></div>
+  <div class="calc-row"><span class="calc-lbl">Loss amount (&pound;)</span><input type="range" min="100" max="2000" step="50" value="400" id="ev-loss"><span class="calc-out" id="ev-loss-v">&pound;400</span></div>
+  <div class="calc-row"><span class="calc-lbl">Win probability (%)</span><input type="range" min="10" max="90" step="1" value="60" id="ev-prob"><span class="calc-out" id="ev-prob-v">60%</span></div>
+  <div class="results-3">
+    <div class="r3" style="background:var(--blue-bg)"><div class="r3-lbl" style="color:var(--blue)">E[X]</div><div class="r3-val" style="color:var(--blue-dk)" id="ev-result">&mdash;</div></div>
+    <div class="r3" style="background:var(--bg3)"><div class="r3-lbl" style="color:var(--tx2)">&sigma;</div><div class="r3-val" id="ev-sd">&mdash;</div></div>
+    <div class="r3" style="background:var(--purple-bg)"><div class="r3-lbl" style="color:var(--purple)">E[X]/&sigma;</div><div class="r3-val" style="color:var(--purple)" id="ev-ratio">&mdash;</div></div>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The two pillars of portfolio theory</div>
+  <p class="qbox-body">Markowitz mean-variance optimisation uses exactly two inputs: expected return (E[X]) and variance (Var(X)). Portfolio expected return = weighted sum of asset returns (linearity of expectation). Portfolio variance depends on every pairwise covariance &mdash; this is where diversification comes from. When assets have negative covariance, combining them reduces portfolio variance below either individual asset's. The Sharpe ratio (E[r] / &sigma;) is the industry-standard measure of risk-adjusted return.</p>
+  <span class="qtag">Markowitz optimisation</span><span class="qtag">Sharpe ratio</span><span class="qtag">Portfolio variance</span><span class="qtag">Covariance matrices</span>
+</div>`
+},
+
+/* ── 5  DISCRETE DISTRIBUTIONS ── */
+{
+title:"Discrete distributions",
+peb:"A probability distribution is a complete description of a random variable &mdash; every possible value and how likely each one is. In practice, the same handful of discrete distributions appear everywhere. The Bernoulli models a single yes/no outcome (did the trade win?). The Binomial counts how many successes in a fixed number of trials (how many of 20 trades were profitable?). The Geometric asks how long until the first success (how many trades until the first winner?). The Poisson counts rare events in a time window (how many crashes per decade?). Knowing which distribution to use and why is like knowing the right tool for the job.",
+html:`
+<div class="sh">Bernoulli distribution</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What it models</div><div class="fc-def">A single trial with two outcomes: success (1) with probability p, failure (0) with probability 1&minus;p. The simplest possible distribution. Every binary event is a Bernoulli trial.</div><div class="fc-eg">Did the trade profit? X = 1 (yes) or X = 0 (no)</div></div>
+  <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">E[X] = p. Var(X) = p(1&minus;p). Variance is maximised at p = 0.5 (maximum uncertainty) and zero at p = 0 or p = 1 (certainty).</div><div class="fc-eg">Win rate p = 0.55: E[X] = 0.55, Var = 0.2475</div></div>
+</div>
+
+<div class="sh">Binomial distribution</div>
+<div class="f-label">Number of successes in n independent Bernoulli trials</div>
+<div class="f-box"><span class="math">P(X = k) = <span class="frac"><span class="num">n!</span><span class="den">k!(n&minus;k)!</span></span> p<sup>k</sup>(1&minus;p)<sup>n&minus;k</sup></span></div>
+<table class="vt">
+  <tr><td>n</td><td>Number of independent trials</td></tr>
+  <tr><td>k</td><td>Number of successes</td></tr>
+  <tr><td>p</td><td>Probability of success on each trial</td></tr>
+  <tr><td>E[X]</td><td>np</td></tr>
+  <tr><td>Var(X)</td><td>np(1&minus;p)</td></tr>
+</table>
+
+<div class="worked">
+  <div class="worked-title">Example &mdash; profitable trades out of 20</div>
+  <div class="worked-body">
+    <p>A strategy has a 55% win rate. Out of 20 trades, what is the probability of exactly 12 winners?</p>
+    <div class="worked-math">P(X = 12) = C(20,12) &times; 0.55&sup1;&sup2; &times; 0.45&sup8;
+           = 125970 &times; 0.000766 &times; 0.001686
+           = 0.162 = 16.2%</div>
+    <p class="worked-conclusion">The single most likely outcome (the mode) is 11 wins, with 12 wins close behind. The binomial captures the full range of uncertainty around a fixed win rate over a set number of trials.</p>
+  </div>
+</div>
+
+<div class="sh">Geometric distribution</div>
+<div class="f-label">Number of trials until the first success</div>
+<div class="f-box"><span class="math">P(X = k) = (1&minus;p)<sup>k&minus;1</sup> &middot; p</span></div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What it models</div><div class="fc-def">How many trials until the first success? The "waiting time" distribution. Memoryless &mdash; past failures do not change the probability of future success.</div><div class="fc-eg">How many trades until the first winner?</div></div>
+  <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">E[X] = 1/p. Var(X) = (1&minus;p)/p&sup2;. If p = 0.5, you expect to wait 2 trials on average. If p = 0.1, you expect to wait 10.</div><div class="fc-eg">With 55% win rate: E[X] = 1/0.55 &asymp; 1.8 trades</div></div>
+  <div class="fc"><div class="fc-term">Memoryless property</div><div class="fc-def">P(X &gt; m + n | X &gt; m) = P(X &gt; n). If you have already failed m times, your expected remaining wait is the same as if you just started. The only discrete distribution with this property.</div></div>
+</div>
+
+<div class="sh">Poisson distribution</div>
+<div class="f-label">Number of events in a fixed interval, rate &lambda; per interval</div>
+<div class="f-box"><span class="math">P(X = k) = <span class="frac"><span class="num">&lambda;<sup>k</sup> e<sup>&minus;&lambda;</sup></span><span class="den">k!</span></span></span></div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What it models</div><div class="fc-def">Counts of rare events in a fixed time/space window: market crashes per century, orders per minute, defaults per year. Events must be independent and occur at a constant average rate.</div><div class="fc-eg">Number of flash crashes per year: &lambda; = 2</div></div>
+  <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">E[X] = Var(X) = &lambda;. The mean equals the variance &mdash; a unique property that makes Poisson easy to identify in data. If mean &ne; variance, it is probably not Poisson.</div><div class="fc-eg">&lambda; = 3: P(0 events) = e<sup>&minus;3</sup> = 4.98%</div></div>
+  <div class="fc"><div class="fc-term">Binomial connection</div><div class="fc-def">Poisson is the limit of Binomial(n, p) as n &rarr; &infin; and p &rarr; 0 with np = &lambda;. Many trials, rare events. This is why it models rare occurrences.</div></div>
+</div>
+
+<div class="sh">Summary</div>
+<table class="rt">
+  <thead><tr><th>Distribution</th><th>Models</th><th>E[X]</th><th>Var(X)</th><th>Quant use</th></tr></thead>
+  <tbody>
+    <tr><td>Bernoulli(p)</td><td>Single binary trial</td><td>p</td><td>p(1&minus;p)</td><td>Win/loss per trade</td></tr>
+    <tr><td>Binomial(n,p)</td><td>Count of successes in n trials</td><td>np</td><td>np(1&minus;p)</td><td>Wins out of n trades</td></tr>
+    <tr><td>Geometric(p)</td><td>Trials until first success</td><td>1/p</td><td>(1&minus;p)/p&sup2;</td><td>Losing streak length</td></tr>
+    <tr><td>Poisson(&lambda;)</td><td>Count of rare events</td><td>&lambda;</td><td>&lambda;</td><td>Crash frequency, order flow</td></tr>
+  </tbody>
+</table>
+
+<div class="qbox">
+  <div class="qbox-lbl">Choosing the right model</div>
+  <p class="qbox-body">The first step in quantitative modelling is asking: what type of random variable am I dealing with? Binary outcome &rarr; Bernoulli. Fixed number of binary trials &rarr; Binomial. Waiting for an event &rarr; Geometric. Counting rare events in time &rarr; Poisson. This decision determines every subsequent calculation. Getting it wrong means building on the wrong foundation &mdash; no amount of mathematical sophistication compensates for choosing the wrong distribution.</p>
+  <span class="qtag">Model selection</span><span class="qtag">Order arrival (Poisson)</span><span class="qtag">Win rate analysis (Binomial)</span><span class="qtag">Drawdown modelling (Geometric)</span>
+</div>`
+},
+
+/* ── 6  CONTINUOUS DISTRIBUTIONS ── */
+{
+title:"Continuous distributions",
+peb:"Continuous random variables take any real value, so we cannot list individual probabilities &mdash; instead we describe them with density functions where area under the curve equals probability. The uniform distribution is the flattest possible: every value equally likely. The normal distribution (the bell curve) models returns and errors. The exponential models waiting times between events. And the log-normal &mdash; perhaps the most important in finance &mdash; models stock prices in the Black-Scholes world. These four distributions and their properties are the core vocabulary of continuous-time quant finance.",
+html:`
+<div class="sh">Uniform distribution</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Uniform(a, b)</div><div class="fc-def">Every value between a and b is equally likely. The density is constant: f(x) = 1/(b&minus;a). The flattest possible distribution &mdash; maximum ignorance about where the value will land.</div><div class="fc-eg">Random number generator: Uniform(0, 1)</div></div>
+  <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">E[X] = (a+b)/2. Var(X) = (b&minus;a)&sup2;/12. The CDF is a straight line from 0 to 1 &mdash; probability grows linearly across the range.</div><div class="fc-eg">Uniform(0,1): E[X] = 0.5, Var = 1/12</div></div>
+</div>
+
+<div class="sh">Normal distribution</div>
+<div class="f-label">The bell curve &mdash; PDF of N(&mu;, &sigma;&sup2;)</div>
+<div class="f-box"><span class="math">f(x) = <span class="frac"><span class="num">1</span><span class="den">&sigma;&radic;(2&pi;)</span></span> e<sup>&minus;<span class="frac"><span class="num">(x&minus;&mu;)<sup>2</sup></span><span class="den">2&sigma;<sup>2</sup></span></span></sup></span></div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Shape</div><div class="fc-def">Symmetric around &mu;, fully described by just two parameters. Bell-shaped. Tails extend to &plusmn;&infin; but decay rapidly.</div></div>
+  <div class="fc"><div class="fc-term">The 68-95-99.7 rule</div><div class="fc-def">~68% within 1&sigma; of &mu;. ~95% within 2&sigma;. ~99.7% within 3&sigma;. A 3-sigma event should be 0.3% likely. In finance they happen far more often &mdash; the fat tail problem.</div></div>
+  <div class="fc"><div class="fc-term">Standard normal Z</div><div class="fc-def">N(0, 1). Any normal X can be standardised: Z = (X &minus; &mu;)/&sigma;. This maps every normal distribution to a single reference table.</div><div class="fc-eg">If X ~ N(100, 15&sup2;), then P(X &gt; 130) = P(Z &gt; 2) &asymp; 2.3%</div></div>
+  <div class="fc"><div class="fc-term">Sum of normals</div><div class="fc-def">If X ~ N(&mu;<sub>1</sub>, &sigma;<sub>1</sub>&sup2;) and Y ~ N(&mu;<sub>2</sub>, &sigma;<sub>2</sub>&sup2;) are independent, then X + Y ~ N(&mu;<sub>1</sub>+&mu;<sub>2</sub>, &sigma;<sub>1</sub>&sup2;+&sigma;<sub>2</sub>&sup2;). Normals are closed under addition.</div></div>
+</div>
+
+<div class="insight">
+  <div class="insight-lbl">Why the normal is both essential and dangerous</div>
+  <p>The normal distribution is the default assumption for stock returns in many models. This works reasonably well for typical days but fails catastrophically in the tails. The 1987 crash was a 20-sigma event under the normal distribution &mdash; probability essentially zero, yet it happened. Real financial returns have heavier tails (leptokurtosis) than the normal predicts. Understanding both the power and limitations of the normal distribution is one of the most important skills in quant finance.</p>
+</div>
+
+<div class="sh">Exponential distribution</div>
+<div class="f-label">Time between Poisson events &mdash; Exp(&lambda;)</div>
+<div class="f-box"><span class="math">f(x) = &lambda; e<sup>&minus;&lambda;x</sup> &ensp; for x &ge; 0</span></div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What it models</div><div class="fc-def">Waiting time between events that arrive at rate &lambda;. The continuous counterpart to the geometric distribution. If events follow a Poisson process, inter-arrival times are exponential.</div><div class="fc-eg">Time between consecutive orders arriving</div></div>
+  <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">E[X] = 1/&lambda;. Var(X) = 1/&lambda;&sup2;. Memoryless: P(X &gt; s+t | X &gt; s) = P(X &gt; t). The only continuous memoryless distribution.</div><div class="fc-eg">&lambda; = 5 orders/min &rarr; E[wait] = 0.2 min = 12 seconds</div></div>
+</div>
+
+<div class="sh">Log-normal distribution</div>
+<div class="f-label">If ln(X) ~ N(&mu;, &sigma;&sup2;), then X is log-normal</div>
+<div class="f-box"><span class="math">X = e<sup>&mu; + &sigma;Z</sup> &ensp; where Z ~ N(0,1)</span></div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">What it models</div><div class="fc-def">Quantities that are always positive and grow multiplicatively. Stock prices are the classic example &mdash; they cannot go negative and are driven by percentage returns that multiply together.</div><div class="fc-eg">S(t) = S(0) &middot; e<sup>(&mu;&minus;&sigma;&sup2;/2)t + &sigma;W(t)</sup></div></div>
+  <div class="fc"><div class="fc-term">Properties</div><div class="fc-def">Always positive. Skewed right (long tail on the high side). E[X] = e<sup>&mu;+&sigma;&sup2;/2</sup>. If log returns are normal, prices are log-normal. This is the Black-Scholes assumption.</div></div>
+  <div class="fc"><div class="fc-term">Connection to log returns</div><div class="fc-def">If prices are log-normal, then log returns ln(S<sub>t</sub>/S<sub>t&minus;1</sub>) are normally distributed. This is why quants work with log returns &mdash; they convert a complicated multiplicative process into a simpler additive one.</div><div class="fc-eg">Log returns are additive: sum of daily log returns = total period return</div></div>
+</div>
+
+<div class="sh">Summary</div>
+<table class="rt">
+  <thead><tr><th>Distribution</th><th>Support</th><th>E[X]</th><th>Var(X)</th><th>Quant use</th></tr></thead>
+  <tbody>
+    <tr><td>Uniform(a,b)</td><td>[a, b]</td><td>(a+b)/2</td><td>(b&minus;a)&sup2;/12</td><td>Simulation, random sampling</td></tr>
+    <tr><td>Normal(&mu;,&sigma;&sup2;)</td><td>(&minus;&infin;, &infin;)</td><td>&mu;</td><td>&sigma;&sup2;</td><td>Returns, errors, CLT limit</td></tr>
+    <tr><td>Exponential(&lambda;)</td><td>[0, &infin;)</td><td>1/&lambda;</td><td>1/&lambda;&sup2;</td><td>Inter-arrival times, survival</td></tr>
+    <tr><td>Log-normal</td><td>(0, &infin;)</td><td>e<sup>&mu;+&sigma;&sup2;/2</sup></td><td>(e<sup>&sigma;&sup2;</sup>&minus;1)e<sup>2&mu;+&sigma;&sup2;</sup></td><td>Stock prices (Black-Scholes)</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; probability of a large stock move</div>
+  <div class="worked-body">
+    <p>Daily log returns ~ N(0.0003, 0.015&sup2;). What is the probability of a loss exceeding 3%?</p>
+    <div class="worked-math">P(X &lt; -0.03) = P(Z &lt; (-0.03 - 0.0003) / 0.015)
+             = P(Z &lt; -2.02)
+             &asymp; 0.0217 = 2.17%</div>
+    <p class="worked-conclusion">Under the normal model, a 3% daily loss should happen about 2.2% of the time &mdash; roughly once every 45 trading days. In reality it happens more often, because real return distributions have fatter tails than the normal. This gap between model and reality is a central concern in risk management.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The vocabulary of continuous-time finance</div>
+  <p class="qbox-body">Black-Scholes assumes log-normal prices (normally distributed log returns). GARCH models use conditional normal or Student-t for returns with time-varying variance. Market microstructure models use exponential inter-arrival times. Monte Carlo simulation generates uniform random numbers and transforms them into any target distribution. Choosing the wrong distribution &mdash; particularly underestimating tail risk by using the normal when returns are fat-tailed &mdash; is one of the most common and costly mistakes in quantitative finance.</p>
+  <span class="qtag">Black-Scholes assumptions</span><span class="qtag">Fat tails vs normal</span><span class="qtag">Monte Carlo simulation</span><span class="qtag">GARCH models</span><span class="qtag">Market microstructure</span>
+</div>`
+}
+];
+
+/* ── ENGINE ── */
+let cur=0,bookMode=false;
+function go(i){
+  cur=i;
+  document.querySelectorAll('.sb-item').forEach((el,idx)=>{
+    el.classList.toggle('active',idx===i);
+    if(idx<i)el.classList.add('done');else el.classList.remove('done');
+  });
+  const t=T[i];
+  document.getElementById('content').innerHTML=`
+    <div class="progress-pips" id="pips"></div>
+    <div class="topic-eyebrow">
+      <span class="badge badge-blue">LV I &middot; Topic ${i+1} of ${T.length}</span>
+      <span class="badge badge-subtle">Core concept</span>
+    </div>
+    <div class="topic-title-lg">${t.title}</div>
+    <div class="peb"><div class="peb-label">Plain English First</div>${t.peb}</div>
+    ${t.html}
+    <div class="topic-nav">
+      ${i>0?`<button class="tn-btn" onclick="go(${i-1})">&#8592; Previous</button>`:''}
+      ${i<T.length-1
+        ?`<button class="tn-btn primary" onclick="go(${i+1})" style="margin-left:auto">Next &#8594;</button>`
+        :'<span style="font-size:13px;color:var(--tx3);margin-left:auto;align-self:center">LV I complete &#10003;</span>'}
+    </div>`;
+  renderPips();
+  bindCalcs();
+  document.getElementById('content').scrollTop=0;
+}
+function renderPips(){
+  const el=document.getElementById('pips');
+  if(!el)return;
+  el.innerHTML=T.map((t,i)=>{
+    const bg=i===cur?'var(--tx1)':i<cur?'#60a5fa':'var(--br2)';
+    return`<button class="pip" title="${t.title}" style="background:${bg}" onclick="go(${i})"></button>`;
+  }).join('');
+}
+function toggleLayout(){
+  bookMode=!bookMode;
+  document.getElementById('shell').classList.toggle('book-mode',bookMode);
+  document.getElementById('layout-btn').classList.toggle('active',bookMode);
+}
+function toggleTheme(){
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('theme-btn').classList.toggle('active',!dark);
+}
+function bindCalcs(){
+  const $=id=>document.getElementById(id);
+  // Bayes calculator
+  if($('bay-prior')){
+    const up=()=>{
+      const prior=+$('bay-prior').value/100;
+      const sens=+$('bay-sens').value/100;
+      const fp=+$('bay-fp').value/100;
+      $('bay-prior-v').textContent=$('bay-prior').value+'%';
+      $('bay-sens-v').textContent=$('bay-sens').value+'%';
+      $('bay-fp-v').textContent=$('bay-fp').value+'%';
+      const pE=sens*prior+fp*(1-prior);
+      const post=pE>0?(sens*prior/pE):0;
+      $('bay-result').textContent=(post*100).toFixed(1)+'%';
+    };
+    [$('bay-prior'),$('bay-sens'),$('bay-fp')].forEach(e=>e.addEventListener('input',up));up();
+  }
+  // Expected value calculator
+  if($('ev-win')){
+    const up=()=>{
+      const w=+$('ev-win').value, l=+$('ev-loss').value, p=+$('ev-prob').value/100;
+      $('ev-win-v').textContent='\u00a3'+w;
+      $('ev-loss-v').textContent='\u00a3'+l;
+      $('ev-prob-v').textContent=$('ev-prob').value+'%';
+      const ev=w*p+(-l)*(1-p);
+      const ex2=w*w*p+l*l*(1-p);
+      const vari=ex2-ev*ev;
+      const sd=Math.sqrt(vari);
+      $('ev-result').textContent=(ev>=0?'\u00a3':'-\u00a3')+Math.abs(ev).toFixed(0);
+      $('ev-sd').textContent='\u00a3'+sd.toFixed(0);
+      $('ev-ratio').textContent=sd>0?(ev/sd).toFixed(2):'—';
+    };
+    [$('ev-win'),$('ev-loss'),$('ev-prob')].forEach(e=>e.addEventListener('input',up));up();
+  }
+}
+if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+}else{
+  document.documentElement.setAttribute('data-theme','light');
+}
+go(0);
+</script>
+</body>
+</html>

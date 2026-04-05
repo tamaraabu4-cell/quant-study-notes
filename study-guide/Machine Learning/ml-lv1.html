@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Machine Learning LV I — Road to Quant</title>
+<style>
+.math{font-family:'Times New Roman',Georgia,serif;font-size:1.05em;letter-spacing:.01em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}
+.num{border-bottom:1.5px solid currentColor;padding:0 4px 2px;text-align:center}
+.den{padding:2px 4px 0;text-align:center}
+.f-box{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;background:rgba(0,0,0,.04);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+[data-theme="dark"] .f-box{background:rgba(255,255,255,.07)}
+:root{--bg:#fff;--bg2:#f5f5f7;--bg3:#e8e8ed;--tx1:#1d1d1f;--tx2:#6e6e73;--tx3:#aeaeb2;--br:rgba(0,0,0,.10);--br2:rgba(0,0,0,.18);--green:#059669;--green-bg:#ecfdf5;--green-dk:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--blue:#2563eb;--blue-bg:#eff6ff;--blue-dk:#1e40af;--purple:#7c3aed;--purple-bg:#f5f3ff;--red:#dc2626;--red-bg:#fff1f2}
+[data-theme="dark"]{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--tx1:#f5f5f7;--tx2:#98989d;--tx3:#636366;--br:rgba(255,255,255,.09);--br2:rgba(255,255,255,.16);--green-bg:#022c22;--green:#34d399;--green-dk:#6ee7b7;--amber-bg:#1c1200;--amber:#fbbf24;--blue-bg:#0d1b3e;--blue:#60a5fa;--blue-dk:#93c5fd;--purple-bg:#1e0e3e;--purple:#a78bfa;--red-bg:#1c0505;--red:#f87171}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;border:none;background:none}
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--br);height:52px;display:flex;align-items:center;padding:0 32px;gap:8px}
+[data-theme="dark"] .nav{background:rgba(28,28,30,.82)}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-right:auto}.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px}.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:10px;transition:background .15s,color .15s}.nav-link:hover{background:var(--bg2);color:var(--tx1)}.nav-link.active{color:var(--tx1);font-weight:500}
+.nav-divider{width:.5px;height:20px;background:var(--br2);margin:0 6px}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:15px;transition:background .15s,color .15s;border:.5px solid transparent}.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br)}.icon-btn.active{background:var(--bg2);border-color:var(--br2)}
+.page-header{padding:28px 32px 0;border-bottom:.5px solid var(--br)}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);margin-bottom:10px}.breadcrumb a:hover{color:var(--tx1)}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--tx2);margin-bottom:18px}
+.lv-tabs{display:flex}.lv-tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-.5px;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s;display:flex;align-items:center;gap:6px}.lv-tab.active{color:var(--tx1);font-weight:500;border-bottom-color:var(--tx1)}.lv-tab.locked{opacity:.35;cursor:default}
+.lv-pip{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.lv-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--tx3)}
+.study-shell{display:flex;min-height:calc(100vh - 52px)}
+.study-sidebar{width:196px;flex-shrink:0;border-right:.5px solid var(--br);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;background:var(--bg)}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);padding:8px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 18px;font-size:13px;color:var(--tx2);cursor:pointer;border-left:2px solid transparent;background:none;width:100%;text-align:left;transition:color .12s,background .12s;line-height:1.4}.sb-item:hover{color:var(--tx1);background:var(--bg2)}.sb-item.active{color:var(--tx1);font-weight:500;border-left-color:var(--red);background:var(--bg2)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--br2);flex-shrink:0}.sb-item.active .sb-dot{background:var(--red)}.sb-item.done .sb-dot{background:var(--red);opacity:.4}
+.study-content{flex:1;padding:28px 48px 64px;overflow-y:auto;max-height:calc(100vh - 52px)}
+.study-shell.book-mode .study-sidebar{display:none}.study-shell.book-mode .study-content{column-count:2;column-gap:52px;column-rule:.5px solid var(--br);padding:28px 52px 64px}.study-shell.book-mode .study-content>*{break-inside:avoid}
+.progress-pips{display:flex;gap:6px;margin-bottom:20px}.pip{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:transform .15s;padding:0}.pip:hover{transform:scale(1.4)}
+.topic-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.topic-title-lg{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:20px;line-height:1.15}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:980px;font-weight:500}
+.badge-red{background:var(--red-bg);color:var(--red)}.badge-subtle{background:var(--bg2);color:var(--tx2)}
+.peb{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.7}
+.peb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
+.sh{font-size:13px;font-weight:600;color:var(--tx1);margin:24px 0 12px;padding-bottom:5px;border-bottom:.5px solid var(--br);letter-spacing:-.01em}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.fc{background:var(--bg2);border-radius:16px;padding:14px 16px}.fc-term{font-size:12px;font-weight:600;margin-bottom:6px}.fc-def{font-size:12px;color:var(--tx2);line-height:1.55}.fc-eg{font-size:11px;color:var(--tx3);margin-top:7px;padding-top:7px;border-top:.5px solid var(--br);font-style:italic}
+.f-label{font-size:11px;color:var(--tx3);text-align:center;margin-bottom:4px;font-style:italic}
+.vt{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:18px}.vt td{padding:6px 10px;border-bottom:.5px solid var(--br);vertical-align:top}.vt td:first-child{font-family:'DM Mono','Courier New',monospace;font-weight:500;color:var(--red);width:60px;font-size:12px}.vt td:last-child{color:var(--tx2)}.vt tr:last-child td{border-bottom:none}
+.rt{width:100%;font-size:13px;border-collapse:collapse;margin:10px 0 18px}.rt th{padding:7px 10px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:.5px solid var(--br2);color:var(--tx2)}.rt td{padding:7px 10px;border-bottom:.5px solid var(--br)}.rt tr:last-child td{border-bottom:none}
+.worked{background:var(--bg2);border:.5px solid var(--br);border-radius:16px;padding:18px 20px;margin:14px 0 18px;break-inside:avoid}.worked-title{font-size:12px;font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--br)}.worked-body{font-size:13px;color:var(--tx2);line-height:1.7}.worked-math{font-family:'DM Mono','Courier New',monospace;background:var(--bg);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12.5px;overflow-x:auto;white-space:pre-wrap;line-height:1.6}.worked-conclusion{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic}
+.insight{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.65;break-inside:avoid}.insight-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px}
+.qbox{background:var(--purple-bg);border-radius:16px;padding:16px 18px;margin-top:18px;break-inside:avoid}.qbox-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:8px}.qbox-body{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px}.qtag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:980px;background:var(--purple-bg);color:var(--purple);border:.5px solid rgba(124,58,237,.2);margin:2px}
+.topic-nav{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:.5px solid var(--br)}.tn-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:980px;border:.5px solid var(--br2);background:var(--bg);color:var(--tx1);cursor:pointer;transition:background .15s}.tn-btn:hover{background:var(--bg2)}.tn-btn.primary{background:var(--tx1);color:var(--bg);border-color:var(--tx1)}.tn-btn.primary:hover{opacity:.85}
+.footer{border-top:.5px solid var(--br);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}.footer a:hover{color:var(--tx1)}
+@media(max-width:700px){.study-sidebar{display:none}.study-content{padding:20px 20px 48px}.nav{padding:0 16px}.page-header{padding:20px 16px 0}.study-shell.book-mode .study-content{column-count:1;padding:20px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">Road to <span>Quant</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="../../index.html">Home</a>
+    <a class="nav-link active" href="../study-guide.html">Study Guide</a>
+    <a class="nav-link" href="../../projects/projects.html">Projects</a>
+    <a class="nav-link" href="../../blog/blog.html">Blog</a>
+  </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" id="layout-btn" title="Toggle layout" onclick="toggleLayout()">&#9700;</button>
+  <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">&#9788;</button>
+</nav>
+<div class="page-header">
+  <div class="breadcrumb"><a href="../../index.html">Home</a><span>/</span><a href="../study-guide.html">Study Guide</a><span>/</span><span>Machine Learning &mdash; LV I</span></div>
+  <div class="page-title">Machine Learning</div>
+  <div class="page-sub">Statistical Learning Foundations &mdash; Level I</div>
+  <div class="lv-tabs">
+    <button class="lv-tab active"><div class="lv-pip"></div>LV I &mdash; Foundations</button>
+    <button class="lv-tab locked">LV II <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV III <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV IV <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV V <span class="lv-badge">locked</span></button>
+  </div>
+</div>
+<div class="study-shell" id="shell">
+  <aside class="study-sidebar">
+    <div class="sb-label" style="margin-top:8px">LV I Topics</div>
+    <button class="sb-item active" onclick="go(0)"><div class="sb-dot"></div>Intro to statistical learning</button>
+    <button class="sb-item" onclick="go(1)"><div class="sb-dot"></div>Linear regression</button>
+    <button class="sb-item" onclick="go(2)"><div class="sb-dot"></div>Bias-variance tradeoff</button>
+    <button class="sb-item" onclick="go(3)"><div class="sb-dot"></div>Overfitting</button>
+    <button class="sb-item" onclick="go(4)"><div class="sb-dot"></div>Model validation</button>
+    <button class="sb-item" onclick="go(5)"><div class="sb-dot"></div>Feature scaling</button>
+  </aside>
+  <main class="study-content" id="content"></main>
+</div>
+<footer class="footer">
+  <span>Road to Quant &middot; ML LV I</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
+</footer>
+<script>
+const T=[
+{title:"Intro to statistical learning",peb:"Machine Learning is the process of using data to learn patterns and make predictions without explicitly programming every rule. In traditional programming, you write the rules and the computer applies them. In ML, you give the computer inputs and outputs, and it learns the rules from the data. In quant finance, markets are noisy, nonlinear, and dynamic &mdash; classical models assume structure that may not exist. ML helps when relationships are complex, patterns are hidden, and data is large. At its core, all ML reduces to one sentence: use past data to learn a function that maps inputs to outputs.",
+html:`
+<div class="sh">The core idea</div>
+<div class="f-label">What every ML model is doing</div>
+<div class="f-box"><span class="math">y = f(x) + &epsilon;</span></div>
+<table class="vt">
+  <tr><td>x</td><td>Features (inputs) &mdash; price, volume, volatility, moving averages, macro indicators</td></tr>
+  <tr><td>y</td><td>Target (output) &mdash; what you want to predict: next-day return, volatility, price direction</td></tr>
+  <tr><td>f</td><td>The true relationship &mdash; unknown, what the model tries to approximate</td></tr>
+  <tr><td>&epsilon;</td><td>Noise &mdash; randomness, measurement error, unknown factors. In finance this is HUGE.</td></tr>
+</table>
+
+<div class="sh">Supervised vs unsupervised learning</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Supervised learning</div><div class="fc-def">The model learns from labelled data &mdash; you know the correct answer for each training example. The goal is to predict y from x on new, unseen data.</div><div class="fc-eg">Input: historical features &rarr; Label: future return. Predict returns on new data.</div></div>
+  <div class="fc"><div class="fc-term">Regression</div><div class="fc-def">Supervised learning where the target y is a continuous number. Predicting how much, not which category.</div><div class="fc-eg">Predict tomorrow&rsquo;s return: y = 0.012 (1.2%)</div></div>
+  <div class="fc"><div class="fc-term">Classification</div><div class="fc-def">Supervised learning where the target y is a category. Predicting which group, not a number.</div><div class="fc-eg">Predict direction: y = Up or Down</div></div>
+  <div class="fc"><div class="fc-term">Unsupervised learning</div><div class="fc-def">No labels. The model finds hidden structure in the data on its own &mdash; clusters, patterns, anomalies.</div><div class="fc-eg">Clustering market regimes. Detecting volatility patterns.</div></div>
+</div>
+
+<div class="sh">Features vs targets in finance</div>
+<table class="rt">
+  <thead><tr><th>Features (x) &mdash; inputs</th><th>Targets (y) &mdash; what to predict</th></tr></thead>
+  <tbody>
+    <tr><td>Price, moving averages</td><td>Next-day return</td></tr>
+    <tr><td>Volume, order flow</td><td>Volatility (next period)</td></tr>
+    <tr><td>VIX, yield curve slope</td><td>Market regime (bull/bear)</td></tr>
+    <tr><td>Earnings surprise, sentiment</td><td>Price direction (up/down)</td></tr>
+    <tr><td>Greek exposures, portfolio weights</td><td>Portfolio risk (VaR)</td></tr>
+  </tbody>
+</table>
+
+<div class="insight">
+  <div class="insight-lbl">Why perfect prediction is impossible in finance</div>
+  <p>The &epsilon; (noise) term in y = f(x) + &epsilon; is enormous in financial data. Markets are not deterministic &mdash; not all information is observable, human behaviour adds randomness, and the system itself changes over time (non-stationarity). This means even a perfect model cannot eliminate the noise. The goal is not to predict perfectly &mdash; it is to extract a signal that is slightly better than random, consistently, at scale. A 51% accuracy applied to thousands of trades can be enormously profitable.</p>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">ML in quant finance today</div>
+  <p class="qbox-body">ML is used across the industry for alpha signal construction (finding predictive patterns in data), regime detection (identifying market states), volatility forecasting (predicting future risk), execution algorithms (minimising market impact), and alternative data processing (parsing satellite images, news sentiment, web traffic). The models range from simple linear regression to deep learning, but the principles in this LV I course &mdash; overfitting, validation, bias-variance &mdash; apply to all of them equally.</p>
+  <span class="qtag">Alpha signals</span><span class="qtag">Regime detection</span><span class="qtag">Volatility forecasting</span><span class="qtag">Execution algos</span>
+</div>`
+},
+{title:"Linear regression",peb:"Linear regression is the simplest and most important supervised learning model. It assumes the relationship between features and target is a straight line (or a flat plane in higher dimensions): y = &beta;<sub>0</sub> + &beta;<sub>1</sub>x<sub>1</sub> + &beta;<sub>2</sub>x<sub>2</sub> + &hellip; The model finds the values of &beta; (the coefficients) that minimise the total squared error between predictions and actual values. Despite being &lsquo;simple,&rsquo; linear regression is used daily in quant finance for factor models, risk decomposition, and as a baseline that any fancier model must beat to justify its complexity.",
+html:`
+<div class="sh">The model</div>
+<div class="f-label">Simple linear regression &mdash; one feature</div>
+<div class="f-box"><span class="math">&ycirc; = &beta;<sub>0</sub> + &beta;<sub>1</sub>x</span></div>
+<div class="f-label">Multiple linear regression &mdash; many features</div>
+<div class="f-box"><span class="math">&ycirc; = &beta;<sub>0</sub> + &beta;<sub>1</sub>x<sub>1</sub> + &beta;<sub>2</sub>x<sub>2</sub> + &hellip; + &beta;<sub>p</sub>x<sub>p</sub></span></div>
+<table class="vt">
+  <tr><td>&ycirc;</td><td>Predicted value &mdash; the model&rsquo;s best guess for y</td></tr>
+  <tr><td>&beta;<sub>0</sub></td><td>Intercept &mdash; the prediction when all features are zero</td></tr>
+  <tr><td>&beta;<sub>i</sub></td><td>Coefficient for feature i &mdash; how much y changes when x<sub>i</sub> increases by 1 unit, holding everything else constant</td></tr>
+</table>
+
+<div class="sh">How it learns &mdash; minimising MSE</div>
+<div class="f-label">Mean Squared Error &mdash; the loss function</div>
+<div class="f-box"><span class="math">MSE = <span class="frac"><span class="num">1</span><span class="den">n</span></span> &Sigma;<sub>i=1</sub><sup>n</sup> (y<sub>i</sub> &minus; &ycirc;<sub>i</sub>)<sup>2</sup></span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">The model finds coefficients &beta; that make the total squared error as small as possible. Squaring means large errors are penalised much more than small ones &mdash; an error of 5 contributes 25 to the loss, while an error of 1 contributes only 1. This is Ordinary Least Squares (OLS).</p>
+
+<div class="sh">Interpreting coefficients</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">&beta;<sub>1</sub> = 0.8</div><div class="fc-def">A 1-unit increase in x<sub>1</sub> is associated with a 0.8-unit increase in y, holding other features constant. The coefficient is the sensitivity or loading.</div><div class="fc-eg">If x<sub>1</sub> = market return, &beta;<sub>1</sub> = beta exposure</div></div>
+  <div class="fc"><div class="fc-term">&beta;<sub>1</sub> = 0</div><div class="fc-def">Feature x<sub>1</sub> has no linear relationship with y. It contributes nothing to the prediction and could be removed.</div></div>
+  <div class="fc"><div class="fc-term">&beta;<sub>1</sub> &lt; 0</div><div class="fc-def">Negative relationship. When x<sub>1</sub> increases, y tends to decrease. A stock with negative beta moves opposite to the market.</div></div>
+  <div class="fc"><div class="fc-term">R&sup2; (R-squared)</div><div class="fc-def">Proportion of variance in y explained by the model. R&sup2; = 0 means the model explains nothing. R&sup2; = 1 means perfect prediction. In finance, R&sup2; above 0.05 for return prediction is often considered useful.</div><div class="fc-eg">R&sup2; = 0.03 for daily returns &mdash; small but potentially profitable at scale</div></div>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; CAPM as linear regression</div>
+  <div class="worked-body">
+    <p>The Capital Asset Pricing Model is a linear regression: stock excess return regressed on market excess return.</p>
+    <div class="worked-math">R_stock - R_f = &alpha; + &beta; &times; (R_market - R_f) + &epsilon;
+
+Fitted: R_stock - R_f = 0.001 + 1.25 &times; (R_market - R_f)
+
+&beta; = 1.25  &rarr; stock moves 1.25% for every 1% market move
+&alpha; = 0.001 &rarr; 0.1% excess return per period (skill or luck?)
+R&sup2; = 0.45   &rarr; 45% of the stock&rsquo;s variance explained by market</div>
+    <p class="worked-conclusion">CAPM is the single most important linear regression in finance. Beta is the slope coefficient. Alpha is the intercept. Every factor model (Fama-French, risk premia) is just a multiple regression with more factors.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The workhorse of quant finance</div>
+  <p class="qbox-body">Linear regression is used for factor decomposition (what drives this portfolio&rsquo;s returns?), risk attribution (how much risk comes from each factor?), signal construction (which features predict returns?), and hedging (what position offsets this exposure?). It is the first model any quant reaches for, and the baseline that every more complex model must beat. The Fama-French 3-factor and 5-factor models are multiple regressions. Pairs trading relies on regression residuals. Even Black-Scholes delta is a regression coefficient.</p>
+  <span class="qtag">CAPM</span><span class="qtag">Factor models</span><span class="qtag">Risk attribution</span><span class="qtag">Pairs trading</span>
+</div>`
+},
+{title:"Bias-variance tradeoff",peb:"Every model makes errors. Those errors come from two sources: bias (the model is too simple to capture the true pattern) and variance (the model is too sensitive to the specific training data and captures noise instead of signal). A straight line fitted to a curved relationship has high bias &mdash; it systematically misses the pattern. A wiggly curve that passes through every training point has high variance &mdash; it captures noise and will perform terribly on new data. The tradeoff is that reducing one tends to increase the other. Finding the sweet spot is the central challenge of machine learning.",
+html:`
+<div class="sh">The decomposition</div>
+<div class="f-label">Total prediction error can be decomposed</div>
+<div class="f-box"><span class="math">E[Error] = Bias<sup>2</sup> + Variance + Irreducible noise</span></div>
+
+<div class="sh">What each component means</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Bias</div><div class="fc-def">Error from wrong assumptions. The model is too simple to capture the true relationship. A linear model has high bias if the true relationship is curved. Bias causes systematic, consistent errors in the same direction.</div><div class="fc-eg">Fitting a straight line to a parabola &mdash; always wrong in the same way</div></div>
+  <div class="fc"><div class="fc-term">Variance</div><div class="fc-def">Error from sensitivity to training data. A different training set would produce a very different model. High variance means the model learned noise, not signal. Predictions are unstable and unreliable.</div><div class="fc-eg">A 20-degree polynomial perfectly fits training data but gives wild predictions on new data</div></div>
+  <div class="fc"><div class="fc-term">Irreducible noise (&epsilon;)</div><div class="fc-def">Randomness inherent in the data. No model can reduce this &mdash; it is the floor on prediction error. In finance, this is enormous because markets are fundamentally noisy.</div><div class="fc-eg">Random earnings surprises, unpredictable news events</div></div>
+</div>
+
+<div class="sh">The tradeoff in practice</div>
+<table class="rt">
+  <thead><tr><th>Model complexity</th><th>Bias</th><th>Variance</th><th>Typical result</th></tr></thead>
+  <tbody>
+    <tr><td>Too simple (underfit)</td><td>High</td><td>Low</td><td>Misses real patterns. Consistent but wrong.</td></tr>
+    <tr><td>Just right</td><td>Moderate</td><td>Moderate</td><td>Captures signal, ignores noise. Best on new data.</td></tr>
+    <tr><td>Too complex (overfit)</td><td>Low</td><td>High</td><td>Memorises training data. Fails on new data.</td></tr>
+  </tbody>
+</table>
+
+<div class="insight">
+  <div class="insight-lbl">Why this matters more in finance than anywhere else</div>
+  <p>Financial data has an exceptionally low signal-to-noise ratio. The true predictable component of daily returns might explain only 1-5% of the variance &mdash; the rest is noise. This means the bias-variance tradeoff is tilted sharply toward simpler models. A complex model in a low-signal environment will almost certainly overfit. This is why quant firms often prefer simple linear models over deep neural networks for alpha generation &mdash; not because they cannot build complex models, but because the data does not support them.</p>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; polynomial regression on price data</div>
+  <div class="worked-body">
+    <p>You fit polynomials of degree 1, 5, and 20 to 50 data points of a stock&rsquo;s return vs. a market factor.</p>
+    <div class="worked-math">Degree 1 (linear): Train R&sup2; = 0.15, Test R&sup2; = 0.13  &larr; slight underfit
+Degree 5:          Train R&sup2; = 0.22, Test R&sup2; = 0.18  &larr; sweet spot
+Degree 20:         Train R&sup2; = 0.95, Test R&sup2; = -0.30 &larr; severe overfit</div>
+    <p class="worked-conclusion">The degree-20 model fits training data almost perfectly (R&sup2; = 0.95) but performs WORSE than random on test data (negative R&sup2;). It memorised the noise. The degree-5 model loses some training accuracy but generalises best. This pattern repeats across every quant modelling problem.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The guiding principle of quant modelling</div>
+  <p class="qbox-body">The bias-variance tradeoff is why quants are obsessed with out-of-sample testing, why simple models often beat complex ones in live trading, and why a backtest Sharpe of 3.0 almost always degrades to below 1.0 in production. Every modelling decision &mdash; how many features to include, how flexible the model should be, how much data to use &mdash; is implicitly navigating this tradeoff. Understanding it prevents the most expensive mistake in quant finance: building a model that looks brilliant in-sample and fails catastrophically live.</p>
+  <span class="qtag">Model selection</span><span class="qtag">Sharpe decay</span><span class="qtag">Complexity control</span><span class="qtag">Regularisation (LV II)</span>
+</div>`
+},
+{title:"Overfitting",peb:"Overfitting is when a model learns the noise in the training data instead of the underlying signal. It is the single most dangerous problem in quantitative finance. An overfitted model performs brilliantly on historical data &mdash; every backtest metric looks spectacular &mdash; but fails completely on new, unseen data. This happens because the model has memorised the specific quirks of the training period rather than learning genuine patterns that persist into the future. Every quant has been burned by this. Recognising and preventing overfitting is arguably the most important skill in the entire field.",
+html:`
+<div class="sh">How to spot overfitting</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Training error low, test error high</div><div class="fc-def">The defining symptom. If your model performs dramatically better on the data it was trained on than on new data, it has overfit. The gap between the two is the overfitting penalty.</div><div class="fc-eg">Backtest Sharpe = 2.5, Live Sharpe = 0.3</div></div>
+  <div class="fc"><div class="fc-term">Too many parameters</div><div class="fc-def">A model with more parameters than data points can perfectly fit any dataset &mdash; including pure noise. Degrees of freedom must be far less than sample size.</div><div class="fc-eg">50 features fitted to 60 data points</div></div>
+  <div class="fc"><div class="fc-term">Unstable coefficients</div><div class="fc-def">If small changes to the training data produce wildly different model parameters, the model is fitting noise. Stable coefficients suggest genuine relationships.</div><div class="fc-eg">Adding 10 data points flips the sign of a coefficient</div></div>
+  <div class="fc"><div class="fc-term">Looks too good to be true</div><div class="fc-def">In finance, a strategy with a backtest Sharpe above 2.0 or a model with R&sup2; above 0.2 for return prediction should trigger immediate scepticism. It is almost certainly overfit.</div><div class="fc-eg">99% win rate in backtest &rarr; guaranteed overfit</div></div>
+</div>
+
+<div class="sh">Why overfitting is especially dangerous in finance</div>
+<div class="insight">
+  <div class="insight-lbl">The data mining trap</div>
+  <p>Financial data is limited (markets only produce ~252 trading days per year) but the number of possible patterns you can search for is effectively infinite. If you test enough strategies, some will show strong backtests purely by chance &mdash; this is multiple testing bias. With 1,000 random strategies tested on the same data, roughly 50 will appear &ldquo;statistically significant&rdquo; at the 5% level even though they have zero real edge. Overfitting is not just a technical nuisance &mdash; it is a systematic bias that can make worthless strategies look profitable.</p>
+</div>
+
+<div class="sh">How to prevent overfitting</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Hold out test data</div><div class="fc-def">Never evaluate on data the model has seen. Split your data into training (learn from this) and test (evaluate on this). Only look at test performance once, at the very end.</div><div class="fc-eg">Train on 2015-2022, test on 2023-2025</div></div>
+  <div class="fc"><div class="fc-term">Keep models simple</div><div class="fc-def">Start with the simplest model that could work. Only add complexity when there is clear evidence it helps on out-of-sample data. Occam&rsquo;s Razor applies powerfully in finance.</div></div>
+  <div class="fc"><div class="fc-term">Use fewer features</div><div class="fc-def">Each additional feature is an opportunity to fit noise. Only include features with a clear economic rationale. If you cannot explain WHY a feature should predict returns, do not include it.</div></div>
+  <div class="fc"><div class="fc-term">Regularisation</div><div class="fc-def">Add a penalty term that discourages large coefficients. This shrinks the model toward simplicity and reduces variance. Covered in depth in LV II (Ridge and Lasso regression).</div></div>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; Sharpe decay as an overfitting diagnostic</div>
+  <div class="worked-body">
+    <p>You build a momentum strategy and optimise parameters on 2015-2022 data, then test on 2023-2025.</p>
+    <div class="worked-math">In-sample (2015-2022):    Sharpe = 1.80
+Out-of-sample (2023-2025): Sharpe = 0.65
+
+Sharpe decay = 1 - (0.65 / 1.80) = 64%</div>
+    <p class="worked-conclusion">64% Sharpe decay is high &mdash; most of the in-sample performance was noise. A decay below 30% suggests a robust strategy. Above 60% suggests significant overfitting. This metric is the single most practical overfitting diagnostic in quant finance.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The quant&rsquo;s number one enemy</div>
+  <p class="qbox-body">Every prop firm, hedge fund, and quantitative research team has rigorous protocols to detect and prevent overfitting. Walk-forward testing (retraining the model periodically as new data arrives), combinatorial cross-validation, and out-of-sample holdout periods are all standard practice. When you present a backtest to a quant researcher, their first question will be: &ldquo;How do you know this is not overfit?&rdquo; If you cannot answer convincingly, the strategy is rejected regardless of its backtest performance.</p>
+  <span class="qtag">Walk-forward testing</span><span class="qtag">Sharpe decay</span><span class="qtag">Data mining bias</span><span class="qtag">Multiple testing correction</span>
+</div>`
+},
+{title:"Model validation",peb:"Model validation answers the most important question in ML: how will this model perform on data it has never seen? You cannot answer this by looking at training performance &mdash; a model that memorises its training data looks perfect on that data but is useless in practice. The solution is to systematically hold out data, test against it, and use techniques like cross-validation to get reliable estimates of real-world performance. In quant finance, this is not just a technique &mdash; it is the difference between a strategy that works live and one that loses money.",
+html:`
+<div class="sh">Train / test split</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Training set</div><div class="fc-def">The data the model learns from. Parameters are fitted to minimise error on this data. Typically 70-80% of total data. The model sees this data during learning.</div><div class="fc-eg">2015-2022 daily price data</div></div>
+  <div class="fc"><div class="fc-term">Test set</div><div class="fc-def">Data the model has NEVER seen. Used to evaluate final performance. Typically 20-30% of data. You only look at test performance once &mdash; at the very end.</div><div class="fc-eg">2023-2025 data &mdash; locked away until final evaluation</div></div>
+  <div class="fc"><div class="fc-term">Validation set (optional)</div><div class="fc-def">A third split used for tuning hyperparameters and comparing model variants. Prevents the test set from being &ldquo;leaked&rdquo; through repeated evaluation. Common split: 60/20/20.</div><div class="fc-eg">Train on 2015-2020, validate on 2021-2022, test on 2023-2025</div></div>
+  <div class="fc"><div class="fc-term">Data leakage</div><div class="fc-def">When information from the future accidentally contaminates the training data. The most common and most costly validation error. Using future data to make predictions about the past guarantees overfitting.</div><div class="fc-eg">Using today&rsquo;s closing price to predict today&rsquo;s direction</div></div>
+</div>
+
+<div class="insight">
+  <div class="insight-lbl">Time series data requires special handling</div>
+  <p>In finance, you CANNOT randomly shuffle data into train and test sets. Financial data is ordered in time, and future data must never leak into training. Always split chronologically: train on the past, test on the future. A model trained on 2020-2025 data and tested on 2018 data is useless &mdash; it has already &ldquo;seen&rdquo; the future. This is the most common mistake beginners make with financial ML.</p>
+</div>
+
+<div class="sh">Cross-validation</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">k-Fold cross-validation</div><div class="fc-def">Split data into k equal parts (folds). Train on k&minus;1 folds, test on the remaining fold. Repeat k times, each fold getting one turn as test set. Average the k results for a more reliable performance estimate.</div><div class="fc-eg">5-fold CV: each 20% of data gets tested once</div></div>
+  <div class="fc"><div class="fc-term">Time-series CV</div><div class="fc-def">Expanding or rolling window validation. Train on [0, t], test on [t, t+h]. Then train on [0, t+h], test on [t+h, t+2h]. And so on. Respects time ordering &mdash; never trains on future data.</div><div class="fc-eg">Walk-forward: retrain monthly, test on next month</div></div>
+  <div class="fc"><div class="fc-term">Why CV is better than a single split</div><div class="fc-def">A single train/test split is sensitive to WHERE you split. The test set might be unusually easy or hard. CV averages over multiple splits, giving a more stable and reliable estimate of true performance.</div></div>
+</div>
+
+<div class="sh">Walk-forward validation for trading strategies</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; monthly walk-forward backtest</div>
+  <div class="worked-body">
+    <div class="worked-math">Window 1: Train Jan 2018 - Dec 2019 → Test Jan 2020
+Window 2: Train Jan 2018 - Jan 2020 → Test Feb 2020
+Window 3: Train Jan 2018 - Feb 2020 → Test Mar 2020
+...
+Window 60: Train Jan 2018 - Nov 2023 → Test Dec 2023
+
+Average Sharpe across 60 test windows = 0.72
+Std of Sharpe across windows = 0.45</div>
+    <p class="worked-conclusion">Walk-forward validation is the gold standard for trading strategy evaluation. Each test window is genuinely out-of-sample. The average performance across windows and its stability (standard deviation) are far more reliable than a single in-sample backtest.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Non-negotiable in quant research</div>
+  <p class="qbox-body">No quant firm accepts a strategy based on in-sample results alone. Walk-forward testing, expanding-window cross-validation, and strict chronological separation between training and test data are universal standards. The FTMO challenge structure itself is a form of validation &mdash; you must demonstrate performance in a live forward test, not just a backtest. Mastering validation methodology is not just an ML skill &mdash; it is the difference between a credible quant and someone who accidentally curve-fitted noise.</p>
+  <span class="qtag">Walk-forward testing</span><span class="qtag">FTMO challenge structure</span><span class="qtag">Data leakage prevention</span><span class="qtag">Robust estimation</span>
+</div>`
+},
+{title:"Feature scaling",peb:"Features in a dataset often have wildly different scales. A stock price might be 3,000 while its daily return is 0.02 and its volume is 50 million. If you feed these raw numbers into most ML algorithms, the model will be dominated by the features with the largest numbers &mdash; not because they are more important, but simply because they are bigger. Feature scaling puts all features on a comparable scale so the model can fairly assess the importance of each one. It is a simple preprocessing step but skipping it can completely ruin a model.",
+html:`
+<div class="sh">Why scaling matters</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Scale affects gradient descent</div><div class="fc-def">Most ML algorithms use gradient descent to learn. If features have different scales, the loss surface becomes elongated and the algorithm takes a much longer, less efficient path to the minimum.</div></div>
+  <div class="fc"><div class="fc-term">Scale affects distance-based models</div><div class="fc-def">Algorithms like k-NN and clustering measure distances between points. A feature in millions will dominate the distance calculation, making other features irrelevant regardless of their predictive power.</div></div>
+  <div class="fc"><div class="fc-term">Scale affects regularisation</div><div class="fc-def">Regularisation penalises large coefficients. If features have different scales, coefficients have different meanings and the penalty is applied unfairly. Scaling ensures the penalty is applied uniformly.</div></div>
+</div>
+
+<div class="sh">Two main approaches</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Standardisation (Z-score)</div><div class="fc-def">Subtract the mean and divide by the standard deviation. Result has mean = 0 and std = 1. Works well when data is approximately normally distributed. The default choice for most financial features.</div><div class="fc-eg">z = (x &minus; &mu;) / &sigma;</div></div>
+  <div class="fc"><div class="fc-term">Min-Max normalisation</div><div class="fc-def">Scale to a fixed range, typically [0, 1]. Subtract the min, divide by the range. Preserves zero entries in sparse data. Sensitive to outliers &mdash; a single extreme value compresses everything else.</div><div class="fc-eg">x_scaled = (x &minus; x_min) / (x_max &minus; x_min)</div></div>
+</div>
+
+<div class="sh">The critical rule &mdash; fit on training data only</div>
+<div class="insight">
+  <div class="insight-lbl">Data leakage through scaling</div>
+  <p>You must compute the mean and standard deviation (or min and max) from the training data ONLY, then apply the same transformation to the test data using those training statistics. If you compute statistics using the entire dataset (including test data), you have leaked future information into the model. This is one of the most common and subtle forms of data leakage in financial ML.</p>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; standardising financial features</div>
+  <div class="worked-body">
+    <div class="worked-math">Raw features for one observation:
+  Price = 3,245.50    Return = 0.012    Volume = 52,000,000
+
+Training set statistics:
+  Price:  mean = 3,100,  std = 200
+  Return: mean = 0.001,  std = 0.015
+  Volume: mean = 45M,    std = 10M
+
+Standardised (Z-score):
+  Price:  (3245.5 - 3100) / 200  =  0.73
+  Return: (0.012 - 0.001) / 0.015 =  0.73
+  Volume: (52M - 45M) / 10M       =  0.70</div>
+    <p class="worked-conclusion">After scaling, all three features are on comparable scales (around 0.7). The model can now fairly compare their importance. Without scaling, the volume feature (52 million) would numerically dominate the return feature (0.012) by a factor of 4 billion.</p>
+  </div>
+</div>
+
+<div class="sh">When you do NOT need scaling</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Tree-based models</div><div class="fc-def">Decision trees, random forests, and gradient boosting (XGBoost) split on thresholds and are invariant to feature scale. Scaling makes no difference to their predictions.</div><div class="fc-eg">XGBoost works identically with raw or scaled data</div></div>
+  <div class="fc"><div class="fc-term">Already comparable scales</div><div class="fc-def">If all features are already in similar ranges (e.g. all are returns, all are percentages), scaling is less critical. But it still rarely hurts and is good practice.</div></div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Data preparation is where quants spend most of their time</div>
+  <p class="qbox-body">In practice, 80% of a quant researcher&rsquo;s time is spent on data preparation: cleaning, scaling, feature engineering, handling missing values, and ensuring no data leakage. The actual model fitting is often the easy part. Scaling is just one step in a broader pipeline, but it is the step that most clearly illustrates the principle: raw data is not model-ready data, and the preprocessing decisions you make can matter as much as the model itself.</p>
+  <span class="qtag">Data pipelines</span><span class="qtag">Feature engineering</span><span class="qtag">Preprocessing</span><span class="qtag">Production ML systems</span>
+</div>`
+}
+];
+
+let cur=0,bookMode=false;
+function go(i){cur=i;document.querySelectorAll('.sb-item').forEach((el,idx)=>{el.classList.toggle('active',idx===i);if(idx<i)el.classList.add('done');else el.classList.remove('done')});const t=T[i];document.getElementById('content').innerHTML=`<div class="progress-pips" id="pips"></div><div class="topic-eyebrow"><span class="badge badge-red">LV I &middot; Topic ${i+1} of ${T.length}</span><span class="badge badge-subtle">Core concept</span></div><div class="topic-title-lg">${t.title}</div><div class="peb"><div class="peb-label">Plain English First</div>${t.peb}</div>${t.html}<div class="topic-nav">${i>0?`<button class="tn-btn" onclick="go(${i-1})">&#8592; Previous</button>`:''}${i<T.length-1?`<button class="tn-btn primary" onclick="go(${i+1})" style="margin-left:auto">Next &#8594;</button>`:'<span style="font-size:13px;color:var(--tx3);margin-left:auto;align-self:center">LV I complete &#10003;</span>'}</div>`;renderPips();document.getElementById('content').scrollTop=0}
+function renderPips(){const el=document.getElementById('pips');if(!el)return;el.innerHTML=T.map((t,i)=>{const bg=i===cur?'var(--tx1)':i<cur?'var(--red)':'var(--br2)';return`<button class="pip" title="${t.title}" style="background:${bg}" onclick="go(${i})"></button>`}).join('')}
+function toggleLayout(){bookMode=!bookMode;document.getElementById('shell').classList.toggle('book-mode',bookMode);document.getElementById('layout-btn').classList.toggle('active',bookMode)}
+function toggleTheme(){const dark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',dark?'light':'dark');document.getElementById('theme-btn').classList.toggle('active',!dark)}
+if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}
+go(0);
+</script>
+</body>
+</html>
