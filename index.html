@@ -11,6 +11,21 @@
 :root {
   --font: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono: 'DM Mono', 'Courier New', monospace;
+  --bg:       #ffffff;
+  --bg2:      #f5f5f7;
+  --bg3:      #e8e8ed;
+  --surface:  #f5f5f7;
+  --border:   rgba(0,0,0,0.08);
+  --border-h: rgba(0,0,0,0.15);
+  --tx1:      #1d1d1f;
+  --tx2:      #6e6e73;
+  --tx3:      #aeaeb2;
+  --green:    #059669;
+  --green-glow: rgba(5,150,105,0.1);
+  --green-dim:  rgba(5,150,105,0.06);
+  --r: 10px; --r-lg: 16px; --r-xl: 24px;
+}
+[data-theme="dark"] {
   --bg:       #09090b;
   --bg2:      #131316;
   --bg3:      #1c1c21;
@@ -23,7 +38,6 @@
   --green:    #10b981;
   --green-glow: rgba(16,185,129,0.15);
   --green-dim:  rgba(16,185,129,0.08);
-  --r: 10px; --r-lg: 16px; --r-xl: 24px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -38,7 +52,8 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .reveal-d3{transition-delay:0.24s}
 .reveal-d4{transition-delay:0.32s}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(9,9,11,0.7);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--border);height:56px;display:flex;align-items:center;padding:0 clamp(20px,4vw,48px)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.7);
+  [data-theme="dark"] .nav{background:rgba(9,9,11,0.7)}
 .nav-logo{font-size:17px;font-weight:600;letter-spacing:-0.03em;margin-right:auto}.nav-logo span{color:var(--green)}
 .nav-links{display:flex;gap:2px}
 .nav-link{padding:7px 14px;font-size:13px;font-weight:400;color:var(--tx3);border-radius:var(--r);transition:color 0.2s,background 0.2s}
@@ -111,8 +126,9 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
     <a class="nav-link active" href="index.html">Home</a>
     <a class="nav-link" href="study-guide/study-guide.html">Study Guide</a>
     <a class="nav-link" href="projects/projects.html">Projects</a>
-    <a class="nav-link" href="blog/blog.html">Blog</a>
+   <a class="nav-link" href="blog/blog.html">Blog</a>
   </div>
+  <button onclick="toggleTheme()" style="padding:6px 12px;font-size:13px;color:var(--tx3);background:none;border:none;cursor:pointer;font-family:var(--font)">☼</button>
 </nav>
 
 <div class="container">
@@ -161,26 +177,26 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
         <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
         <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">Study →</span></div>
       </a>
-      <a class="subject-card reveal reveal-d3" href="study-guide/study-guide.html">
+      <a class="subject-card reveal reveal-d3" href="study-guide/Probability/probability-lv1.html">
         <div class="s-icon" style="background:rgba(59,130,246,0.1);color:#3b82f6;font-size:12px">P(x)</div>
         <div class="s-name">Probability & Statistics</div>
         <div class="s-desc">Distributions, Bayes, stochastic processes, and martingales.</div>
-        <div class="level-bar"><div class="lv partial"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
-        <div class="s-foot"><span class="s-progress">LV I · Coming soon</span><span class="s-cta">View →</span></div>
+        <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
+        <div class="s-foot"><span class="s-progress">LV I · 7 topics complete</span><span class="s-cta">View →</span></div>
       </a>
-      <a class="subject-card reveal reveal-d1" href="study-guide/study-guide.html">
+      <a class="subject-card reveal reveal-d1" href="study-guide/CS/cs-lv1.html">
         <div class="s-icon" style="background:rgba(16,185,129,0.1);color:#10b981;font-size:12px">&lt;/&gt;</div>
         <div class="s-name">Computer Science</div>
         <div class="s-desc">Python, algorithms, numerical methods, and quant infrastructure.</div>
-        <div class="level-bar"><div class="lv partial"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
-        <div class="s-foot"><span class="s-progress">LV I · Coming soon</span><span class="s-cta">View →</span></div>
+        <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
+        <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">View →</span></div>
       </a>
-      <a class="subject-card reveal reveal-d2" href="study-guide/study-guide.html">
+      <a class="subject-card reveal reveal-d2" href="study-guide/ML/ml-lv1.html">
         <div class="s-icon" style="background:rgba(239,68,68,0.1);color:#ef4444;font-size:12px">f(x)</div>
         <div class="s-name">Machine Learning</div>
         <div class="s-desc">Statistical learning, supervised models, and quantitative alpha modelling.</div>
-        <div class="level-bar"><div class="lv partial"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
-        <div class="s-foot"><span class="s-progress">LV I · Coming soon</span><span class="s-cta">View →</span></div>
+        <div class="level-bar"><div class="lv on"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div><div class="lv"></div></div>
+        <div class="s-foot"><span class="s-progress">LV I · 6 topics complete</span><span class="s-cta">View →</span></div>
       </a>
     </div>
     <div class="callout reveal" style="margin-top:48px">
@@ -199,6 +215,14 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 </footer>
 
 <script>
+function toggleTheme(){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+}
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+}
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
