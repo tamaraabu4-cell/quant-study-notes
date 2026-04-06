@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Finance LV II — Road to Quant</title>
+<style>
+.math{font-family:'Times New Roman',Georgia,serif;font-size:1.05em;letter-spacing:.01em}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}
+.num{border-bottom:1.5px solid currentColor;padding:0 4px 2px;text-align:center}
+.den{padding:2px 4px 0;text-align:center}
+.big-paren{font-size:1.35em;vertical-align:middle;line-height:1}
+.f-box{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;background:rgba(0,0,0,.04);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+[data-theme="dark"] .f-box{background:rgba(255,255,255,.07)}
+:root{--font:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'DM Mono','Courier New',monospace;--bg:#fff;--bg2:#f5f5f7;--bg3:#e8e8ed;--tx1:#1d1d1f;--tx2:#6e6e73;--tx3:#aeaeb2;--br:rgba(0,0,0,.10);--br2:rgba(0,0,0,.18);--green:#059669;--green-bg:#ecfdf5;--green-dk:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--blue:#2563eb;--blue-bg:#eff6ff;--blue-dk:#1e40af;--purple:#7c3aed;--purple-bg:#f5f3ff;--red:#dc2626;--red-bg:#fff1f2;--nav-h:52px;--r:10px;--r-lg:16px}
+[data-theme="dark"]{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--tx1:#f5f5f7;--tx2:#98989d;--tx3:#636366;--br:rgba(255,255,255,.09);--br2:rgba(255,255,255,.16);--green-bg:#022c22;--green:#34d399;--green-dk:#6ee7b7;--amber-bg:#1c1200;--amber:#fbbf24;--blue-bg:#0d1b3e;--blue:#60a5fa;--blue-dk:#93c5fd;--purple-bg:#1e0e3e;--purple:#a78bfa;--red-bg:#1c0505;--red:#f87171}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--tx1);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font-family:var(--font);cursor:pointer;border:none;background:none}
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--br);height:var(--nav-h);display:flex;align-items:center;padding:0 32px;gap:8px}
+[data-theme="dark"] .nav{background:rgba(28,28,30,.82)}
+.nav-logo{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-right:auto}.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px}.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:var(--r);transition:background .15s,color .15s}.nav-link:hover{background:var(--bg2);color:var(--tx1)}.nav-link.active{color:var(--tx1);font-weight:500}
+.nav-divider{width:.5px;height:20px;background:var(--br2);margin:0 6px}
+.icon-btn{width:32px;height:32px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:15px;transition:background .15s,color .15s;border:.5px solid transparent}.icon-btn:hover{background:var(--bg2);color:var(--tx1);border-color:var(--br)}.icon-btn.active{background:var(--bg2);border-color:var(--br2)}
+.page-header{padding:28px 32px 0;border-bottom:.5px solid var(--br)}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);margin-bottom:10px}.breadcrumb a:hover{color:var(--tx1)}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--tx2);margin-bottom:18px}
+.lv-tabs{display:flex;gap:0}.lv-tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-.5px;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s;font-family:var(--font);display:flex;align-items:center;gap:6px}.lv-tab.active{color:var(--tx1);font-weight:500;border-bottom-color:var(--tx1)}.lv-tab.done{color:var(--tx2);cursor:pointer}.lv-tab.locked{opacity:.35;cursor:default}
+.lv-pip{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.lv-check{color:var(--green);font-size:11px}
+.lv-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--tx3)}
+.study-shell{display:flex;min-height:calc(100vh - var(--nav-h))}
+.study-sidebar{width:196px;flex-shrink:0;border-right:.5px solid var(--br);padding:20px 0;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--bg)}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);padding:8px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 18px;font-size:13px;color:var(--tx2);cursor:pointer;border-left:2px solid transparent;background:none;width:100%;text-align:left;transition:color .12s,background .12s;line-height:1.4;font-family:var(--font)}.sb-item:hover{color:var(--tx1);background:var(--bg2)}.sb-item.active{color:var(--tx1);font-weight:500;border-left-color:var(--green);background:var(--bg2)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--br2);flex-shrink:0}.sb-item.active .sb-dot{background:var(--green)}.sb-item.done .sb-dot{background:var(--green);opacity:.4}
+.study-content{flex:1;padding:28px 48px 64px;overflow-y:auto;max-height:calc(100vh - var(--nav-h));max-width:100%}
+.study-shell.book-mode .study-sidebar{display:none}.study-shell.book-mode .study-content{column-count:2;column-gap:52px;column-rule:.5px solid var(--br);max-width:100%;padding:28px 52px 64px}.study-shell.book-mode .study-content>*{break-inside:avoid}.study-shell.book-mode .calc-block{break-inside:avoid}.study-shell.book-mode .fc-grid{break-inside:avoid}
+.progress-pips{display:flex;gap:6px;margin-bottom:20px}.pip{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:transform .15s;padding:0}.pip:hover{transform:scale(1.4)}
+.topic-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.topic-title-lg{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:20px;line-height:1.15}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:980px;font-weight:500}
+.badge-green{background:var(--green-bg);color:var(--green)}.badge-subtle{background:var(--bg2);color:var(--tx2)}
+.peb{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 var(--r) var(--r) 0;padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.7;color:var(--tx1);break-inside:avoid}
+.peb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
+.sh{font-size:13px;font-weight:600;color:var(--tx1);margin:24px 0 12px;padding-bottom:5px;border-bottom:.5px solid var(--br);letter-spacing:-.01em}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.fc{background:var(--bg2);border-radius:var(--r-lg);padding:14px 16px}.fc-term{font-size:12px;font-weight:600;color:var(--tx1);margin-bottom:6px}.fc-def{font-size:12px;color:var(--tx2);line-height:1.55}.fc-eg{font-size:11px;color:var(--tx3);margin-top:7px;padding-top:7px;border-top:.5px solid var(--br);font-style:italic}
+.f-label{font-size:11px;color:var(--tx3);text-align:center;margin-bottom:4px;font-style:italic}
+.vt{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:18px}.vt td{padding:6px 10px;border-bottom:.5px solid var(--br);vertical-align:top}.vt td:first-child{font-family:var(--mono);font-weight:500;color:var(--blue);width:55px;font-size:12px}.vt td:last-child{color:var(--tx2)}.vt tr:last-child td{border-bottom:none}
+.ct,.rt{width:100%;font-size:13px;border-collapse:collapse;margin:10px 0 18px}.ct th,.rt th{padding:7px 10px;background:var(--bg2);font-weight:500;font-size:11px;text-align:left;border-bottom:.5px solid var(--br2);color:var(--tx2);letter-spacing:.02em}.ct td,.rt td{padding:7px 10px;border-bottom:.5px solid var(--br)}.ct tr:last-child td,.rt tr:last-child td{border-bottom:none}.ct .hl td{background:var(--green-bg);color:var(--green-dk);font-weight:500}
+.worked{background:var(--bg2);border:.5px solid var(--br);border-radius:var(--r-lg);padding:18px 20px;margin:14px 0 18px;break-inside:avoid}.worked-title{font-size:12px;font-weight:600;color:var(--tx1);margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--br)}.worked-body{font-size:13px;color:var(--tx2);line-height:1.7}.worked-math{font-family:var(--mono);background:var(--bg);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13px;overflow-x:auto;white-space:pre-wrap;line-height:1.6}.worked-conclusion{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic}
+.insight{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.65;break-inside:avoid}.insight-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px}
+.qbox{background:var(--purple-bg);border-radius:var(--r-lg);padding:16px 18px;margin-top:18px;break-inside:avoid}.qbox-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:8px}.qbox-body{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px}.qtag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:980px;background:var(--purple-bg);color:var(--purple);border:.5px solid rgba(124,58,237,.2);margin:2px}
+.calc-block{background:var(--bg2);border-radius:var(--r-lg);padding:20px;margin-bottom:18px;break-inside:avoid}
+.calc-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}.calc-row:last-of-type{margin-bottom:0}
+.calc-lbl{font-size:12px;color:var(--tx2);min-width:120px}.calc-out{font-size:13px;font-weight:600;color:var(--tx1);min-width:70px;text-align:right}
+input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--bg3);outline:none;cursor:pointer}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--tx1);cursor:pointer}input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--tx1);border:none;cursor:pointer}
+.result-strip{display:flex;align-items:baseline;gap:10px;border-radius:var(--r);padding:14px 18px;margin-top:12px}.result-lbl{font-size:12px}.result-val{font-size:30px;font-weight:600;letter-spacing:-.03em}
+.results-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.r3{border-radius:var(--r);padding:12px 14px}.r3-lbl{font-size:11px;margin-bottom:4px}.r3-val{font-size:20px;font-weight:600;letter-spacing:-.02em}
+.topic-nav{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:.5px solid var(--br)}.tn-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:980px;border:.5px solid var(--br2);background:var(--bg);color:var(--tx1);cursor:pointer;transition:background .15s;font-family:var(--font)}.tn-btn:hover{background:var(--bg2)}.tn-btn.primary{background:var(--tx1);color:var(--bg);border-color:var(--tx1)}.tn-btn.primary:hover{opacity:.85}
+.footer{border-top:.5px solid var(--br);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tx3)}.footer a:hover{color:var(--tx1)}
+@media(max-width:700px){.study-sidebar{display:none}.study-content{padding:20px 20px 48px}.study-shell.book-mode .study-content{column-count:1;padding:20px}.nav{padding:0 16px}.page-header{padding:20px 16px 0}.footer{padding:16px;flex-direction:column;gap:6px}.results-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="../../index.html" class="nav-logo">Road to <span>Quant</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="../../index.html">Home</a>
+    <a class="nav-link active" href="../study-guide.html">Study Guide</a>
+    <a class="nav-link" href="../../projects/projects.html">Projects</a>
+    <a class="nav-link" href="../../blog/blog.html">Blog</a>
+  </div>
+  <div class="nav-divider"></div>
+  <button class="icon-btn" id="layout-btn" title="Toggle layout" onclick="toggleLayout()">&#9700;</button>
+  <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">&#9788;</button>
+</nav>
+<div class="page-header">
+  <div class="breadcrumb"><a href="../../index.html">Home</a><span>/</span><a href="../study-guide.html">Study Guide</a><span>/</span><span style="color:var(--tx1)">Finance &mdash; LV II</span></div>
+  <div class="page-title">Finance</div>
+  <div class="page-sub">Pricing Principles &mdash; Level II</div>
+  <div class="lv-tabs">
+    <a class="lv-tab done" href="finance-lv1.html"><span class="lv-check">&check;</span> LV I</a>
+    <button class="lv-tab active"><div class="lv-pip"></div>LV II &mdash; Pricing</button>
+    <button class="lv-tab locked">LV III <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV IV <span class="lv-badge">locked</span></button>
+    <button class="lv-tab locked">LV V <span class="lv-badge">locked</span></button>
+  </div>
+</div>
+<div class="study-shell" id="shell">
+  <aside class="study-sidebar" id="sidebar">
+    <div class="sb-label" style="margin-top:8px">LV II Topics</div>
+    <button class="sb-item active" onclick="go(0)"><div class="sb-dot"></div>No-arbitrage principle</button>
+    <button class="sb-item" onclick="go(1)"><div class="sb-dot"></div>Forward contract pricing</button>
+    <button class="sb-item" onclick="go(2)"><div class="sb-dot"></div>Option pricing fundamentals</button>
+    <button class="sb-item" onclick="go(3)"><div class="sb-dot"></div>Put-call parity</button>
+    <button class="sb-item" onclick="go(4)"><div class="sb-dot"></div>CAPM &amp; asset pricing</button>
+    <button class="sb-item" onclick="go(5)"><div class="sb-dot"></div>Risk-neutral valuation</button>
+  </aside>
+  <main class="study-content" id="content"></main>
+</div>
+<footer class="footer">
+  <span>Road to Quant &middot; Finance LV II</span>
+  <a href="https://github.com/tamaraabu4-cell/quant-study-notes" target="_blank">github.com/tamaraabu4-cell &nearr;</a>
+</footer>
+
+<script>
+const T=[
+
+/* ── 0  NO-ARBITRAGE PRINCIPLE ── */
+{title:"No-arbitrage principle",
+peb:"Arbitrage means making a guaranteed profit with zero risk and zero net investment &mdash; free money. The no-arbitrage principle says this cannot persist in a functioning market. If you could buy gold in London for &pound;1,000 and simultaneously sell it in New York for &pound;1,050, traders would pile in instantly, buying in London (pushing the price up) and selling in New York (pushing the price down) until the prices converge and the free money disappears. This principle is not just an observation &mdash; it is the foundation of ALL pricing in finance. Every formula you will learn from here onwards &mdash; forward prices, option prices, bond prices &mdash; is derived by asking: what price prevents arbitrage?",
+html:`
+<div class="sh">The core idea</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Arbitrage</div><div class="fc-def">A strategy that generates a guaranteed profit from a price discrepancy, with no net investment and no risk. The &ldquo;holy grail&rdquo; &mdash; if it exists, it will be exploited instantly until it disappears.</div><div class="fc-eg">Buy asset at &pound;100 in market A, simultaneously sell at &pound;102 in market B = &pound;2 risk-free profit</div></div>
+  <div class="fc"><div class="fc-term">No-arbitrage principle</div><div class="fc-def">In an efficient market, arbitrage opportunities cannot persist. Prices adjust to eliminate free money. This is not an assumption about perfection &mdash; it is a statement that any mispricing will be corrected by rational traders seeking profit.</div><div class="fc-eg">If violated, traders exploit it until prices align</div></div>
+  <div class="fc"><div class="fc-term">Law of One Price</div><div class="fc-def">Two assets (or portfolios) that produce identical future cash flows must have the same price today. If they did not, you could buy the cheap one and sell the expensive one for an arbitrage profit.</div><div class="fc-eg">A bond and a portfolio replicating its cash flows must cost the same</div></div>
+  <div class="fc"><div class="fc-term">Replication</div><div class="fc-def">Building a portfolio that exactly replicates the payoff of another asset. If you can replicate an asset&rsquo;s payoff, the Law of One Price tells you the asset&rsquo;s fair price = the cost of the replicating portfolio.</div><div class="fc-eg">A forward can be replicated with a spot position + borrowing</div></div>
+</div>
+
+<div class="sh">The pricing logic</div>
+<div class="insight">
+  <div class="insight-lbl">How no-arbitrage becomes a pricing tool</div>
+  <p>The argument always follows the same structure: (1) Assume the price is wrong &mdash; too high or too low. (2) Construct a strategy that generates a risk-free profit from the mispricing. (3) Conclude that since this cannot persist, the &ldquo;correct&rdquo; price is the one where no such strategy exists. Every pricing formula in LV II through LV V is derived using exactly this logic.</p>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; arbitraging a mispriced forward</div>
+  <div class="worked-body">
+    <p>Gold spot price = &pound;1,900. Risk-free rate = 5%. The 1-year forward is quoted at &pound;2,050. Is this an arbitrage?</p>
+    <div class="worked-math">Fair forward price = Spot &times; (1 + r) = 1,900 &times; 1.05 = &pound;1,995
+
+The quoted forward (&pound;2,050) is ABOVE fair value.
+
+Arbitrage strategy:
+1. Borrow &pound;1,900 at 5%
+2. Buy gold spot at &pound;1,900
+3. Sell the forward at &pound;2,050
+
+At expiry:
+- Deliver gold, receive &pound;2,050
+- Repay loan: &pound;1,900 &times; 1.05 = &pound;1,995
+- Profit = &pound;2,050 - &pound;1,995 = &pound;55 (risk-free)</div>
+    <p class="worked-conclusion">The forward is overpriced. Traders would execute this strategy until the forward price falls to &pound;1,995. This is how no-arbitrage determines the fair forward price &mdash; it is not a forecast, it is a mathematical necessity.</p>
+  </div>
+</div>
+
+<div class="sh">Key consequences</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Pricing by replication</div><div class="fc-def">If you can build a portfolio that exactly replicates an asset&rsquo;s payoff, the asset&rsquo;s price must equal the cost of building that portfolio. This is how forwards, options, and swaps are priced.</div></div>
+  <div class="fc"><div class="fc-term">No free lunch</div><div class="fc-def">You cannot earn returns above the risk-free rate without taking risk. If a strategy appears to offer risk-free excess returns, either you are missing a risk or the opportunity will disappear.</div></div>
+  <div class="fc"><div class="fc-term">Relative pricing</div><div class="fc-def">No-arbitrage prices assets relative to each other, not in absolute terms. It tells you the option price given the stock price &mdash; not whether the stock price itself is correct.</div></div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The foundation of everything that follows</div>
+  <p class="qbox-body">No-arbitrage is the single most important idea in quantitative finance. Forward pricing (next topic) is a direct application. Put-call parity is a no-arbitrage relationship. Black-Scholes is derived by constructing a replicating portfolio. Risk-neutral valuation (topic 6) is the mathematical framework that makes no-arbitrage pricing systematic. Every derivative ever priced on Wall Street is priced by this principle.</p>
+  <span class="qtag">Forward pricing</span><span class="qtag">Option pricing</span><span class="qtag">Black-Scholes (LV IV)</span><span class="qtag">Derivative valuation</span>
+</div>`
+},
+
+/* ── 1  FORWARD CONTRACT PRICING ── */
+{title:"Forward contract pricing",
+peb:"A forward contract is an agreement to buy or sell an asset at a specific price on a specific future date. No money changes hands today &mdash; you simply lock in a price now and settle later. The question is: what should that locked-in price be? Too high and the buyer is overpaying. Too low and the seller is giving it away. The no-arbitrage principle from the last topic gives us the exact answer: the forward price equals the spot price grown at the risk-free rate, adjusted for any income the asset pays. This is not a prediction of the future price &mdash; it is the price that prevents free money.",
+html:`
+<div class="sh">What is a forward contract?</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Long forward</div><div class="fc-def">The buyer. Agrees to purchase the asset at the forward price F on the expiry date. Profits if the spot price at expiry is above F. Loses if below.</div><div class="fc-eg">Long gold forward at &pound;2,000 &mdash; if gold is &pound;2,100 at expiry, you profit &pound;100</div></div>
+  <div class="fc"><div class="fc-term">Short forward</div><div class="fc-def">The seller. Agrees to deliver the asset at price F. Profits if spot at expiry is below F. The mirror image of the long position.</div><div class="fc-eg">Short gold forward at &pound;2,000 &mdash; if gold is &pound;1,900 at expiry, you profit &pound;100</div></div>
+  <div class="fc"><div class="fc-term">No upfront cost</div><div class="fc-def">Unlike buying an asset outright, entering a forward costs nothing at initiation. The forward price is set so the contract has zero value at inception. Settlement happens entirely at expiry.</div></div>
+  <div class="fc"><div class="fc-term">Payoff at expiry</div><div class="fc-def">Long payoff = S<sub>T</sub> &minus; F. Short payoff = F &minus; S<sub>T</sub>. Linear and symmetric &mdash; your gain is the counterparty&rsquo;s loss. This is why forwards are called &ldquo;zero-sum&rdquo; instruments.</div></div>
+</div>
+
+<div class="sh">The forward pricing formula</div>
+<div class="f-label">Forward price on an asset with no income</div>
+<div class="f-box"><span class="math">F = S<sub>0</sub> &middot; e<sup>rT</sup></span></div>
+<div class="f-label">Forward price on an asset paying continuous yield q</div>
+<div class="f-box"><span class="math">F = S<sub>0</sub> &middot; e<sup>(r &minus; q)T</sup></span></div>
+<table class="vt">
+  <tr><td>F</td><td>Forward price &mdash; the delivery price agreed today</td></tr>
+  <tr><td>S<sub>0</sub></td><td>Current spot price of the underlying asset</td></tr>
+  <tr><td>r</td><td>Continuously compounded risk-free interest rate</td></tr>
+  <tr><td>q</td><td>Continuous dividend or convenience yield (reduces the forward price)</td></tr>
+  <tr><td>T</td><td>Time to expiry in years</td></tr>
+</table>
+
+<div class="sh">Why this formula?</div>
+<div class="insight">
+  <div class="insight-lbl">The cost-of-carry argument</div>
+  <p>The forward price reflects the cost of carrying the asset until delivery. If you buy gold spot, you pay S<sub>0</sub> today and must finance that purchase at rate r for T years &mdash; total cost = S<sub>0</sub>e<sup>rT</sup>. The forward must equal this cost, or arbitrage exists. If the asset pays income (dividends, yield), the carry cost is reduced by that income &mdash; hence the (r &minus; q) adjustment.</p>
+</div>
+
+<div class="sh">Live forward price calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Spot price (&pound;)</span><input type="range" min="100" max="5000" step="50" value="1900" id="fwd-s"><span class="calc-out" id="fwd-s-v">&pound;1,900</span></div>
+  <div class="calc-row"><span class="calc-lbl">Risk-free rate (%)</span><input type="range" min="0.5" max="10" step="0.25" value="5" id="fwd-r"><span class="calc-out" id="fwd-r-v">5%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Yield q (%)</span><input type="range" min="0" max="5" step="0.25" value="0" id="fwd-q"><span class="calc-out" id="fwd-q-v">0%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Time (years)</span><input type="range" min="0.25" max="3" step="0.25" value="1" id="fwd-t"><span class="calc-out" id="fwd-t-v">1.0 yr</span></div>
+  <div class="result-strip" style="background:var(--green-bg)"><span class="result-lbl" style="color:var(--green)">Forward Price</span><span class="result-val" style="color:var(--green-dk)" id="fwd-result">&mdash;</span></div>
+</div>
+
+<div class="sh">Worked example &mdash; FX forward</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; GBPUSD 6-month forward</div>
+  <div class="worked-body">
+    <p>GBPUSD spot = 1.2700. UK rate = 4.5%. US rate = 5.25%. What is the 6-month forward?</p>
+    <div class="worked-math">F = S &times; e^((r_USD - r_GBP) &times; T)
+F = 1.2700 &times; e^((0.0525 - 0.045) &times; 0.5)
+F = 1.2700 &times; e^(0.00375)
+F = 1.2700 &times; 1.003757
+F = 1.2748</div>
+    <p class="worked-conclusion">The forward is above spot because USD rates exceed GBP rates &mdash; you earn more holding USD, so the forward compensates by making GBP slightly more expensive in the future. This is covered interest rate parity &mdash; the foundation of FX forward pricing.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Used daily across all markets</div>
+  <p class="qbox-body">FX forwards are the largest derivatives market in the world by notional volume. Commodity futures follow the same cost-of-carry logic. Equity index futures are priced as F = S&middot;e<sup>(r&minus;q)T</sup> where q is the dividend yield. Understanding forward pricing also leads directly to swap pricing (a swap is a series of forwards) and is the stepping stone to option pricing &mdash; Black-Scholes starts from the same cost-of-carry framework.</p>
+  <span class="qtag">FX forwards</span><span class="qtag">Commodity futures</span><span class="qtag">Equity index futures</span><span class="qtag">Swap pricing</span>
+</div>`
+},
+
+/* ── 2  OPTION PRICING FUNDAMENTALS ── */
+{title:"Option pricing fundamentals",
+peb:"An option gives you the RIGHT but not the obligation to buy or sell an asset at a specific price. A call option lets you buy. A put option lets you sell. Unlike a forward where you must transact, with an option you can walk away if the price moves against you &mdash; your worst case is losing the premium you paid. This asymmetry is what makes options powerful and what makes them harder to price. The value of an option comes from two sources: intrinsic value (how much it would be worth if exercised right now) and time value (the chance that it becomes more valuable before expiry).",
+html:`
+<div class="sh">The basics</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Call option</div><div class="fc-def">Right to BUY the underlying at the strike price K. You exercise if S<sub>T</sub> &gt; K. Payoff = max(S<sub>T</sub> &minus; K, 0). You profit when the asset rises above the strike.</div><div class="fc-eg">Call with K = &pound;100: if stock is &pound;115, payoff = &pound;15. If &pound;90, payoff = &pound;0.</div></div>
+  <div class="fc"><div class="fc-term">Put option</div><div class="fc-def">Right to SELL the underlying at the strike price K. You exercise if S<sub>T</sub> &lt; K. Payoff = max(K &minus; S<sub>T</sub>, 0). You profit when the asset falls below the strike.</div><div class="fc-eg">Put with K = &pound;100: if stock is &pound;85, payoff = &pound;15. If &pound;110, payoff = &pound;0.</div></div>
+  <div class="fc"><div class="fc-term">Premium</div><div class="fc-def">The price you pay upfront to buy the option. This is your maximum loss. The option seller (writer) receives the premium and takes on the obligation.</div><div class="fc-eg">Pay &pound;5 premium for a call &mdash; break-even at S<sub>T</sub> = K + 5</div></div>
+  <div class="fc"><div class="fc-term">Strike price (K)</div><div class="fc-def">The pre-agreed price at which you can buy (call) or sell (put) the underlying. Fixed at contract inception. Determines the payoff boundary.</div></div>
+</div>
+
+<div class="sh">Moneyness</div>
+<table class="rt">
+  <thead><tr><th>Term</th><th>Call condition</th><th>Put condition</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>In-the-money (ITM)</td><td>S &gt; K</td><td>S &lt; K</td><td>Has intrinsic value &mdash; worth exercising now</td></tr>
+    <tr><td>At-the-money (ATM)</td><td>S &asymp; K</td><td>S &asymp; K</td><td>Strike equals spot &mdash; maximum time value</td></tr>
+    <tr><td>Out-of-the-money (OTM)</td><td>S &lt; K</td><td>S &gt; K</td><td>No intrinsic value &mdash; only time value</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">What determines an option&rsquo;s price?</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Intrinsic value</div><div class="fc-def">The payoff if exercised right now. For a call: max(S &minus; K, 0). For a put: max(K &minus; S, 0). Cannot be negative. The &ldquo;floor&rdquo; of the option&rsquo;s value.</div></div>
+  <div class="fc"><div class="fc-term">Time value</div><div class="fc-def">Option price minus intrinsic value. Represents the possibility that the option becomes more valuable before expiry. Always positive for live options. Decays to zero at expiry (theta decay).</div></div>
+  <div class="fc"><div class="fc-term">Volatility (&sigma;)</div><div class="fc-def">Higher volatility = higher option price. More uncertainty means more chance of a large favourable move. The option buyer benefits from volatility because their downside is capped at the premium.</div></div>
+  <div class="fc"><div class="fc-term">Time to expiry (T)</div><div class="fc-def">More time = higher option price (generally). More time means more opportunity for the underlying to move favourably. As T approaches 0, time value shrinks to zero.</div></div>
+  <div class="fc"><div class="fc-term">Interest rates (r)</div><div class="fc-def">Higher rates increase call values and decrease put values. A call is like a deferred purchase &mdash; higher rates make deferring more valuable. Effect is usually small relative to volatility.</div></div>
+  <div class="fc"><div class="fc-term">Dividends (q)</div><div class="fc-def">Expected dividends reduce call values and increase put values. A dividend payment drops the stock price on the ex-date, benefiting put holders and hurting call holders.</div></div>
+</div>
+
+<div class="sh">The six inputs to an option price</div>
+<table class="rt">
+  <thead><tr><th>Factor</th><th>Call price</th><th>Put price</th></tr></thead>
+  <tbody>
+    <tr><td>Spot price S &uarr;</td><td>&uarr; increases</td><td>&darr; decreases</td></tr>
+    <tr><td>Strike price K &uarr;</td><td>&darr; decreases</td><td>&uarr; increases</td></tr>
+    <tr><td>Volatility &sigma; &uarr;</td><td>&uarr; increases</td><td>&uarr; increases</td></tr>
+    <tr><td>Time to expiry T &uarr;</td><td>&uarr; increases</td><td>&uarr; increases</td></tr>
+    <tr><td>Risk-free rate r &uarr;</td><td>&uarr; increases</td><td>&darr; decreases</td></tr>
+    <tr><td>Dividends q &uarr;</td><td>&darr; decreases</td><td>&uarr; increases</td></tr>
+  </tbody>
+</table>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; decomposing an option&rsquo;s price</div>
+  <div class="worked-body">
+    <p>Stock price S = &pound;105. A call option with K = &pound;100 is trading at &pound;8.50.</p>
+    <div class="worked-math">Intrinsic value = max(105 - 100, 0) = £5.00
+Time value     = Option price - Intrinsic = £8.50 - £5.00 = £3.50
+
+The £3.50 time value reflects:
+- The chance S moves even further above 100
+- The remaining time to expiry
+- Current volatility levels</div>
+    <p class="worked-conclusion">58.8% of this option&rsquo;s price is intrinsic value (real, exercisable profit) and 41.2% is time value (the probability premium). As expiry approaches, the time value decays to zero and only intrinsic value remains.</p>
+  </div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The building blocks for LV IV</div>
+  <p class="qbox-body">These fundamentals feed directly into Black-Scholes pricing (LV IV), where the six inputs above are combined into a closed-form formula. Understanding WHY each factor affects the price prepares you for the Greeks &mdash; Delta, Gamma, Vega, Theta, Rho &mdash; which are the partial derivatives of option price with respect to each input. Every options trading desk monitors these sensitivities in real time.</p>
+  <span class="qtag">Black-Scholes (LV IV)</span><span class="qtag">Option Greeks</span><span class="qtag">Volatility trading</span><span class="qtag">Hedging</span>
+</div>`
+},
+
+/* ── 3  PUT-CALL PARITY ── */
+{title:"Put-call parity",
+peb:"Put-call parity is a no-arbitrage relationship that links the prices of European calls and puts with the same strike and expiry. It says: a call and a put with the same strike and expiry, combined with some borrowing or lending, must have a specific price relationship &mdash; otherwise you can construct a risk-free arbitrage. This is powerful because if you know the call price, you can immediately calculate the put price (and vice versa). It also reveals that calls and puts are not independent instruments &mdash; they are two sides of the same coin, connected by a simple equation.",
+html:`
+<div class="sh">The formula</div>
+<div class="f-label">Put-call parity for European options on a non-dividend-paying stock</div>
+<div class="f-box"><span class="math">C &minus; P = S<sub>0</sub> &minus; K &middot; e<sup>&minus;rT</sup></span></div>
+<div class="f-label">Rearranged &mdash; the price of a put given the call</div>
+<div class="f-box"><span class="math">P = C &minus; S<sub>0</sub> + K &middot; e<sup>&minus;rT</sup></span></div>
+<table class="vt">
+  <tr><td>C</td><td>European call price</td></tr>
+  <tr><td>P</td><td>European put price (same strike and expiry as the call)</td></tr>
+  <tr><td>S<sub>0</sub></td><td>Current spot price of the underlying</td></tr>
+  <tr><td>K</td><td>Strike price (same for both call and put)</td></tr>
+  <tr><td>r</td><td>Continuously compounded risk-free rate</td></tr>
+  <tr><td>T</td><td>Time to expiry in years</td></tr>
+</table>
+
+<div class="sh">Why it works &mdash; replication</div>
+<div class="insight">
+  <div class="insight-lbl">Two portfolios with identical payoffs</div>
+  <p>Portfolio A: Buy call + invest Ke<sup>&minus;rT</sup> at the risk-free rate. Portfolio B: Buy put + buy the stock. At expiry, both portfolios are worth exactly max(S<sub>T</sub>, K) regardless of what happens. Since they produce identical payoffs in every scenario, the Law of One Price requires they cost the same today. That equality IS put-call parity.</p>
+</div>
+
+<div class="sh">Worked example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; finding the put price from the call</div>
+  <div class="worked-body">
+    <p>S = &pound;100, K = &pound;100, r = 5%, T = 0.5 years, C = &pound;7.50. What is P?</p>
+    <div class="worked-math">P = C - S + K &middot; e^(-rT)
+P = 7.50 - 100 + 100 &times; e^(-0.05 &times; 0.5)
+P = 7.50 - 100 + 100 &times; 0.9753
+P = 7.50 - 100 + 97.53
+P = £5.03</div>
+    <p class="worked-conclusion">The put must be &pound;5.03. If the market quotes it at &pound;5.80, an arbitrageur would sell the put, buy the call, short the stock, and lend the PV of K &mdash; locking in a &pound;0.77 risk-free profit. The market would adjust until P = &pound;5.03.</p>
+  </div>
+</div>
+
+<div class="sh">Live put-call parity calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Stock price (&pound;)</span><input type="range" min="50" max="200" step="1" value="100" id="pcp-s"><span class="calc-out" id="pcp-s-v">&pound;100</span></div>
+  <div class="calc-row"><span class="calc-lbl">Strike (&pound;)</span><input type="range" min="50" max="200" step="1" value="100" id="pcp-k"><span class="calc-out" id="pcp-k-v">&pound;100</span></div>
+  <div class="calc-row"><span class="calc-lbl">Call price (&pound;)</span><input type="range" min="0.5" max="30" step="0.5" value="7.5" id="pcp-c"><span class="calc-out" id="pcp-c-v">&pound;7.50</span></div>
+  <div class="calc-row"><span class="calc-lbl">Rate (%)</span><input type="range" min="1" max="10" step="0.25" value="5" id="pcp-r"><span class="calc-out" id="pcp-r-v">5%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Time (years)</span><input type="range" min="0.1" max="2" step="0.1" value="0.5" id="pcp-t"><span class="calc-out" id="pcp-t-v">0.5 yr</span></div>
+  <div class="result-strip" style="background:var(--blue-bg)"><span class="result-lbl" style="color:var(--blue)">Put Price (from parity)</span><span class="result-val" style="color:var(--blue-dk)" id="pcp-result">&mdash;</span></div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">Practical applications</div>
+  <p class="qbox-body">Market makers use put-call parity to quote puts from calls (and vice versa) instantly. If the parity is violated, it signals either an arbitrage or a data error. Synthetic positions are built using parity: a synthetic long stock = long call + short put + lend PV(K). Synthetic forwards strip out the lending component. Parity also implies that call and put implied volatilities at the same strike must be identical &mdash; a fact used constantly in volatility surface construction.</p>
+  <span class="qtag">Synthetic positions</span><span class="qtag">Market making</span><span class="qtag">Vol surface construction</span><span class="qtag">Arbitrage detection</span>
+</div>`
+},
+
+/* ── 4  CAPM & ASSET PRICING ── */
+{title:"CAPM &amp; asset pricing",
+peb:"The Capital Asset Pricing Model answers one of the biggest questions in finance: what return should you expect from a risky asset? The answer is deceptively simple &mdash; you should earn the risk-free rate plus a premium for the systematic risk you bear (measured by beta). If a stock has beta = 1.5, it moves 1.5x as much as the market, so you should be compensated with 1.5x the market risk premium. CAPM is a direct consequence of mean-variance optimisation from Probability LV I &mdash; if all investors hold efficient portfolios, the equilibrium expected return must be linear in beta.",
+html:`
+<div class="sh">The CAPM equation</div>
+<div class="f-label">Expected return of asset i</div>
+<div class="f-box"><span class="math">E[R<sub>i</sub>] = R<sub>f</sub> + &beta;<sub>i</sub> &middot; (E[R<sub>m</sub>] &minus; R<sub>f</sub>)</span></div>
+<table class="vt">
+  <tr><td>E[R<sub>i</sub>]</td><td>Expected return of the asset</td></tr>
+  <tr><td>R<sub>f</sub></td><td>Risk-free rate &mdash; the return on a riskless investment (e.g. government bonds)</td></tr>
+  <tr><td>&beta;<sub>i</sub></td><td>Beta &mdash; sensitivity of the asset to market movements. Measures systematic risk only.</td></tr>
+  <tr><td>E[R<sub>m</sub>]</td><td>Expected return of the market portfolio</td></tr>
+  <tr><td>E[R<sub>m</sub>]&minus;R<sub>f</sub></td><td>Market risk premium &mdash; the excess return investors demand for holding the market</td></tr>
+</table>
+
+<div class="sh">Understanding beta</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">&beta; = 1</div><div class="fc-def">Asset moves with the market. Same systematic risk as the market. Expected excess return = market risk premium.</div><div class="fc-eg">An index tracker fund</div></div>
+  <div class="fc"><div class="fc-term">&beta; &gt; 1</div><div class="fc-def">More sensitive than the market. Amplifies market moves. Higher expected return to compensate for higher risk.</div><div class="fc-eg">&beta; = 1.5: if market rises 10%, stock rises ~15%. Tech stocks typically &beta; &gt; 1.</div></div>
+  <div class="fc"><div class="fc-term">&beta; &lt; 1</div><div class="fc-def">Less sensitive than the market. Dampens market moves. Lower expected return because less risky.</div><div class="fc-eg">&beta; = 0.5: if market falls 10%, stock falls ~5%. Utilities typically &beta; &lt; 1.</div></div>
+  <div class="fc"><div class="fc-term">&beta; = 0</div><div class="fc-def">Uncorrelated with the market. Expected return = risk-free rate. The asset carries zero systematic risk &mdash; only idiosyncratic risk, which is not compensated.</div></div>
+</div>
+
+<div class="sh">Computing beta</div>
+<div class="f-label">Beta from regression (Finance LV I connection)</div>
+<div class="f-box"><span class="math">&beta;<sub>i</sub> = <span class="frac"><span class="num">Cov(R<sub>i</sub>, R<sub>m</sub>)</span><span class="den">Var(R<sub>m</sub>)</span></span></span></div>
+<p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:16px">Beta is the slope coefficient from regressing asset returns on market returns (the CAPM regression from ML LV I). It measures how much of the asset&rsquo;s return is explained by market movements &mdash; this is the systematic risk component.</p>
+
+<div class="sh">Live CAPM calculator</div>
+<div class="calc-block">
+  <div class="calc-row"><span class="calc-lbl">Risk-free rate (%)</span><input type="range" min="0.5" max="8" step="0.25" value="4.5" id="capm-rf"><span class="calc-out" id="capm-rf-v">4.5%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Market return (%)</span><input type="range" min="4" max="15" step="0.5" value="9" id="capm-rm"><span class="calc-out" id="capm-rm-v">9%</span></div>
+  <div class="calc-row"><span class="calc-lbl">Beta</span><input type="range" min="0" max="2.5" step="0.1" value="1.2" id="capm-b"><span class="calc-out" id="capm-b-v">1.20</span></div>
+  <div class="results-3">
+    <div class="r3" style="background:var(--bg3)"><div class="r3-lbl" style="color:var(--tx2)">Risk premium</div><div class="r3-val" id="capm-rp">&mdash;</div></div>
+    <div class="r3" style="background:var(--bg3)"><div class="r3-lbl" style="color:var(--tx2)">Beta premium</div><div class="r3-val" id="capm-bp">&mdash;</div></div>
+    <div class="r3" style="background:var(--green-bg)"><div class="r3-lbl" style="color:var(--green)">Expected return</div><div class="r3-val" style="color:var(--green-dk)" id="capm-er">&mdash;</div></div>
+  </div>
+</div>
+
+<div class="sh">CAPM limitations</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Single factor</div><div class="fc-def">CAPM uses only market beta. Real returns are driven by multiple factors &mdash; size, value, momentum, quality. Fama-French models (LV V) extend CAPM to multiple factors.</div></div>
+  <div class="fc"><div class="fc-term">Assumes efficient markets</div><div class="fc-def">If markets are inefficient, expected returns can deviate from CAPM predictions. Alpha (&alpha;) is the return unexplained by CAPM &mdash; genuine skill or mispricing.</div></div>
+  <div class="fc"><div class="fc-term">Static beta</div><div class="fc-def">Real betas change over time. A stock&rsquo;s sensitivity to the market shifts with leverage, business cycle, and regime. Rolling-window beta estimation partially addresses this.</div></div>
+</div>
+
+<div class="qbox">
+  <div class="qbox-lbl">The benchmark for all quant strategies</div>
+  <p class="qbox-body">Every quant strategy is ultimately measured against CAPM. Alpha is the return above what beta exposure would predict. The Sharpe ratio is return per unit of total risk. The Information Ratio is alpha per unit of tracking error (non-market risk). When a quant fund reports &ldquo;our strategy generates 8% alpha,&rdquo; they mean 8% above what CAPM says they should earn given their beta. Understanding CAPM is essential for understanding how the industry measures performance.</p>
+  <span class="qtag">Alpha vs beta</span><span class="qtag">Sharpe ratio</span><span class="qtag">Factor models (LV V)</span><span class="qtag">Performance attribution</span>
+</div>`
+},
+
+/* ── 5  RISK-NEUTRAL VALUATION ── */
+{title:"Risk-neutral valuation",
+peb:"Risk-neutral valuation is the mathematical trick that makes derivative pricing tractable. Instead of trying to figure out real-world probabilities and risk preferences (which are different for every investor), we imagine a fictional world where everyone is risk-neutral &mdash; where investors do not demand any extra return for taking risk. In this fictional world, ALL assets earn the risk-free rate. The amazing result (the Fundamental Theorem of Asset Pricing) is that the no-arbitrage price calculated in this fictional world equals the real no-arbitrage price in the actual world. This means we can price any derivative by computing its expected payoff under risk-neutral probabilities and discounting at the risk-free rate.",
+html:`
+<div class="sh">The key insight</div>
+<div class="fc-grid">
+  <div class="fc"><div class="fc-term">Real-world probabilities</div><div class="fc-def">The actual probabilities of events happening. Affected by risk preferences &mdash; investors demand higher returns for riskier assets. Denoted P. Used for risk management and forecasting.</div><div class="fc-eg">The stock has a 60% real chance of going up</div></div>
+  <div class="fc"><div class="fc-term">Risk-neutral probabilities</div><div class="fc-def">Fictional probabilities under which all assets earn the risk-free rate. Denoted Q. NOT the real chance of anything happening &mdash; they are a mathematical tool that makes pricing work. Used for derivative pricing.</div><div class="fc-eg">Under Q, the stock has a 52% chance of going up (adjusted for risk)</div></div>
+  <div class="fc"><div class="fc-term">Why it works</div><div class="fc-def">The Fundamental Theorem of Asset Pricing: a market is arbitrage-free if and only if there exists a risk-neutral probability measure. The no-arbitrage price equals the risk-neutral expectation discounted at the risk-free rate.</div></div>
+  <div class="fc"><div class="fc-term">The pricing formula</div><div class="fc-def">Price = e<sup>&minus;rT</sup> &middot; E<sup>Q</sup>[Payoff]. Take the expected payoff under Q probabilities, discount at the risk-free rate. This works for any derivative &mdash; forwards, options, exotics.</div></div>
+</div>
+
+<div class="sh">The risk-neutral pricing formula</div>
+<div class="f-label">Price of any derivative</div>
+<div class="f-box"><span class="math">V<sub>0</sub> = e<sup>&minus;rT</sup> &middot; E<sup>Q</sup>[Payoff(S<sub>T</sub>)]</span></div>
+<table class="vt">
+  <tr><td>V<sub>0</sub></td><td>Fair price of the derivative today</td></tr>
+  <tr><td>e<sup>&minus;rT</sup></td><td>Discount factor &mdash; brings future value back to today at the risk-free rate</td></tr>
+  <tr><td>E<sup>Q</sup></td><td>Expectation under risk-neutral probabilities (NOT real-world)</td></tr>
+</table>
+
+<div class="sh">One-period binomial example</div>
+<div class="worked">
+  <div class="worked-title">Example &mdash; pricing a call option with the binomial model</div>
+  <div class="worked-body">
+    <p>Stock is &pound;100 today. In one period it goes to &pound;120 (up) or &pound;90 (down). Risk-free rate = 5%. Price a call with K = &pound;100.</p>
+    <div class="worked-math">Step 1 — Find risk-neutral probability q:
+  q = (e^(rT) - d) / (u - d)
+  u = 120/100 = 1.20,  d = 90/100 = 0.90
+  q = (1.05 - 0.90) / (1.20 - 0.90)
+  q = 0.15 / 0.30 = 0.50
+
+Step 2 — Compute expected payoff under Q:
+  Call payoff if up:   max(120 - 100, 0) = £20
+  Call payoff if down: max(90 - 100, 0)  = £0
+  E^Q[Payoff] = 0.50 &times; 20 + 0.50 &times; 0 = £10
+
+Step 3 — Discount at risk-free rate:
+  V = e^(-0.05) &times; 10 = 0.9512 &times; 10 = £9.51</div>
+    <p class="worked-conclusion">The fair price of the call is &pound;9.51. Notice we never used the real probability of the stock going up &mdash; only the risk-neutral probability q = 0.50. This is the power of risk-neutral valuation: the real-world probability does not matter for pricing.</p>
+  </div>
+</div>
+
+<div class="sh">Why real-world probabilities do not matter for pricing</div>
+<div class="insight">
+  <div class="insight-lbl">The replication argument</div>
+  <p>The option can be perfectly replicated by a portfolio of stock + borrowing. The cost of that replicating portfolio does not depend on anyone&rsquo;s beliefs about the probability of up or down moves &mdash; it only depends on the possible prices (120 and 90) and the risk-free rate. Since the option must cost the same as its replicating portfolio (no-arbitrage), the option price is also independent of real-world probabilities. Risk-neutral probabilities are simply the mathematical device that captures this independence.</p>
+</div>
+
+<div class="sh">Connecting everything</div>
+<table class="rt">
+  <thead><tr><th>Concept</th><th>Uses real-world P</th><th>Uses risk-neutral Q</th></tr></thead>
+  <tbody>
+    <tr><td>Forecasting / prediction</td><td>&check; &mdash; what will probably happen</td><td></td></tr>
+    <tr><td>Risk management (VaR)</td><td>&check; &mdash; tail risk under real distribution</td><td></td></tr>
+    <tr><td>CAPM expected returns</td><td>&check; &mdash; compensation for real risk</td><td></td></tr>
+    <tr><td>Forward pricing</td><td></td><td>&check; &mdash; no-arbitrage price</td></tr>
+    <tr><td>Option pricing</td><td></td><td>&check; &mdash; expected payoff under Q</td></tr>
+    <tr><td>Black-Scholes</td><td></td><td>&check; &mdash; continuous-time Q</td></tr>
+  </tbody>
+</table>
+
+<div class="qbox">
+  <div class="qbox-lbl">The mathematical engine of derivative pricing</div>
+  <p class="qbox-body">Risk-neutral valuation is the bridge between this level and LV IV (Black-Scholes). Black-Scholes is the continuous-time limit of the binomial model &mdash; infinite time steps, each infinitesimally small. The risk-neutral probability becomes a risk-neutral probability measure, the discrete sum becomes an integral, and the binomial tree becomes geometric Brownian motion. But the core logic is identical: compute the expected payoff under Q, discount at the risk-free rate. Everything in derivative pricing, from vanilla options to the most exotic structured products, uses this framework.</p>
+  <span class="qtag">Binomial model</span><span class="qtag">Black-Scholes (LV IV)</span><span class="qtag">Monte Carlo pricing</span><span class="qtag">Exotic derivatives</span>
+</div>`
+}
+];
+
+/* ── ENGINE ── */
+let cur=0,bookMode=false;
+function fmt(n){const abs=Math.abs(Math.round(n*100)/100);const s='£'+abs.toLocaleString();return n<0?'-'+s:s}
+function go(i){
+  cur=i;
+  document.querySelectorAll('.sb-item').forEach((el,idx)=>{el.classList.toggle('active',idx===i);if(idx<i)el.classList.add('done');else el.classList.remove('done')});
+  const t=T[i];
+  document.getElementById('content').innerHTML=`
+    <div class="progress-pips" id="pips"></div>
+    <div class="topic-eyebrow"><span class="badge badge-green">LV II &middot; Topic ${i+1} of ${T.length}</span><span class="badge badge-subtle">Core concept</span></div>
+    <div class="topic-title-lg">${t.title}</div>
+    <div class="peb"><div class="peb-label">Plain English First</div>${t.peb}</div>
+    ${t.html}
+    <div class="topic-nav">${i>0?`<button class="tn-btn" onclick="go(${i-1})">&#8592; Previous</button>`:''}${i<T.length-1?`<button class="tn-btn primary" onclick="go(${i+1})" style="margin-left:auto">Next &#8594;</button>`:'<span style="font-size:13px;color:var(--tx3);margin-left:auto;align-self:center">LV II complete &#10003;</span>'}</div>`;
+  renderPips();bindCalcs();document.getElementById('content').scrollTop=0;
+}
+function renderPips(){const el=document.getElementById('pips');if(!el)return;el.innerHTML=T.map((t,i)=>{const bg=i===cur?'var(--tx1)':i<cur?'var(--green)':'var(--br2)';return`<button class="pip" title="${t.title}" style="background:${bg}" onclick="go(${i})"></button>`}).join('')}
+function toggleLayout(){bookMode=!bookMode;document.getElementById('shell').classList.toggle('book-mode',bookMode);document.getElementById('layout-btn').classList.toggle('active',bookMode)}
+function toggleTheme(){const isDark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',isDark?'light':'dark');document.getElementById('theme-btn').classList.toggle('active',!isDark)}
+
+function bindCalcs(){
+  const $=id=>document.getElementById(id);
+
+  // Forward pricing calculator
+  if($('fwd-s')){
+    const up=()=>{
+      const s=+$('fwd-s').value,r=+$('fwd-r').value/100,q=+$('fwd-q').value/100,t=+$('fwd-t').value;
+      $('fwd-s-v').textContent='£'+s.toLocaleString();
+      $('fwd-r-v').textContent=$('fwd-r').value+'%';
+      $('fwd-q-v').textContent=$('fwd-q').value+'%';
+      $('fwd-t-v').textContent=t.toFixed(2)+' yr';
+      const fwd=s*Math.exp((r-q)*t);
+      $('fwd-result').textContent='£'+fwd.toFixed(2);
+    };
+    [$('fwd-s'),$('fwd-r'),$('fwd-q'),$('fwd-t')].forEach(e=>e.addEventListener('input',up));up();
+  }
+
+  // Put-call parity calculator
+  if($('pcp-s')){
+    const up=()=>{
+      const s=+$('pcp-s').value,k=+$('pcp-k').value,c=+$('pcp-c').value,r=+$('pcp-r').value/100,t=+$('pcp-t').value;
+      $('pcp-s-v').textContent='£'+s;
+      $('pcp-k-v').textContent='£'+k;
+      $('pcp-c-v').textContent='£'+c.toFixed(2);
+      $('pcp-r-v').textContent=$('pcp-r').value+'%';
+      $('pcp-t-v').textContent=t.toFixed(1)+' yr';
+      const p=c-s+k*Math.exp(-r*t);
+      $('pcp-result').textContent='£'+Math.max(0,p).toFixed(2);
+    };
+    [$('pcp-s'),$('pcp-k'),$('pcp-c'),$('pcp-r'),$('pcp-t')].forEach(e=>e.addEventListener('input',up));up();
+  }
+
+  // CAPM calculator
+  if($('capm-rf')){
+    const up=()=>{
+      const rf=+$('capm-rf').value,rm=+$('capm-rm').value,b=+$('capm-b').value;
+      $('capm-rf-v').textContent=rf+'%';
+      $('capm-rm-v').textContent=rm+'%';
+      $('capm-b-v').textContent=b.toFixed(2);
+      const rp=rm-rf;
+      const bp=b*rp;
+      const er=rf+bp;
+      $('capm-rp').textContent=rp.toFixed(1)+'%';
+      $('capm-bp').textContent=bp.toFixed(1)+'%';
+      $('capm-er').textContent=er.toFixed(1)+'%';
+    };
+    [$('capm-rf'),$('capm-rm'),$('capm-b')].forEach(e=>e.addEventListener('input',up));up();
+  }
+}
+
+if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}
+go(0);
+</script>
+</body>
+</html>
